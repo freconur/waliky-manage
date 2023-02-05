@@ -1,7 +1,9 @@
 export interface Product {
-  image: string
-  marca: string
-  name: string
-  price: number
-  state: boolean
+  // id: string
+  image?: string
+  marca?: string
+  name?: string
+  price?: string
+  // state: boolean
+  id?:string
 }
