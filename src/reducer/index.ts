@@ -12,11 +12,7 @@ import { TYPES } from "./action";
   
   const db = getFirestore(app);
 
-  interface StateProduct {
-    product: Product[]
-  }
-
-  export const getCartucherasBts = (dispatch:any) => {
+  export const getCartucherasBts = (dispatch: (action: any) => void) => {
     const colRef = collection(db, "bts/Xq9UGyUn6d4OukEb1jPk/cartucheras");
     onSnapshot(colRef, (snapshot) => {
         let cartucheras:Product[] = [];

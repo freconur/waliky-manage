@@ -1,6 +1,5 @@
 import { useEffect, useReducer } from "react"
 import { getCartucherasBts } from "../reducer"
-import { TYPES } from "../reducer/action"
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer"
 
 
@@ -8,13 +7,27 @@ import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reduc
 const SearchIdProduct = () => {
 
     const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
-
+    const { product } = state
+    console.log('product',product)
     useEffect(() => {
         getCartucherasBts(dispatch) 
     },[])
     return (
         <>
-        <h1>aqui iran los datos</h1>
+        <ul>
+            {
+                product.map((item, index) => {
+                    return(
+                        <li key={index}>
+                            <p>{item.name}</p>
+                            <p>{item.marca}</p>
+                            <p>{item.price}</p>
+                            <p>{item.id}</p>
+                        </li>
+                    )
+                })
+            }
+        </ul>
         </>
     )
 }
