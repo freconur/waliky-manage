@@ -7,3 +7,7 @@ export interface Product {
   // state: boolean
   id?:string
 }
+
+export interface SearchById {
+  id: string
+}
