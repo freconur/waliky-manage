@@ -46,6 +46,7 @@ const SearchIdProduct = () => {
 								<p>{item.marca}</p>
 								<p>{item.price}</p>
 								<p>{item.id}</p>
+								<p>ahora sigue las ventas</p>
 							</li>
 						)
 					})
