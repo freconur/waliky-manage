@@ -5,9 +5,10 @@ export interface Product {
   name?: string
   price?: string
   // state: boolean
+  stock?: number
+  state?: boolean
   id?:string
 }
-
 export interface SearchById {
   id: string
 }

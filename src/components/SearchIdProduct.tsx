@@ -25,11 +25,9 @@ const SearchIdProduct = () => {
 			[e.target.name]: e.target.value
 		})
 	}
-	console.log('inputValues', inputValues)
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		getProductById(dispatch, inputValues)
-		console.log('productbyid', product)
 	}
 	return (
 		<>

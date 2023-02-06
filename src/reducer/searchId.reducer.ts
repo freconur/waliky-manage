@@ -20,13 +20,11 @@ export const searchIdReducer = (state:typeof initialStateProducts, action: FormR
   switch (action.type) {
     // case TYPES.GET_PRODUCT_BY_ID:
     case "getProductById" : 
-      console.log('action.payload',action.payload)
       return { 
         ...state, 
         product: action.payload, 
       }
       case "getCartucherasBts" : 
-      console.log('action.payload',action.payload)
       return { 
         ...state, 
         prueba: action.payload, 
