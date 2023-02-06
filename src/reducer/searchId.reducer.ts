@@ -7,36 +7,30 @@ type lalala = {
   marca?: string
   name?: string
   price?: string
-  // state: boolean
   id?:string
 }
-
-type State = {
-  todos: lalala[]
-}
-
-type Estado = typeof initialStateProducts
-type FormReducerAction = { 
-  // type: typeof TYPES.GET_PRODUCT_BY_ID
-  type: "getProductById"
-  // payload:
-  payload: lalala[]
-};
+type FormReducerAction = 
+| { type: "getProductById", payload: Product}
+| { type: "getCartucherasBts", payload: Product[]}
 export const initialStateProducts = {
-  product: [] as lalala[],
-  
+  product: [] as Product,
+  prueba: [] as Product[]
 };
 export const searchIdReducer = (state:typeof initialStateProducts, action: FormReducerAction) => {
   switch (action.type) {
     // case TYPES.GET_PRODUCT_BY_ID:
-    case "getProductById" : {
+    case "getProductById" : 
       console.log('action.payload',action.payload)
       return { 
-        ...state.product, 
+        ...state, 
         product: action.payload, 
-      };
-    }
-
+      }
+      case "getCartucherasBts" : 
+      console.log('action.payload',action.payload)
+      return { 
+        ...state, 
+        prueba: action.payload, 
+      }
     default:
       return state;
   }

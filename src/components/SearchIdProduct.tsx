@@ -1,14 +1,5 @@
-import {
-	getFirestore,
-	collection,
-	doc,
-	getDoc,
-	getDocs,
-	onSnapshot
-} from "firebase/firestore"
 import React, { useEffect, useReducer, useState } from "react"
-import { app } from "../firebase/firebase.config"
-import { getCartucherasBts } from "../reducer"
+import { getCartucherasBts, getProductById } from "../reducer"
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer"
 import { Product, SearchById } from "../types"
 
@@ -21,31 +12,24 @@ const SearchIdProduct = () => {
 	const [inputValues, setInputValues] = useState<FormStates['form']>({
 		id: ''
 	})
-	const [findItem, setFindItem] = useState<FormStates['product']>()
 	const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
-	const { product } = state
-	console.log('product', product)
+	const { product, prueba } = state
 
 	useEffect(() => {
 		getCartucherasBts(dispatch)
-	}, [])
-	const db = getFirestore(app);
+	}, [product])
 
-	const handleChangeForm = (e:React.ChangeEvent<HTMLInputElement>) => {
+	const handleChangeForm = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setInputValues({
 			...inputValues,
 			[e.target.name]: e.target.value
 		})
 	}
-	console.log('inputValues',inputValues)
-	const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
+	console.log('inputValues', inputValues)
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const product = doc(db, "bts/Xq9UGyUn6d4OukEb1jPk/cartucheras", inputValues.id);
-		const findProduct = await getDoc(product);
-		if (findProduct.exists()) {
-			setFindItem(findProduct.data());
-		}
-		console.log('findItem',findItem)
+		getProductById(dispatch, inputValues)
+		console.log('productbyid', product)
 	}
 	return (
 		<>
@@ -55,8 +39,9 @@ const SearchIdProduct = () => {
 				<button>Buscar</button>
 			</form>
 			<ul>
+
 				{
-					product.map((item, index) => {
+					prueba?.map((item, index) => {
 						return (
 							<li key={index}>
 								<p>{item.name}</p>
@@ -68,6 +53,12 @@ const SearchIdProduct = () => {
 					})
 				}
 			</ul>
+			<div>
+				<p>{product.name}</p>
+				<p>{product.marca}</p>
+				<p>{product.price}</p>
+				<p>{product.image}</p>
+			</div>
 		</>
 	)
 }
