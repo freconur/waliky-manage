@@ -1,3 +1,4 @@
+import { RegistroVenta } from "../components/RegistroVenta"
 import { SearchIdProduct } from "../components/SearchIdProduct"
 
 
@@ -6,6 +7,7 @@ const Home = () => {
         <>
             holi
             <SearchIdProduct />
+            <RegistroVenta/>
         </>
     )
 }

@@ -36,22 +36,6 @@ const SearchIdProduct = () => {
 				<input onChange={handleChangeForm} type="text" name="id" placeholder="id de producto" />
 				<button>Buscar</button>
 			</form>
-			<ul>
-
-				{
-					prueba?.map((item, index) => {
-						return (
-							<li key={index}>
-								<p>{item.name}</p>
-								<p>{item.marca}</p>
-								<p>{item.price}</p>
-								<p>{item.id}</p>
-								<p>ahora sigue las ventas</p>
-							</li>
-						)
-					})
-				}
-			</ul>
 			<div>
 				<p>{product.name}</p>
 				<p>{product.marca}</p>

@@ -2,6 +2,7 @@ import {
   getFirestore,
   collection,
   doc,
+  updateDoc,
   getDoc,
   getDocs,
   onSnapshot,
@@ -20,22 +21,13 @@ export const getBtsCategories = async () => {
   });
   return btsCategories;
 };
-export const getkawaiiProduct = async () => {
-  const colRefkawaii = await getDocs(collection(db, "kawaii"));
-  const kawaii: Product[] = [];
-  colRefkawaii.forEach((doc) => {
-    kawaii.push({ ...doc.data(), id: doc.id });
-  });
-  return kawaii;
-};
 
 export const getProductById = async (
   dispatch: (action: any) => void,
   inputValues: SearchById
 ) => {
   const btsCategories = await getBtsCategories();
-  const kawaii = await getkawaiiProduct();
-  console.log("kawaii", kawaii);
+
   let findProduct;
   let product: Product | undefined;
 
@@ -43,11 +35,11 @@ export const getProductById = async (
   findProduct = await getDoc(colRef);
   product = findProduct.data();
   if (findProduct.exists()) {
-    return dispatch({ type: "getProductById", payload: product });
+    // localStorage.setItem('PRODUCT_BY_ID',JSON.stringify(colRef))
+    return dispatch({ type: "getProductById", payload: product, payload2: "kawaii"});
   }
 
   btsCategories.map(async (category) => {
-    // const colRef = doc(db, "bts/Xq9UGyUn6d4OukEb1jPk/cartucheras", inputValues.id);
     const colRef = doc(
       db,
       `bts/${category.id}/${category.name}`,
@@ -56,7 +48,7 @@ export const getProductById = async (
     findProduct = await getDoc(colRef);
     product = findProduct.data();
     if (findProduct.exists()) {
-      return dispatch({ type: "getProductById", payload: product });
+      return dispatch({ type: "getProductById", payload: product, payload2: `bts/${category.id}/${category.name}`});
     }
   });
 };
@@ -68,5 +60,23 @@ export const getCartucherasBts = (dispatch: (action: any) => void) => {
       cartucheras.push({ ...doc.data(), id: doc.id });
     });
     dispatch({ type: "getCartucherasBts", payload: cartucheras });
+  });
+};
+
+export const updateStockProduct =  (
+  dispatch: (action: any) => void,
+  path:string,
+  id:SearchById,
+  stock: number
+) => {
+  
+  // const getProductLocalStorage = localStorage.getItem('PRODUCT_BY_ID')
+  // const colRef2 = JSON.parse(getProductLocalStorage as string) 
+  const colRef = doc(db, path, id.id);
+
+  // const product:string = JSON.parse(getProductLocalStorage)
+  // const colRef = doc(db, "cities", "DC");
+   updateDoc(colRef, {
+    stock: stock,
   });
 };
