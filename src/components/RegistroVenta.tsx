@@ -18,6 +18,7 @@ const RegistroVenta = () => {
 
 	useEffect(() => {
 	}, [product, pathProduct])
+	console.log('rtaproduct', product)
 	const onChangeIdFormVentas = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setInputIdValue({
 			...inputIdValue,
@@ -34,7 +35,7 @@ const RegistroVenta = () => {
 		if (product.stock) {
 			if (product.stock > inputIdValue.cantidad) {
 				const newStock: number = product.stock - inputIdValue.cantidad
-				updateStockProduct(pathProduct, inputIdValue, newStock)
+				updateStockProduct(pathProduct, inputIdValue, newStock, product)
 			} else {
 				console.log('estas ingresando una mayor cantidad al stock disponible')
 			}
@@ -42,7 +43,6 @@ const RegistroVenta = () => {
 	}
 	return (
 		<>
-			<h1>Holis</h1>
 			{/* <form className="form-ventas" onSubmit={onSubmitFormVentas}> */}
 			<form className="form-ventas">
 				<div>

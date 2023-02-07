@@ -5,10 +5,12 @@ import {
   updateDoc,
   getDoc,
   getDocs,
+  addDoc,
   onSnapshot,
+  Timestamp
 } from "firebase/firestore";
 import { app } from "../firebase/firebase.config";
-import { Product, SearchById } from "../types";
+import { InputValueVentas, Product, SearchById } from "../types";
 import { TYPES } from "./action";
 
 const db = getFirestore(app);
@@ -65,11 +67,21 @@ export const getCartucherasBts = (dispatch: (action: any) => void) => {
 
 export const updateStockProduct =  (
   path:string,
-  id:SearchById,
-  stock: number
+  inputValues:InputValueVentas,
+  stock: number,
+  product: Product
 ) => {
-  const colRef = doc(db, path, id.id);
-   updateDoc(colRef, {
+  const colRef = doc(db, path, inputValues.id);
+  updateDoc(colRef, {
     stock: stock,
   });
+
+  const docData = {
+    idProduct: inputValues.id,
+    name:product.name,
+    timestamp:Timestamp.fromDate(new Date()),
+    cantidad: inputValues.cantidad
+  }
+  addDoc(collection(db, "/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/febrero-2023"),docData);
+  // const product = getDoc(colRef)
 };
