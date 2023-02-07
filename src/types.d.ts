@@ -12,3 +12,7 @@ export interface Product {
 export interface SearchById {
   id: string
 }
+export interface InputValueVentas {
+  id: string
+  cantidad: number
+}

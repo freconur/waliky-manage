@@ -64,18 +64,11 @@ export const getCartucherasBts = (dispatch: (action: any) => void) => {
 };
 
 export const updateStockProduct =  (
-  dispatch: (action: any) => void,
   path:string,
   id:SearchById,
   stock: number
 ) => {
-  
-  // const getProductLocalStorage = localStorage.getItem('PRODUCT_BY_ID')
-  // const colRef2 = JSON.parse(getProductLocalStorage as string) 
   const colRef = doc(db, path, id.id);
-
-  // const product:string = JSON.parse(getProductLocalStorage)
-  // const colRef = doc(db, "cities", "DC");
    updateDoc(colRef, {
     stock: stock,
   });
