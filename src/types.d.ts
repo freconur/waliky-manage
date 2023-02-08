@@ -8,6 +8,8 @@ export interface Product {
   stock?: number
   state?: boolean
   id?:string
+  option?: string
+
 }
 export interface SearchById {
   id: string
@@ -15,4 +17,9 @@ export interface SearchById {
 export interface InputValueVentas {
   id: string
   cantidad: number
+}
+
+export interface Options{
+  id?: string
+  option?: string
 }
