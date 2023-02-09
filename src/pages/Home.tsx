@@ -1,20 +1,20 @@
-import { RegistroVenta } from "../components/RegistroVenta"
-import { SearchIdProduct } from "../components/SearchIdProduct"
-// import { SideBar } from "../components/SideBar"
-import { TablaVentas } from "../components/TablaVentas"
+import { RegistroVenta } from "./RegistroVenta"
+import { SearchIdProduct } from "./SearchIdProduct"
+import { SideBar } from "../components/SideBar"
+import { TablaVentas } from "./TablaVentas"
 
 const Home = () => {
 	return (
 		<>
-			<div className="flex">
+			{/* <div className="flex"> */}
 
 				{/* <SideBar /> */}
 				<div className="">
-					<SearchIdProduct />
+					{/* <SearchIdProduct />
 					<RegistroVenta />
-					<TablaVentas />
+					<TablaVentas /> */}
 				</div>
-			</div>
+			{/* </div> */}
 		</>
 	)
 }

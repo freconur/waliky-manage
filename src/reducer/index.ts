@@ -10,7 +10,7 @@ import {
   Timestamp
 } from "firebase/firestore";
 import { app } from "../firebase/firebase.config";
-import { InputValueVentas, Options, Product, SearchById } from "../types";
+import { InputValueVentas, Options, Product, ProductSold, SearchById } from "../types";
 import { TYPES } from "./action";
 
 const db = getFirestore(app);
@@ -98,4 +98,16 @@ const getOptions: Options[] = [];
     dispatch({ type: "getOptions", payload: getOptions });
   });
   // dispatch({type:"getOptions", payload: findOptions.data()})
+}
+
+export const getProductsSold = (dispatch:(action:any) => void) => {
+  const colref = collection(db, "/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/febrero-2023");
+  onSnapshot(colref, (snapshot) => {
+    const getSolds:ProductSold[] = []
+    snapshot.docs.forEach(doc => {
+      getSolds.push({...doc.data(), id: doc.id });
+    })
+    dispatch({ type: "getProductsSold", payload: getSolds });
+  })
+
 }

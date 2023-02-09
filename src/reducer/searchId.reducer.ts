@@ -1,4 +1,4 @@
-import { Options, Product } from "../types";
+import { Options, Product, ProductSold } from "../types";
 import { TYPES } from "./action";
 // import { GET_PRODUCT_BY_ID } from "./action";
 
@@ -7,11 +7,13 @@ type FormReducerAction =
 | { type: "getCartucherasBts", payload: Product[]}
 // | { type: "getOptions", payload: Product[]}
 | { type: "getOptions", payload: Options[]}
+| { type: "getProductsSold", payload: ProductSold[]}
 export const initialStateProducts = {
   product: [] as Product,
   prueba: [] as Product[],
   pathProduct: '' as string,
-  options: {} as Options[]
+  options: {} as Options[],
+  productsSold: [] as ProductSold[]
 };
 export const searchIdReducer = (state:typeof initialStateProducts, action: FormReducerAction) => {
   switch (action.type) {
@@ -28,11 +30,21 @@ export const searchIdReducer = (state:typeof initialStateProducts, action: FormR
         prueba: action.payload, 
       }
       case "getOptions" : 
-      const aaaaa = [...action.payload]
       return { 
         ...state, 
-        options: aaaaa 
+        options: action.payload 
       }
+      case "getProductsSold":
+        const rtaaa = action.payload.map(item => {
+          return({
+            ...item,
+            date: item.timestamp.toDate().toString().slice(0,21)
+          })
+        })
+        return {
+          ...state,
+          productsSold: rtaaa
+        }
     default:
       return state;
   }

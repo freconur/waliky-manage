@@ -7,6 +7,9 @@ module.exports = {
     extend: {
       gridTemplateColumns: {
         'dashboard': '250px 1fr',
+      },
+      bgCutomize: {
+        'prueba': '#ffffff54'
       }
     },
   },
