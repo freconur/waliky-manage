@@ -3,22 +3,16 @@ import { getProductById, updateStockProduct } from "../reducer"
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer"
 import { InputValueVentas, SearchById } from '../types'
 
-interface StateRegistroVentas {
-	id: SearchById
-}
-
 const RegistroVenta = () => {
 	const [inputIdValue, setInputIdValue] = useState<InputValueVentas>({
 		id: '',
 		cantidad: 0
 	})
-
 	const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
 	const { product, pathProduct } = state
 
 	useEffect(() => {
 	}, [product, pathProduct])
-	console.log('rtaproduct', product)
 	const onChangeIdFormVentas = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setInputIdValue({
 			...inputIdValue,
@@ -29,7 +23,6 @@ const RegistroVenta = () => {
 		e.preventDefault()
 		getProductById(dispatch, inputIdValue)
 	}
-	// const onSubmitFormVentas = (e: React.FormEvent<HTMLFormElement>) => {
 	const onSubmitFormVentas = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault()
 		if (product.stock) {
@@ -43,21 +36,37 @@ const RegistroVenta = () => {
 	}
 	return (
 		<>
-			{/* <form className="form-ventas" onSubmit={onSubmitFormVentas}> */}
-			<form className="form-ventas">
-				<div>
-					<input onChange={onChangeIdFormVentas} type="text" placeholder="id" name="id" />
-					<button onClick={onSubmitCheckId}>✅</button>
-				</div>
-				<input type="text" disabled placeholder={`${product.name}`} name="name" />
-				<input type="text" disabled placeholder={`${product.price}`} name="price" />
-				<input type="number" disabled placeholder={`${product.stock}`} name="stock" />
-				<input onChange={onChangeIdFormVentas} type="number" placeholder="ingresa cantidad" name="cantidad" />
-				{product.stock
-					&& <input type="text" disabled value="activo" placeholder="estado" name="state" />}
-				{/* <input type="boolean" value={product.state} placeholder="estado" name="state" /> */}
-				<button onClick={onSubmitFormVentas}>registrar</button>
-			</form>
+			<div className="m-10">
+				<h1 className="uppercase text-2xl">registro de ventas</h1>
+
+				<form className="form-ventas">
+					<div className="flex flex-col">
+						<label className="text-2xl">id de producto</label>
+						<div>
+							<input className="border p-1 pl-3" onChange={onChangeIdFormVentas} type="text" placeholder="id" name="id" />
+							<button  className="ml-2" onClick={onSubmitCheckId}>✅</button>
+						</div>
+					</div>
+					<input type="text" disabled placeholder={`${product.name ? product.name : "descripcion"}`} name="name" />
+					<input type="text" disabled placeholder={`${product.price ? product.price : "precio"}`} name="price" />
+					<input type="number" disabled placeholder={`${product.stock ? product.stock : "stock"}`} name="stock" />
+					<input onChange={onChangeIdFormVentas} type="number" placeholder="ingresa cantidad" name="cantidad" />
+					{product.stock
+						&& <input type="text" disabled value="activo" placeholder="estado" name="state" />}
+					{/* <input type="boolean" value={product.state} placeholder="estado" name="state" /> */}
+					<button onClick={onSubmitFormVentas}>registrar</button>
+				</form>
+					<table>
+						<thead>
+							<tr>
+								<th className="w-48">descripcion</th>
+								<th className="w-48">precio</th>
+								<th className="w-48">stock</th>
+								<th className="w-48">cantidad</th>
+							</tr>
+						</thead>
+					</table>
+			</div>
 		</>
 	)
 }
