@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react"
+import { useLocation } from "react-router-dom"
 import { getCartucherasBts, getProductById } from "../reducer"
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer"
 import { Product, SearchById } from "../types"
@@ -9,6 +10,7 @@ interface FormStates {
 }
 
 const SearchIdProduct = () => {
+	const location = useLocation()
 	const [inputValues, setInputValues] = useState<FormStates['form']>({
 		id: ''
 	})
@@ -27,7 +29,7 @@ const SearchIdProduct = () => {
 	}
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		getProductById(dispatch, inputValues)
+		getProductById(dispatch, inputValues,location.pathname)
 	}
 	return (
 		<>

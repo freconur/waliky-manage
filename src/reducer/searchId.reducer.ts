@@ -8,12 +8,14 @@ type FormReducerAction =
 // | { type: "getOptions", payload: Product[]}
 | { type: "getOptions", payload: Options[]}
 | { type: "getProductsSold", payload: ProductSold[]}
+| { type: "getCurrentProductSell", payload: Product[]}
 export const initialStateProducts = {
   product: [] as Product,
   prueba: [] as Product[],
   pathProduct: '' as string,
   options: {} as Options[],
-  productsSold: [] as ProductSold[]
+  productsSold: [] as ProductSold[],
+  currentProductSell: [] as Product[]
 };
 export const searchIdReducer = (state:typeof initialStateProducts, action: FormReducerAction) => {
   switch (action.type) {
@@ -45,6 +47,11 @@ export const searchIdReducer = (state:typeof initialStateProducts, action: FormR
           ...state,
           productsSold: rtaaa
         }
+        case "getCurrentProductSell":
+          return ({
+            ...state,
+            currentProductSell: action.payload
+          })
     default:
       return state;
   }

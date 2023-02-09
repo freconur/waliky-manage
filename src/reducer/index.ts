@@ -5,12 +5,19 @@ import {
   updateDoc,
   getDoc,
   getDocs,
+  setDoc,
   addDoc,
   onSnapshot,
-  Timestamp
+  Timestamp,
 } from "firebase/firestore";
 import { app } from "../firebase/firebase.config";
-import { InputValueVentas, Options, Product, ProductSold, SearchById } from "../types";
+import {
+  InputValueVentas,
+  Options,
+  Product,
+  ProductSold,
+  SearchById,
+} from "../types";
 import { TYPES } from "./action";
 
 const db = getFirestore(app);
@@ -24,21 +31,29 @@ export const getBtsCategories = async () => {
   return btsCategories;
 };
 
+export const setProductToSell = async (product: Product) => {
+  await addDoc(
+    collection(
+      db,
+      "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/29tuy4tlrTRio6sYJR6D/productsCurrentSale"
+    ),
+    product
+  );
+};
+
 export const getProductById = async (
   dispatch: (action: any) => void,
-  inputValues: SearchById
+  inputValues: SearchById,
+  location: string
 ) => {
   const btsCategories = await getBtsCategories();
-
   let findProduct;
   let product: Product | undefined;
-
   const colRef = doc(db, "kawaii", inputValues.id);
   findProduct = await getDoc(colRef);
-  product = findProduct.data();
+  product = { ...findProduct.data(), id: inputValues.id };
   if (findProduct.exists()) {
-    // localStorage.setItem('PRODUCT_BY_ID',JSON.stringify(colRef))
-    return dispatch({ type: "getProductById", payload: product, payload2: "kawaii"});
+    dispatch({ type: "getProductById", payload: product, payload2: "kawaii" });
   }
 
   btsCategories.map(async (category) => {
@@ -48,11 +63,19 @@ export const getProductById = async (
       inputValues.id
     );
     findProduct = await getDoc(colRef);
-    product = findProduct.data();
+    product = { ...findProduct.data(), id: inputValues.id };
     if (findProduct.exists()) {
-      return dispatch({ type: "getProductById", payload: product, payload2: `bts/${category.id}/${category.name}`});
+      dispatch({
+        type: "getProductById",
+        payload: product,
+        payload2: `bts/${category.id}/${category.name}`,
+      });
     }
   });
+  if (location === "/registro-de-ventas") {
+    setProductToSell(product);
+    getCurrentProductSell(dispatch)
+  }
 };
 export const getCartucherasBts = (dispatch: (action: any) => void) => {
   const colRef = collection(db, "bts/Xq9UGyUn6d4OukEb1jPk/cartucheras");
@@ -65,9 +88,9 @@ export const getCartucherasBts = (dispatch: (action: any) => void) => {
   });
 };
 
-export const updateStockProduct =  (
-  path:string,
-  inputValues:InputValueVentas,
+export const updateStockProduct = (
+  path: string,
+  inputValues: InputValueVentas,
   stock: number,
   product: Product
 ) => {
@@ -78,36 +101,59 @@ export const updateStockProduct =  (
 
   const docData = {
     idProduct: inputValues.id,
-    name:product.name,
-    timestamp:Timestamp.fromDate(new Date()),
-    cantidad: inputValues.cantidad
-  }
-  addDoc(collection(db, "/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/febrero-2023"),docData);
+    name: product.name,
+    timestamp: Timestamp.fromDate(new Date()),
+    cantidad: inputValues.cantidad,
+  };
+  addDoc(
+    collection(db, "/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/febrero-2023"),
+    docData
+  );
   // const product = getDoc(colRef)
 };
 
-export const getOptions = (dispatch:(action:any) => void) => {
-  const colRef =  collection(db, "/registro-de-ventas/AGpZzU0AileZDyUkEyAd/options");
+export const getOptions = (dispatch: (action: any) => void) => {
+  const colRef = collection(
+    db,
+    "/registro-de-ventas/AGpZzU0AileZDyUkEyAd/options"
+  );
   // const findOptions = await getDoc(colRef);
-   onSnapshot(colRef, (snapshot) => {
-const getOptions: Options[] = [];
+  onSnapshot(colRef, (snapshot) => {
+    const getOptions: Options[] = [];
     snapshot.docs.forEach((doc) => {
       // getOptions.push({...doc.data(), id: doc.id });
-      getOptions.push({...doc.data()});
+      getOptions.push({ ...doc.data() });
     });
     dispatch({ type: "getOptions", payload: getOptions });
   });
   // dispatch({type:"getOptions", payload: findOptions.data()})
-}
+};
 
-export const getProductsSold = (dispatch:(action:any) => void) => {
-  const colref = collection(db, "/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/febrero-2023");
+export const getProductsSold = (dispatch: (action: any) => void) => {
+  const colref = collection(
+    db,
+    "/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/febrero-2023"
+  );
   onSnapshot(colref, (snapshot) => {
-    const getSolds:ProductSold[] = []
-    snapshot.docs.forEach(doc => {
-      getSolds.push({...doc.data(), id: doc.id });
-    })
+    const getSolds: ProductSold[] = [];
+    snapshot.docs.forEach((doc) => {
+      getSolds.push({ ...doc.data(), id: doc.id });
+    });
     dispatch({ type: "getProductsSold", payload: getSolds });
-  })
+  });
+};
 
+export const getCurrentProductSell = (dispatch:(action:any) => void) => {
+  const colref = collection(
+    db,
+    "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/29tuy4tlrTRio6sYJR6D/productsCurrentSale"
+  );
+  onSnapshot(colref, (snapshot) => {
+    const getCurrentProducts: ProductSold[] = [];
+    snapshot.docs.forEach((doc) => {
+      // getCurrentProducts.push({ ...doc.data(), id: doc.id });
+      getCurrentProducts.push({...doc.data()});
+    });
+    dispatch({ type: "getCurrentProductSell", payload: getCurrentProducts });
+  });
 }
