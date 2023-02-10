@@ -24,7 +24,7 @@ const RegistroVenta = () => {
 			pathProduct: pathProduct
 		})
 	}, [product, pathProduct, cantidadProduct])
-	console.log('currentProductSell',currentProductSell)
+	console.log('product', product)
 	const onChangeIdProduct = (e: React.ChangeEvent<HTMLInputElement>) => {
 		getProductById(dispatch, inputValue, e.target.value)
 	}
@@ -35,12 +35,16 @@ const RegistroVenta = () => {
 		})
 	}
 	const addProductToSell = () => {
-		const productToSell = {...product, stock:inputValue.newStock, pathProduct:`/${inputValue.pathProduct}`}
-		addCurrentProductToSell(dispatch, productToSell, inputValue)
+		if (Object.entries(product).length === 0 || product.stock === 0) {
+			console.log('no hay stock o no has ingresado datos del producto')
+		} else {
+			const productToSell = { ...product, stock: inputValue.newStock, pathProduct: `/${inputValue.pathProduct}` }
+			addCurrentProductToSell(dispatch, productToSell, inputValue)
+		}
 	}
 	const onSubmitFormSell = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault()
-		updateStockProduct(inputValue, currentProductSell)
+		updateStockProduct(inputValue, currentProductSell, dispatch)
 	}
 	return (
 		<div className="m-10">
@@ -58,7 +62,7 @@ const RegistroVenta = () => {
 					<div className="flex cursor-pointer relative text-lg bg-amber-400 z-10">
 						<input className="relative w-96 p-3 border" type="text" placeholder={`${product.name ? product.name : "descripcion"}`} name="name" />
 						<input className="relative p-3 w-24 border" type="text" placeholder={`${product.price ? product.price : "precio"}`} name="price" />
-						<input className="relative p-3 w-24 border" type="number" placeholder={`${product.stock ? product.stock : "stock"}`} name="stock" />
+						<input className="relative p-3 w-24 border" type="number" placeholder={`${product.stock === 0 || product.stock ? product.stock : "stock"}`} name="stock" />
 						<input className="border p-3 w-24" type="text" placeholder={`${product.stock ? "activo" : "estado"}`} name="state" />
 					</div>
 					<div className="p-3 relative border w-24">
@@ -83,7 +87,7 @@ const RegistroVenta = () => {
 						currentProductSell.length === 0
 							?
 							<tr className="text-center">
-								<td>agrega un producto</td>
+								<td>aun no hay productos por registrar</td>
 								<td>0</td>
 								<td>0</td>
 								<td>0</td>

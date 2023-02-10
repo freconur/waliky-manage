@@ -91,21 +91,10 @@ export const getCartucherasBts = (dispatch: (action: any) => void) => {
     dispatch({ type: "getCartucherasBts", payload: cartucheras });
   });
 };
-
-
-// export const getCurrentProductToSell = async(dispatch:(action:any)=>void) => {
-
-//   const item = await getDocs(collection(db, "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale"));
-//   const currentProductToSell: Product[] = [];
-//   item.forEach((doc) => {
-//     currentProductToSell.push({ ...doc.data()});
-//   });
-//   dispatch({type:"", payload: currentProductToSell})
-//   // return currentProductToSell
-// }
 export const updateStockProduct = async(
   inputValues: InputValueVentas,
-  currentProductSell: Product[]
+  currentProductSell: Product[],
+  dispatch:(action:any)=>void
 ) => {
   currentProductSell.map(  async currentProduct => {
     const colRef =  doc(db,`${currentProduct.pathProduct}`,`${currentProduct.idProduct}`);
@@ -132,7 +121,7 @@ export const updateStockProduct = async(
     );
      await deleteDoc(doc(db,"/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale",`${currentProduct.id}`))
   })
-
+  getCurrentProductSell(dispatch)
 };
 
 export const getOptions = (dispatch: (action: any) => void) => {
