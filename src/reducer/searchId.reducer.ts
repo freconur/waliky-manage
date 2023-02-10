@@ -9,8 +9,8 @@ type FormReducerAction =
   | { type: "getOptions"; payload: Options[] }
   | { type: "getProductsSold"; payload: ProductSold[] }
   | { type: "getCurrentProductSell"; payload: Product[] }
-  | { type: "plus"; payload: number }
-  | { type: "less"; payload: number }
+  | { type: "plus"; payload: number, payload2:number}
+  | { type: "less"; payload: number, payload2:number}
 export const initialStateProducts = {
   product: [] as Product,
   prueba: [] as Product[],
@@ -19,6 +19,8 @@ export const initialStateProducts = {
   productsSold: [] as ProductSold[],
   currentProductSell: [] as Product[],
   cantidadProduct: 1 as number,
+  warningStockCantidad: '' as string,
+  
 };
 export const searchIdReducer = (
   state: typeof initialStateProducts,
@@ -59,9 +61,11 @@ export const searchIdReducer = (
         currentProductSell: action.payload,
       };
     case "plus":
+      if(action.payload >= action.payload2) return {...state, warningStockCantidad: "no puedes agregar mas cantidad ya que no hay suficiente stock"}
       return {
         ...state,
         cantidadProduct: action.payload + 1,
+        warningStockCantidad: ''
       };
       case "less":
         if(action.payload === 1) return {...state, cantidadProduct: 1}
@@ -69,6 +73,7 @@ export const searchIdReducer = (
       return {
         ...state,
         cantidadProduct: action.payload - 1,
+        warningStockCantidad:''
       };
     default:
       return state;

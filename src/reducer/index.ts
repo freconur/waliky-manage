@@ -6,6 +6,7 @@ import {
   getDoc,
   getDocs,
   setDoc,
+  deleteDoc,
   addDoc,
   onSnapshot,
   Timestamp,
@@ -35,7 +36,7 @@ export const setProductToSell = async (product: Product) => {
   await addDoc(
     collection(
       db,
-      "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/29tuy4tlrTRio6sYJR6D/productsCurrentSale"
+      "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale"
     ),
     product
   );
@@ -53,7 +54,7 @@ export const getProductById = async (
   console.log('pruebita2', `${InputId}`)
   const colRef =  doc(db, "kawaii", `${InputId}`);
   findProduct = await getDoc(colRef);
-  product = { ...findProduct.data(), id: `${InputId}`};
+  product = { ...findProduct.data(), idProduct: `${InputId}`};
   if (findProduct.exists()) {
     dispatch({ type: "getProductById", payload: product, payload2: "kawaii" });
   }
@@ -80,6 +81,7 @@ export const getProductById = async (
   // }
 };
 export const getCartucherasBts = (dispatch: (action: any) => void) => {
+   
   const colRef = collection(db, "bts/Xq9UGyUn6d4OukEb1jPk/cartucheras");
   onSnapshot(colRef, (snapshot) => {
     let cartucheras: Product[] = [];
@@ -90,28 +92,47 @@ export const getCartucherasBts = (dispatch: (action: any) => void) => {
   });
 };
 
-export const updateStockProduct = (
-  path: string,
-  inputValues: InputValueVentas,
-  stock: number,
-  product: Product
-) => {
-  const colRef = doc(db, path, inputValues.id);
-  updateDoc(colRef, {
-    stock: stock,
-  });
 
-  const docData = {
-    idProduct: inputValues.id,
-    name: product.name,
-    timestamp: Timestamp.fromDate(new Date()),
-    cantidad: inputValues.cantidad,
-  };
-  addDoc(
-    collection(db, "/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/febrero-2023"),
-    docData
-  );
-  // const product = getDoc(colRef)
+// export const getCurrentProductToSell = async(dispatch:(action:any)=>void) => {
+
+//   const item = await getDocs(collection(db, "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale"));
+//   const currentProductToSell: Product[] = [];
+//   item.forEach((doc) => {
+//     currentProductToSell.push({ ...doc.data()});
+//   });
+//   dispatch({type:"", payload: currentProductToSell})
+//   // return currentProductToSell
+// }
+export const updateStockProduct = async(
+  inputValues: InputValueVentas,
+  currentProductSell: Product[]
+) => {
+  currentProductSell.map(  async currentProduct => {
+    const colRef =  doc(db,`${currentProduct.pathProduct}`,`${currentProduct.idProduct}`);
+     updateDoc(colRef, {
+      // ...currentProduct,
+      id: currentProduct.idProduct,
+      name: currentProduct.name,
+      price: currentProduct.price,
+      image: currentProduct.image,
+      state: currentProduct.state,
+      stock: currentProduct.stock,
+      marca:currentProduct.marca
+    });
+
+    const docData = {
+      idProduct: currentProduct.idProduct,
+      name: currentProduct.name,
+      timestamp: Timestamp.fromDate(new Date()),
+      cantidad: currentProduct.cantidad,
+    };
+     await addDoc(
+      collection(db, "/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/febrero-2023"),
+      docData
+    );
+     await deleteDoc(doc(db,"/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale",`${currentProduct.id}`))
+  })
+
 };
 
 export const getOptions = (dispatch: (action: any) => void) => {
@@ -145,25 +166,36 @@ export const getProductsSold = (dispatch: (action: any) => void) => {
   });
 };
 
-export const getCurrentProductSell = (dispatch:(action:any) => void) => {
-  const colref = collection(
-    db,
-    "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/29tuy4tlrTRio6sYJR6D/productsCurrentSale"
-  );
-  onSnapshot(colref, (snapshot) => {
-    const getCurrentProducts: ProductSold[] = [];
-    snapshot.docs.forEach((doc) => {
-      // getCurrentProducts.push({ ...doc.data(), id: doc.id });
-      getCurrentProducts.push({...doc.data()});
-    });
-    dispatch({ type: "getCurrentProductSell", payload: getCurrentProducts });
+export const getCurrentProductSell = async(dispatch:(action:any) => void) => {
+
+  const item = await getDocs(collection(db, "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale"));
+  const currentProductToSell: Product[] = [];
+  item.forEach((doc) => {
+    currentProductToSell.push({ ...doc.data(), id:doc.id});
   });
+  
+  // const colref = collection(
+  //   db,
+  //   "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale"
+  // );
+  // onSnapshot(colref, (snapshot) => {
+  //   const getCurrentProducts: ProductSold[] = [];
+  //   snapshot.docs.forEach((doc) => {
+  //     // getCurrentProducts.push({ ...doc.data(), id: doc.id });
+  //     getCurrentProducts.push({...doc.data(), id:doc.id});
+  //   });
+    dispatch({ type: "getCurrentProductSell", payload: currentProductToSell });
+  // });
 }
 
 export const addCurrentProductToSell = (dispatch:(action:any) => void, product:Product ,inputValues:InputValueVentas) => {
 if (inputValues.location === "/registro-de-ventas") {
   console.log('addCurrentProductToSell', product)
-    setProductToSell(product);
+    setProductToSell({...product, cantidad:inputValues.cantidad});
     getCurrentProductSell(dispatch)
   }
 }
+
+export const addSalesProductTable = () => {
+
+} 

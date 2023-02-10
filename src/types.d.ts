@@ -1,7 +1,7 @@
 import { Timestamp } from "firebase/firestore"
 
 export interface Product {
-  // id: string
+  idProduct?: string
   image?: string
   marca?: string
   name?: string
@@ -12,14 +12,18 @@ export interface Product {
   id?:string
   option?: string
   cantidad?: number
+  pathProduct?: string
+  
 }
 export interface SearchById {
   id: string
 }
 export interface InputValueVentas {
   id: string
-  cantidad: number,
-  location:string
+  cantidad?: number,
+  location?:string,
+  newStock?: number
+  pathProduct?: string
 }
 
 export interface Options{

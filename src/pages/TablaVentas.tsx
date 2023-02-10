@@ -7,8 +7,6 @@ const TablaVentas = () => {
 
   const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
   const { productsSold } = state
-  // console.log('productsSold', productsSold[0]?.timestamp.toDate())
-  console.log('productsSold', productsSold)
   useEffect(() => {
     getProductsSold(dispatch)
   }, [])
