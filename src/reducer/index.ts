@@ -43,15 +43,17 @@ export const setProductToSell = async (product: Product) => {
 
 export const getProductById = async (
   dispatch: (action: any) => void,
-  inputValues: SearchById,
-  location: string
+  inputValues: InputValueVentas,
+  InputId?: string
 ) => {
   const btsCategories = await getBtsCategories();
   let findProduct;
   let product: Product | undefined;
-  const colRef = doc(db, "kawaii", inputValues.id);
+  console.log('pruebita', InputId)
+  console.log('pruebita2', `${InputId}`)
+  const colRef =  doc(db, "kawaii", `${InputId}`);
   findProduct = await getDoc(colRef);
-  product = { ...findProduct.data(), id: inputValues.id };
+  product = { ...findProduct.data(), id: `${InputId}`};
   if (findProduct.exists()) {
     dispatch({ type: "getProductById", payload: product, payload2: "kawaii" });
   }
@@ -60,10 +62,10 @@ export const getProductById = async (
     const colRef = doc(
       db,
       `bts/${category.id}/${category.name}`,
-      inputValues.id
+      `${InputId}`
     );
     findProduct = await getDoc(colRef);
-    product = { ...findProduct.data(), id: inputValues.id };
+    product = { ...findProduct.data(), id: `${InputId}` };
     if (findProduct.exists()) {
       dispatch({
         type: "getProductById",
@@ -72,10 +74,10 @@ export const getProductById = async (
       });
     }
   });
-  if (location === "/registro-de-ventas") {
-    setProductToSell(product);
-    getCurrentProductSell(dispatch)
-  }
+  // if (inputValues.location === "/registro-de-ventas") {
+  //   setProductToSell(product);
+  //   getCurrentProductSell(dispatch)
+  // }
 };
 export const getCartucherasBts = (dispatch: (action: any) => void) => {
   const colRef = collection(db, "bts/Xq9UGyUn6d4OukEb1jPk/cartucheras");
@@ -156,4 +158,12 @@ export const getCurrentProductSell = (dispatch:(action:any) => void) => {
     });
     dispatch({ type: "getCurrentProductSell", payload: getCurrentProducts });
   });
+}
+
+export const addCurrentProductToSell = (dispatch:(action:any) => void, product:Product ,inputValues:InputValueVentas) => {
+if (inputValues.location === "/registro-de-ventas") {
+  console.log('addCurrentProductToSell', product)
+    setProductToSell(product);
+    getCurrentProductSell(dispatch)
+  }
 }

@@ -17,7 +17,7 @@ const TablaVentas = () => {
     <>
       <div className="m-7 ">
         <h1 className="text-cyan-800 uppercase font-bold text-3xl">registro de ventas</h1>
-        <table className="mt-10 border rounded  ">
+        <table className="mt-10 border rounded">
           <thead className="bg-indigo-700 text-white capitalize">
             <tr className="text-center">
               <th className="w-8">n</th>

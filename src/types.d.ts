@@ -11,14 +11,15 @@ export interface Product {
   state?: boolean
   id?:string
   option?: string
-
+  cantidad?: number
 }
 export interface SearchById {
   id: string
 }
 export interface InputValueVentas {
   id: string
-  cantidad: number
+  cantidad: number,
+  location:string
 }
 
 export interface Options{
