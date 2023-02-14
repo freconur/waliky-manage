@@ -55,10 +55,11 @@ export const getBtsProducts = async () => {
       resolve(btsProducts)
   })
 };
-export const getAllProducts = async () => {
+export const getAllProducts = async (dispatch:(action:any) => void) => {
   const bts = await getBtsProducts();
   const kawaii = await getKawaiiProducts();
-  console.log('getAllProducts', bts.concat(kawaii))
+  const allProducts:Product[] = bts.concat(kawaii)
+  dispatch({type:"getAllProducts", payload: allProducts})
 };
 export const setProductToSell = async (product: Product) => {
   await addDoc(
