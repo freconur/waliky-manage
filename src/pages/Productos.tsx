@@ -15,7 +15,7 @@ useEffect(() => {
 return (
 
 
-    <div>Holi</div>
+    <div>Holi como estas</div>
 )
 
 
