@@ -6,6 +6,7 @@ import { RegistroVenta } from './pages/RegistroVenta';
 // import { SearchIdProduct } from './pages/SearchIdProduct';
 import { TablaVentas } from './pages/TablaVentas';
 import { SearchIdProduct } from './pages/SearchIdProduct';
+import { Productos } from './pages/Productos';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/registro-de-ventas" element={<RegistroVenta />} />
           <Route path="/ventas" element={<TablaVentas />} />
           <Route path="/busqueda-de-producto" element={<SearchIdProduct />} />
+          <Route path="/registro-de-productos" element={<Productos />} />
         </Routes>
       </Layout>
     </BrowserRouter>
