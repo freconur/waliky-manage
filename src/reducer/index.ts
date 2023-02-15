@@ -100,10 +100,6 @@ export const getProductById = async (
       });
     }
   });
-  // if (inputValues.location === "/registro-de-ventas") {
-  //   setProductToSell(product);
-  //   getCurrentProductSell(dispatch)
-  // }
 };
 export const getCartucherasBts = (dispatch: (action: any) => void) => {
   const colRef = collection(db, "bts/Xq9UGyUn6d4OukEb1jPk/cartucheras");
@@ -140,6 +136,7 @@ export const updateStockProduct = async (
     const docData = {
       idProduct: currentProduct.idProduct,
       name: currentProduct.name,
+      price:currentProduct.price,
       timestamp: Timestamp.fromDate(new Date()),
       cantidad: currentProduct.cantidad,
     };
@@ -157,22 +154,18 @@ export const updateStockProduct = async (
   });
   getCurrentProductSell(dispatch);
 };
-
 export const getOptions = (dispatch: (action: any) => void) => {
   const colRef = collection(
     db,
     "/registro-de-ventas/AGpZzU0AileZDyUkEyAd/options"
   );
-  // const findOptions = await getDoc(colRef);
   onSnapshot(colRef, (snapshot) => {
     const getOptions: Options[] = [];
     snapshot.docs.forEach((doc) => {
-      // getOptions.push({...doc.data(), id: doc.id });
       getOptions.push({ ...doc.data() });
     });
     dispatch({ type: "getOptions", payload: getOptions });
   });
-  // dispatch({type:"getOptions", payload: findOptions.data()})
 };
 
 export const getProductsSold = (dispatch: (action: any) => void) => {
@@ -202,19 +195,7 @@ export const getCurrentProductSell = async (
   item.forEach((doc) => {
     currentProductToSell.push({ ...doc.data(), id: doc.id });
   });
-
-  // const colref = collection(
-  //   db,
-  //   "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale"
-  // );
-  // onSnapshot(colref, (snapshot) => {
-  //   const getCurrentProducts: ProductSold[] = [];
-  //   snapshot.docs.forEach((doc) => {
-  //     // getCurrentProducts.push({ ...doc.data(), id: doc.id });
-  //     getCurrentProducts.push({...doc.data(), id:doc.id});
-  //   });
   dispatch({ type: "getCurrentProductSell", payload: currentProductToSell });
-  // });
 };
 
 export const addCurrentProductToSell = (
@@ -229,4 +210,3 @@ export const addCurrentProductToSell = (
   }
 };
 
-export const addSalesProductTable = () => {};

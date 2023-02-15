@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react"
+import { useEffect, useReducer, useState } from "react"
 import { getProductsSold } from "../reducer"
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer"
 
@@ -6,46 +6,57 @@ import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reduc
 const TablaVentas = () => {
 
   const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
-  const { productsSold } = state
+  const { productsSold, salesMonth, currentDate } = state
   useEffect(() => {
     getProductsSold(dispatch)
   }, [])
+  console.log('currentDate',currentDate)
   return (
 
     <>
-      <div className="m-7 ">
-        <h1 className="text-cyan-800 uppercase font-bold text-3xl">registro de ventas</h1>
-        <table className="mt-10 border rounded">
-          <thead className="bg-indigo-700 text-white capitalize">
-            <tr className="text-center">
-              <th className="w-8">n</th>
-              <th className="w-64">id registro</th>
-              <th className="w-48">id producto</th>
-              <th className="w-80">descripcion de producto</th>
-              <th className="w-48">fecha</th>
-              <th className="w-auto p-2">cantidad</th>
-            </tr>
-          </thead>
-          <tbody className="text-slate-600">
-            {Array.isArray(productsSold)
-              &&
-              productsSold.map((item, index) => {
-                return (
-                  <tr  key={index} className="w-auto text-center">
-                    <td>{index + 1}</td>
-                    {/* <td>{item.id?.substring(1, 10)}...</td> */}
-                    <td>{item.id}</td>
-                    <td>{item.idProduct}</td>
-                    <td>{item.name}</td>
-                    <td>{item.date}</td>
-                    <td>{item.cantidad}</td>
-                  </tr>
+      <div className="m-7 max-sm:mr-2 max-sm:ml-2 max-sm:mt-2">
+        <div className="flex flex-row-reverse max-cs:mr-0 mr-5 text-lg text-gray-400 capitalize">{currentDate}</div>
+        <div className="flex justify-between max-xs:flex-col-reverse">
+          <h1 className="text-cyan-800 uppercase font-bold text-3xl max-xs:text-xl">registro de ventas</h1>
+          <div className="flex justify-end">
+            <div></div>
+            <div className="bg-yellow-300 w-32 rounded-lg text-center drop-shadow-lg mr-5 max-cs:mr-0 max-sm:mb-4">
+              <h2 className="text-white font-bold capitalize">venta del mes</h2><span className="text-green-500 text-xl font-bold">S/{salesMonth}</span>
+            </div>
+          </div>
+        </div>
+        <div className="rounded-lg shadow max-cs:mr-0 mt-5 mr-5 overflow-auto">
+          <table className="w-full overflow-auto">
+            <thead className="bg-gray-50 border-b-2 border-gray-200">
+              <tr className="text-center">
+                <th className="p-2 capitalize text-gray-500 w-10  text-sm font-semibold tracking-wide text-left ">id</th>
+                <th className="p-2 capitalize text-gray-500 w-24  text-sm font-semibold tracking-wide text-left ">id prod.</th>
+                <th className="p-2 capitalize text-gray-500 w-[768px]  text-sm font-semibold tracking-wide text-left ">descripcion de producto</th>
+                <th className="p-2 capitalize text-gray-500 w-40  text-sm font-semibold tracking-wide text-left ">fecha</th>
+                <th className="p-2 capitalize text-gray-500 w-5  text-sm font-semibold tracking-wide text-left ">cantidad</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {Array.isArray(productsSold)
+                &&
+                productsSold.map((item, index) => {
+                  return (
+                    <tr key={index} className="w-auto text-center">
+                      <td className=" cursor-pointer duration-900 bg-white p-1 capitalize text-gray-400 text-md ">{index + 1}</td>
+                      {/* <td>{item.id?.substring(1, 10)}...</td> */}
+                      {/* <td className="text-left cursor-pointer duration-900 max-cz:hidden bg-white p-1 capitalize text-gray-400 text-md">{item.id}</td> */}
+                      <td className=" text-left p-1 capitalize text-gray-400  w-5 bg-white text-md">{item.idProduct?.substring(0, 4)}...</td>
+                      <td className="text-left p-1 capitalize text-gray-400 w-24 bg-white text-md">{item.name}</td>
+                      <td className="text-left p-1 capitalize text-gray-400 w-40 bg-white text-md">{item.date}</td>
+                      <td className="text-center p-1 capitalize text-gray-400  bg-white text-md">{item.cantidad}</td>
+                    </tr>
 
-                )
-              })}
+                  )
+                })}
 
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   )

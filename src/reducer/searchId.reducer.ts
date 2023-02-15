@@ -1,3 +1,4 @@
+import { funcionDate } from "../date/date";
 import { Options, Product, ProductSold } from "../types";
 import { TYPES } from "./action";
 // import { GET_PRODUCT_BY_ID } from "./action";
@@ -22,7 +23,9 @@ export const initialStateProducts = {
   cantidadProduct: 1 as number,
   warningStockCantidad: '' as string,
   allProducts: [] as Product[],
-  
+  dailySales: 0 as number,
+  salesMonth: 0 as number,
+  currentDate: '' as string
 };
 export const searchIdReducer = (
   state: typeof initialStateProducts,
@@ -47,6 +50,11 @@ export const searchIdReducer = (
         options: action.payload,
       };
     case "getProductsSold":
+      let ventaTotalMes = 0
+      let date = funcionDate()
+      action.payload.map(item => {
+        ventaTotalMes = ventaTotalMes + parseInt(`${item.price}`,10)
+      })
       const rtaaa = action.payload.map((item) => {
         return {
           ...item,
@@ -56,6 +64,8 @@ export const searchIdReducer = (
       return {
         ...state,
         productsSold: rtaaa,
+        salesMonth: ventaTotalMes,
+        currentDate: date
       };
     case "getCurrentProductSell":
       return {

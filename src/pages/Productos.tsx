@@ -43,7 +43,7 @@ const Productos = () => {
 	}
 	return (
 
-		<div className="ml-10 mt-5 w-auto">
+		<div className="max-cz:ml-5 ml-10 mt-5 w-auto">
 			<h1 className="capitalize text-4xl font-bold text-gray-600">tus productos</h1>
 			<div className="mt-5 mr-5">
 				<p className="capitalize text-xl text-gray-500 mb-2">buscar</p>
