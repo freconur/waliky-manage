@@ -14,7 +14,7 @@ const Productos = () => {
     if (search.length === 0) {
       return allProducts.slice(currentPage, currentPage + 5)
     } else {
-      const filtered = allProducts.filter(product => product.name?.toLowerCase().includes(search))
+      const filtered = allProducts.filter(product => product.name?.toLowerCase().includes(search.toLowerCase()))
       return filtered.slice(currentPage, currentPage + 5)
     }
 
