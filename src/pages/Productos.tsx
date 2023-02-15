@@ -11,21 +11,24 @@ const Productos = () => {
 	const [search, setSearch] = useState('')
 
 	const filterProducts = (): Product[] => {
-		if(search.length === 0) {
+		if (search.length === 0) {
 			return allProducts.slice(currentPage, currentPage + 5)
+		} else {
+			const filtered = allProducts.filter(product => product.name?.toLowerCase().includes(search))
+			return filtered.slice(currentPage, currentPage + 5)
 		}
 
-		const filtered = allProducts.filter(product => product.name?.includes(search))
-		return filtered.slice(currentPage, currentPage + 5)
 	}
 
 
 	useEffect(() => {
 		getAllProducts(dispatch)
 	}, [])
-
+	const onClickResetCurrentPage = () => {
+		setCurrentPage(0)
+	}
 	const nextPage = () => {
-		if(allProducts.filter(product => product.name?.includes(search)).length > currentPage + 5) {
+		if (allProducts.filter(product => product.name?.includes(search)).length > currentPage + 5) {
 			setCurrentPage(currentPage + 5)
 		}
 	}
@@ -39,40 +42,50 @@ const Productos = () => {
 		setSearch(e.target.value)
 	}
 	return (
-		<div>
-			<div>
-				<input className="border-2" onChange={onSearchChange} value={search} type="text" />
+
+		<div className="ml-10 mt-5 w-auto">
+			<h1 className="capitalize text-4xl font-bold text-gray-600">tus productos</h1>
+			<div className="mt-5 mr-5">
+				<p className="capitalize text-xl text-gray-500 mb-2">buscar</p>
+				<input className="border-2 w-full p-2 rounded-lg" onClick={onClickResetCurrentPage} onChange={onSearchChange} value={search} type="text" />
 			</div>
-			<div className="m-5">
-				<button onClick={previewPage} className="mr-5 rounded bg-black text-white cursor-pointer">anterior</button>
-				<button onClick={nextPage} className="mr-5 rounded bg-black text-white cursor-pointer">siguiente</button>
+
+			<div className="overflow-auto rounded-lg shadow mt-5 mr-5">
+				<table className="w-full  overflow-auto">
+					<thead className="bg-gray-50 border-b-2 border-gray-200">
+						<tr>
+							<th className="p-3 capitalize text-gray-500 w-10 max-cz:hidden  text-sm font-semibold tracking-wide text-left">id</th>
+							<th className="p-3 capitalize text-gray-500 w-[1024px] text-sm font-semibold tracking-wide text-left">nombre</th>
+							<th className="p-3 capitalize text-gray-500 w-10 text-sm font-semibold tracking-wide text-left">precio</th>
+							<th className="p-3 capitalize text-gray-500 w-10 text-sm font-semibold tracking-wide text-left">marca</th>
+							<th className="p-3 capitalize text-gray-500 text-sm font-semibold tracking-wide text-left">imagen</th>
+						</tr>
+					</thead>
+					<tbody className="divide-y divide-gray-100 ">
+						{filterProducts().map(({ id, name, image, price, marca }, index) => {
+							return (
+								<tr key={id} className="duration-1000">
+									<td className=" cursor-pointer duration-900 max-cz:hidden bg-white p-3 capitalize text-gray-400 text-md ">
+										<div className="text-blue-500 font-bold hover:underline ">
+											{index + 1}
+										</div>
+									</td>
+									<td className="p-3 capitalize text-gray-400  w-10 bg-white text-md">{name}</td>
+									<td className="p-3 capitalize text-gray-400  bg-white text-md">S/{price}</td>
+									<td className="p-3 capitalize text-gray-400  bg-white text-md">{marca}</td>
+									<td className="p-3 capitalize text-gray-400  bg-white text-md">
+										<img className="w-[50px] h-[50px]" src={image} alt={name} />
+									</td>
+								</tr>
+							)
+						})}
+					</tbody>
+				</table>
 			</div>
-			<table>
-				<thead>
-					<tr>
-						<th>n</th>
-						<th>id</th>
-						<th>nombre</th>
-						<th>imagen</th>
-					</tr>
-				</thead>
-				<tbody>
-					{filterProducts().map(({ id, name, image }, index) => {
-						return (
-							<tr key={id}>
-								<td>{index + 1}</td>
-								<td>{id}</td>
-								<td>{name}</td>
-								<td>
-									{/* <div className="w-30 h-30"> */}
-									<img className="w-10 h-10" src={image} alt={name} />
-									{/* </div> */}
-								</td>
-							</tr>
-						)
-					})}
-				</tbody>
-			</table>
+			<div className="mt-3">
+				<button onClick={previewPage} className="p-2 mr-5 rounded bg-orange-500 duration-300 hover:bg-orange-400 font-semibold drop-shadow-xl text-white cursor-pointer">anterior</button>
+				<button onClick={nextPage} className="p-2 mr-5 rounded bg-orange-500 duration-300 hover:bg-orange-400 font-semibold drop-shadow-xl text-white cursor-pointer">siguiente</button>
+			</div>
 		</div>
 	)
 

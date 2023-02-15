@@ -4,13 +4,16 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
+    screens: {
+          sm: '640px',
+          cz: '664px',
+          md: '768px',
+          lg: '1024px',
+          xl: '1280px',
+          '2xl': '1536px',
+        },
     extend: {
-      gridTemplateColumns: {
-        'dashboard': '250px 1fr',
-      },
-      bgCutomize: {
-        'prueba': '#ffffff54'
-      }
+    
     },
   },
   plugins: [],
