@@ -10,9 +10,7 @@ const TablaVentas = () => {
   useEffect(() => {
     getProductsSold(dispatch)
   }, [])
-  console.log('currentDate',currentDate)
   return (
-
     <>
       <div className="m-7 max-sm:mr-2 max-sm:ml-2 max-sm:mt-2">
         <div className="flex flex-row-reverse max-cs:mr-0 mr-5 text-lg text-gray-400 capitalize">{currentDate}</div>
@@ -26,7 +24,7 @@ const TablaVentas = () => {
           </div>
         </div>
         <div className="rounded-lg shadow max-cs:mr-0 mt-5 mr-5 overflow-auto">
-          <table className="w-full overflow-auto">
+          <table className="w-full overflow-auto max-xsm:hidden">
             <thead className="bg-gray-50 border-b-2 border-gray-200">
               <tr className="text-center">
                 <th className="p-2 capitalize text-gray-500 w-10  text-sm font-semibold tracking-wide text-left ">id</th>
@@ -56,6 +54,23 @@ const TablaVentas = () => {
 
             </tbody>
           </table>
+          <ul className="hidden max-xsm:block">
+            {productsSold.map(({name, id, date, cantidad, price}, index) => {
+              return (
+                <li className="rounded-lg bg-slate-200 m-2 p-1">
+                  <div className="flex justify-between">
+                    <span className="text-blue-500 font-semibold mr-2">id:{index + 1}</span>
+                    <span>{date}</span>
+                  </div>
+                  <p className="text-md capitalize text-gray-500">{name}</p>
+                  <div>
+                    <span className="mr-5 capitalize">precio:  <span className="font-bold">s/ {price}</span></span>
+                    <span className="mr-5 capitalize">cantidad: <span className="font-bold">{cantidad}</span></span>
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
         </div>
       </div>
     </>
