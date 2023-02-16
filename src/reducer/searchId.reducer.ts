@@ -13,6 +13,7 @@ type FormReducerAction =
   | { type: "plus"; payload: number, payload2:number}
   | { type: "less"; payload: number, payload2:number}
   | { type: "getAllProducts"; payload: Product[]}
+  | { type: "warningStock"; payload: string}
 export const initialStateProducts = {
   product: [] as Product,
   prueba: [] as Product[],
@@ -25,7 +26,8 @@ export const initialStateProducts = {
   allProducts: [] as Product[],
   dailySales: 0 as number,
   salesMonth: 0 as number,
-  currentDate: '' as string
+  currentDate: '' as string,
+  warningStock: '' as string
 };
 export const searchIdReducer = (
   state: typeof initialStateProducts,
@@ -92,6 +94,11 @@ export const searchIdReducer = (
         ...state,
         allProducts: action.payload,
       };
+      case "warningStock":
+        return {
+          ...state,
+          warningStockCantidad:action.payload
+        }
     default:
       return state;
   }

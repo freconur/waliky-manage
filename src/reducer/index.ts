@@ -169,10 +169,7 @@ export const getOptions = (dispatch: (action: any) => void) => {
 };
 
 export const getProductsSold = (dispatch: (action: any) => void) => {
-  const colref = collection(
-    db,
-    "/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/febrero-2023"
-  );
+  const colref = collection(db,"/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/febrero-2023");
   onSnapshot(colref, (snapshot) => {
     const getSolds: ProductSold[] = [];
     snapshot.docs.forEach((doc) => {
@@ -185,17 +182,15 @@ export const getProductsSold = (dispatch: (action: any) => void) => {
 export const getCurrentProductSell = async (
   dispatch: (action: any) => void
 ) => {
-  const item = await getDocs(
-    collection(
-      db,
-      "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale"
-    )
-  );
-  const currentProductToSell: Product[] = [];
-  item.forEach((doc) => {
-    currentProductToSell.push({ ...doc.data(), id: doc.id });
-  });
-  dispatch({ type: "getCurrentProductSell", payload: currentProductToSell });
+  // const item = await getDocs(collection(db,"/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale"));
+  const item = collection(db,"/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale");
+  onSnapshot(item,(snapshot) => {
+    const currentProductToSell: Product[] = [];
+    snapshot.docs.forEach((doc) => {
+      currentProductToSell.push({ ...doc.data(), id: doc.id });
+    });
+    dispatch({ type: "getCurrentProductSell", payload: currentProductToSell });
+  })
 };
 
 export const addCurrentProductToSell = (
@@ -209,4 +204,7 @@ export const addCurrentProductToSell = (
     getCurrentProductSell(dispatch);
   }
 };
+export const deleteCurrentProduct = async (dispatch:(action:any) => void, id:string) => {
+  await deleteDoc(doc(db, "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale", id))
+}
 

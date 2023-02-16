@@ -2,11 +2,6 @@
 import { useEffect, useReducer, useState } from "react";
 import { BsArrowLeftShort } from "react-icons/bs";
 import { BsClipboardData } from "react-icons/bs";
-import { RiCurrencyFill } from "react-icons/ri";
-import { BsFillGrid1X2Fill } from "react-icons/bs";
-// import { RiDatabaseFill } from "react-icons/bs";
-// import { RiFileSearchFill } from "react-icons/bs";
-
 import { Link } from "react-router-dom";
 import { getOptions } from "../reducer";
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer";
