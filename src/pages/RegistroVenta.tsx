@@ -37,6 +37,12 @@ const RegistroVenta = () => {
 		})
 	}
 	const addProductToSell = () => {
+		if(currentProductSell.length >= 1) {
+			const rtaaddProductToSell = currentProductSell.find(item => item.idProduct === product.idProduct)
+			if(rtaaddProductToSell?.stock === 0) {
+				return console.log("ya no hay stock suficiente")
+			}
+		}
 		if (Object.entries(product).length === 0 || product.stock === 0) {
 			console.log('no hay stock o no has ingresado datos del producto')
 		} else {
@@ -50,11 +56,11 @@ const RegistroVenta = () => {
 	}
 	return (
 		<div className="m-10 max-xs:m-3">
-			<h1 className="uppercase text-2xl">gestion de ventas</h1>
+			<h1 className="uppercase text-cyan-700 font-bold text-2xl">gestion de ventas</h1>
 			<div className="w-full">
-				<div className="w-full flex flex-col ">
-					<label className="text-2xl">id de producto</label>
-					<div className="mb-5 mt-5">
+				<div className="mt-2 w-full flex flex-col ">
+					<label className="text-md font-medium text-gray-500 ">id de producto</label>
+					<div className="mb-4 mt-0">
 						<input className="border p-1 pl-3" onChange={onChangeIdProduct} value={id} type="text" placeholder="id" name="id" />
 						<p>{inputValue.id}</p>
 					</div>
@@ -66,8 +72,8 @@ const RegistroVenta = () => {
 						<input className=" p-3 w-full border" type="text" placeholder={`${product.price ? product.price : "precio"}`} name="price" />
 						<input className=" p-3 w-full border" type="number" placeholder={`${product.stock === 0 || product.stock ? product.stock : "stock"}`} name="stock" />
 						<input className="border p-3 w-full" type="text" placeholder={`${product.stock ? "activo" : "estado"}`} name="state" />
-					</div> */}
-					{/* <div className="p-3 relative border w-24">
+					</div>
+					<div className="p-3 relative border w-24">
 						<button onClick={() => dispatch({ type: "less", payload: cantidadProduct, payload2: parseInt(`${product.stock}`, 10) })} className="m-1 rounded-full absolute border w-5 h-5 z-40 text-center leading-3 left-2 hover:bg-blue-500 duration-300 hover:text-white">-</button>
 						<input onChange={onChangeIdFormVentas} value={cantidadProduct} name="cantidad" placeholder="1" className="text-center w-5 ml-6" />
 						<button onClick={() => dispatch({ type: "plus", payload: cantidadProduct, payload2: parseInt(`${product.stock}`, 10) })} className="m-1 rounded-full absolute border w-5 h-5 z-40 text-center leading-3 right-2 top-3 hover:bg-blue-500 duration-300 hover:text-white">+</button>
@@ -107,7 +113,9 @@ const RegistroVenta = () => {
 								?
 								<li>ingresa un producto</li>
 								:
-								<li className="cursor-pointer" onClick={addProductToSell}>
+								
+								<li className="relative">
+									<div onClick={addProductToSell} className="absolute cursor-pointer z-20 bg-transparent inset-0"></div>
 									<div className="flex justify-between mb-2">
 										<img className="w-[50px] h-[50px] mr-2" src={product.image} alt={product.name} />
 										<p className="text-gray-500 font-semibold capitalize">{product.name}</p>
@@ -118,10 +126,10 @@ const RegistroVenta = () => {
 									</div>
 									<div className="flex justify-between">
 										<div className="text-gray-600 text-md font-semibold mt-1">cantidad:</div>
-										<div className="p-1 w-[68px] leading-normal">
-											<button onClick={() => dispatch({ type: "less", payload: cantidadProduct, payload2: parseInt(`${product.stock}`, 10) })} className="rounded-full border border-blue-300 w-5 m-0 h-5 z-40 text-center leading-3  hover:bg-blue-500 duration-300 hover:text-white hover:border-white">-</button>
-											<input onChange={onChangeIdFormVentas} value={cantidadProduct} name="cantidad" placeholder="1" className="text-center max-w-[20px] text-blue-700 font-bold bg-blue-100" />
-											<button onClick={() => dispatch({ type: "plus", payload: cantidadProduct, payload2: parseInt(`${product.stock}`, 10) })} className="m-0 rounded-full  border border-blue-300 w-5 h-5 z-40 text-center leading-3 right-2 hover:bg-blue-500 duration-300 hover:text-white hover:border-white">+</button>
+										<div className="p-1 w-[68px] leading-normal relative">
+											<button onClick={() => dispatch({ type: "less", payload: cantidadProduct, payload2: parseInt(`${product.stock}`, 10) })} className="absolute rounded-full border border-blue-300 w-5 m-0 h-5 z-40 text-center leading-3  hover:bg-blue-500 duration-300 hover:text-white hover:border-white">-</button>
+											<input onChange={onChangeIdFormVentas} value={cantidadProduct} name="cantidad" placeholder="1" className="absolute left-7 max-w-[20px] text-blue-700 font-bold bg-blue-100" />
+											<button onClick={() => dispatch({ type: "plus", payload: cantidadProduct, payload2: parseInt(`${product.stock}`, 10) })} className="absolute m-0 rounded-full  border border-blue-300 w-5 h-5 z-40 text-center leading-3 right-2 hover:bg-blue-500 duration-300 hover:text-white hover:border-white">+</button>
 										</div>
 									</div>
 
@@ -179,7 +187,7 @@ const RegistroVenta = () => {
 						:
 						currentProductSell.map(item => {
 							return (
-								<li className="p-2 bg-pink-100 rounded-sm shadow">
+								<li className="p-2 bg-pink-100 rounded-sm shadow mb-2">
 									<div className="flex justify-between mb-2">
 										<img className="w-[50px] h-[50px] mr-2" src={item.image} alt={item.name} />
 										<p className="text-gray-500 font-semibold capitalize">{item.name}</p>
@@ -190,7 +198,7 @@ const RegistroVenta = () => {
 									</div>
 									<div className="flex justify-between">
 										<div className="text-gray-600 text-md font-semibold mt-1">cantidad:</div>
-										<div className="p-1 w-[68px] text-center leading-normal">{item.cantidad}</div>
+										<div className="p-1 w-[68px] text-center leading-normal font-bold text-blue-700">{item.cantidad}</div>
 									</div>
 
 								</li>

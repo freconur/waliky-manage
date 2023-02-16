@@ -15,7 +15,7 @@ const TablaVentas = () => {
       <div className="m-7 max-sm:mr-2 max-sm:ml-2 max-sm:mt-2">
         <div className="flex flex-row-reverse max-cs:mr-0 mr-5 text-lg text-gray-400 capitalize">{currentDate}</div>
         <div className="flex justify-between max-xs:flex-col-reverse">
-          <h1 className="text-cyan-800 uppercase font-bold text-3xl max-xs:text-xl">registro de ventas</h1>
+          <h1 className="text-cyan-700 uppercase font-bold text-3xl max-xs:text-xl">ventas de febrero</h1>
           <div className="flex justify-end">
             <div></div>
             <div className="bg-yellow-300 w-32 rounded-lg text-center drop-shadow-lg mr-5 max-cs:mr-0 max-sm:mb-4">
