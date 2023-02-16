@@ -44,13 +44,13 @@ const Productos = () => {
   return (
 
     <div className="max-cz:ml-5 ml-10 mt-5 w-auto">
-      <h1 className="capitalize text-4xl font-bold text-gray-600">tus productos</h1>
-      <div className="mt-5 mr-5">
+      <h1 className="capitalize text-3xl font-bold text-gray-600">tus productos</h1>
+      <div className="mt-2 mr-5">
         <p className="capitalize text-xl text-gray-500 mb-2">buscar</p>
         <input className="border-2 w-full p-2 rounded-lg" onClick={onClickResetCurrentPage} onChange={onSearchChange} value={search} type="text" />
       </div>
 
-      <div className="overflow-auto rounded-lg shadow mt-5 mr-5">
+      <div className="overflow-auto rounded-lg shadow mt-2 mr-5">
         <table className="w-full  overflow-auto">
           <thead className="bg-gray-50 border-b-2 border-gray-200">
             <tr>
