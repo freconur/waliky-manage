@@ -54,10 +54,10 @@ const Productos = () => {
         <table className="w-full  overflow-auto">
           <thead className="bg-gray-50 border-b-2 border-gray-200">
             <tr>
-              <th className="p-3 capitalize text-gray-500 w-10 max-cz:hidden  text-sm font-semibold tracking-wide text-left">id</th>
+              <th className="p-3 capitalize text-gray-500 w-10  text-sm font-semibold tracking-wide text-left">id</th>
               <th className="p-3 capitalize text-gray-500 w-[1024px] text-sm font-semibold tracking-wide text-left">nombre</th>
               <th className="p-3 capitalize text-gray-500 w-10 text-sm font-semibold tracking-wide text-left">precio</th>
-              <th className="p-3 capitalize text-gray-500 w-10 text-sm font-semibold tracking-wide text-left">marca</th>
+              <th className="p-3 capitalize text-gray-500 w-10 max-cz:hidden text-sm font-semibold tracking-wide text-left">marca</th>
               <th className="p-3 capitalize text-gray-500 text-sm font-semibold tracking-wide text-left">imagen</th>
             </tr>
           </thead>
@@ -65,7 +65,7 @@ const Productos = () => {
             {filterProducts().map(({ id, name, image, price, marca }, index) => {
               return (
                 <tr key={id} className="duration-1000">
-                  <td className=" cursor-pointer duration-900 max-cz:hidden bg-white p-3 capitalize text-gray-400 text-md ">
+                  <td className=" cursor-pointer duration-900  bg-white p-3 capitalize text-gray-400 text-md ">
                     <div className="duration-500 rounded-full font-bold hover:underline hover:bg-blue-200 text-center bg-blue-400 text-white h-[25px] w-[25px]">
                       <CopyToClipboard text={`${id}`}>
                         <span>
@@ -76,7 +76,7 @@ const Productos = () => {
                   </td>
                   <td className="p-3 capitalize text-gray-400  w-10 bg-white text-md">{name}</td>
                   <td className="p-3 capitalize text-gray-400  bg-white text-md">S/{price}</td>
-                  <td className="p-3 capitalize text-gray-400  bg-white text-md">{marca}</td>
+                  <td className="p-3 capitalize text-gray-400 max-cz:hidden bg-white text-md">{marca}</td>
                   <td className="p-3 capitalize text-gray-400  bg-white text-md">
                     <img className="w-[50px] h-[50px]" src={image} alt={name} />
                   </td>
