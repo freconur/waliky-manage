@@ -29,7 +29,7 @@ const SideBar = () => {
           {Array.isArray((options)) &&
             options?.map((item, index) => {
               return (
-                <li key={index} className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2  rounded-md mt-2 capitalize   hover:bg-white">
+                <li key={index} className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2  rounded-md mt-2 capitalize   hover:bg-red-200">
                   <Link to={`${item.path}`} className="w-48">
                     <img className="text-2xl block float-left" src={item.image} alt="" />
                     {/* <span className="text-2xl block float-left"><BsFillGrid1X2Fill/></span> */}

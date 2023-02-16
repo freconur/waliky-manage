@@ -2,6 +2,7 @@ import { useEffect, useReducer, useState } from "react"
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer";
 import { getAllProducts } from '../reducer/'
 import { Product } from "../types";
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 
 const Productos = () => {
@@ -65,8 +66,12 @@ const Productos = () => {
               return (
                 <tr key={id} className="duration-1000">
                   <td className=" cursor-pointer duration-900 max-cz:hidden bg-white p-3 capitalize text-gray-400 text-md ">
-                    <div className="text-blue-500 font-bold hover:underline ">
-                      {index + 1}
+                    <div className="duration-500 rounded-full font-bold hover:underline hover:bg-blue-200 text-center bg-blue-400 text-white h-[25px] w-[25px]">
+                      <CopyToClipboard text={`${id}`}>
+                        <span>
+                          {index + 1}
+                        </span>
+                      </CopyToClipboard>
                     </div>
                   </td>
                   <td className="p-3 capitalize text-gray-400  w-10 bg-white text-md">{name}</td>

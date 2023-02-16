@@ -4,12 +4,14 @@ import { addCurrentProductToSell, deleteCurrentProduct, getCurrentProductSell, g
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer"
 import { InputValueVentas } from '../types'
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { CopyToClipboard } from 'react-copy-to-clipboard'
+
 
 
 const RegistroVenta = () => {
 	const location = useLocation()
 	const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
-	const { product, pathProduct, currentProductSell, cantidadProduct, warningStockCantidad,warningStock } = state
+	const { product, pathProduct, currentProductSell, cantidadProduct, warningStockCantidad, warningStock } = state
 	const [id, setId] = useState('')
 	const [inputValue, setInputValue] = useState<InputValueVentas>({
 		id: '',
@@ -39,11 +41,11 @@ const RegistroVenta = () => {
 		})
 	}
 	const addProductToSell = () => {
-		if(currentProductSell.length >= 1) {
+		if (currentProductSell.length >= 1) {
 			const rtaaddProductToSell = currentProductSell.find(item => item.idProduct === product.idProduct)
-			if(rtaaddProductToSell?.stock === 0) {
+			if (rtaaddProductToSell?.stock === 0) {
 				// return console.log("ya no hay stock suficiente")
-				return dispatch({type:"warningStock", payload: "no hay stock suficiente"})
+				return dispatch({ type: "warningStock", payload: "no hay stock suficiente" })
 			}
 		}
 		if (Object.entries(product).length === 0 || product.stock === 0) {
@@ -53,7 +55,7 @@ const RegistroVenta = () => {
 			addCurrentProductToSell(dispatch, productToSell, inputValue)
 		}
 	}
-	const onDeleteCurrentProduct = (id:string) => {
+	const onDeleteCurrentProduct = (id: string) => {
 		deleteCurrentProduct(dispatch, id)
 	}
 	const onSubmitFormSell = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -72,7 +74,8 @@ const RegistroVenta = () => {
 					</div>
 				</div>
 				<div className="flex relative max-w-[768px] mb-5">
-					<div className="overflow-auto rounded-lg border-blue-200 border w-full drop-shadow-md">
+					<div className="overflow-auto relative rounded-lg border-blue-200 border w-full drop-shadow-md">
+						<div onClick={addProductToSell} className="absolute cursor-pointer z-20 inset-0"></div>
 						<table className="w-full rounded-lg  bg-blue-100 max-xm:hidden">
 							<tbody className="w-full">
 								{Object.entries(product).length === 0 || id.length < 20
@@ -91,10 +94,10 @@ const RegistroVenta = () => {
 										<th className="text-center text-md border-blue-200 border-l-2  min-w-[30px] font-medium text-blue-500">{product.stock}</th>
 										<th className="text-center text-md border-blue-200 border-l-2 mr-1 ml-1 min-w-[30px] font-medium text-blue-500">{`${product.state === true ? "activo" : "inactivo"}`}</th>
 										<th className="text-center min-w-[73.4px] text-md border-blue-200 border-l-2 font-medium text-blue-500">
-											<div className="p-1 border  w-full">
-												<button onClick={() => dispatch({ type: "less", payload: cantidadProduct, payload2: parseInt(`${product.stock}`, 10) })} className="rounded-full border border-blue-300 w-5 m-0 h-5 z-40 text-center leading-3 hover:bg-blue-500 duration-300 hover:text-white hover:border-white">-</button>
-												<input onChange={onChangeIdFormVentas} value={cantidadProduct} name="cantidad" placeholder="1" className="text-center max-w-[20px] bg-blue-100" />
-												<button onClick={() => dispatch({ type: "plus", payload: cantidadProduct, payload2: parseInt(`${product.stock}`, 10) })} className="m-0 rounded-full  border border-blue-300 w-5 h-5 z-40 text-center leading-3 right-2 hover:bg-blue-500 duration-300 hover:text-white hover:border-white">+</button>
+											<div className="p-1 border relative w-full">
+												<button onClick={() => dispatch({ type: "less", payload: cantidadProduct, payload2: parseInt(`${product.stock}`, 10) })} className="absolute left-1 rounded-full border border-blue-300 w-5 m-0 h-5 z-40 text-center leading-3 hover:bg-blue-500 duration-300 hover:text-white hover:border-white">-</button>
+												<input onChange={onChangeIdFormVentas} value={cantidadProduct} name="cantidad" placeholder="1" className=" text-center w-10 bg-blue-100" />
+												<button onClick={() => dispatch({ type: "plus", payload: cantidadProduct, payload2: parseInt(`${product.stock}`, 10) })} className="right-1 absolute m-0 rounded-full  border border-blue-300 w-5 h-5 z-40 text-center leading-3  hover:bg-blue-500 duration-300 hover:text-white hover:border-white">+</button>
 											</div>
 										</th>
 									</tr>
@@ -158,17 +161,23 @@ const RegistroVenta = () => {
 								</tr>
 								:
 								// currentProductSell.map(({ id, name, price, stock, cantidad }, index) => {
-									currentProductSell.map((item, index) => {
+								currentProductSell.map((item, index) => {
 									return (
-										<tr key={id} className="text-center">
-											<td className="text-gray-400 bg-white capitalize text-md">{index + 1}</td>
-											<td className="text-gray-400 bg-white capitalize text-md">{item.name}</td>
-											<td className="text-gray-400 bg-white capitalize text-md">{item.price}</td>
-											<td className="text-gray-400 bg-white capitalize text-md">{item.stock}</td>
-											<td className="text-gray-400 bg-white capitalize text-md">{item.cantidad}</td>
-											<td className="text-red-600 bg-white capitalize text-md cursor-pointer"><RiDeleteBin5Line onClick={() => onDeleteCurrentProduct(`${item.id}`)}/></td>
-
-
+										<tr key={id}>
+											<td className="text-gray-400 bg-white pl-1 text-center capitalize text-md">
+												<div className="text-white bg-blue-400 font-bold cursor-pointer rounded-full border h-[25px] w-[25px]">
+													<CopyToClipboard text={`${item.idProduct}`}>
+														<span>
+															{index + 1}
+														</span>
+													</CopyToClipboard>
+												</div>
+											</td>
+											<td className="text-gray-400 bg-white capitalize text-md text-left">{item.name}</td>
+											<td className="text-gray-400 bg-white capitalize text-md text-center">{item.price}</td>
+											<td className="text-gray-400 bg-white capitalize text-md text-center">{item.stock}</td>
+											<td className="text-gray-400 bg-white capitalize text-md text-center">{item.cantidad}</td>
+											<td className="text-red-600 bg-white capitalize text-md cursor-pointer text-center"><RiDeleteBin5Line onClick={() => onDeleteCurrentProduct(`${item.id}`)} /></td>
 										</tr>
 									)
 								})
@@ -180,9 +189,17 @@ const RegistroVenta = () => {
 						?
 						<li className="p-2 bg-green-400 rounded-sm shadow">no hay producto para registrar</li>
 						:
-						currentProductSell.map(item => {
+						currentProductSell.map((item, index) => {
 							return (
-								<li className="p-2 bg-pink-100 rounded-sm shadow mb-2">
+								<li key={item.id} className="p-2 bg-green-100 rounded-sm shadow mb-2">
+									<div className="mb-1 flex justify-between">
+										<div className=" rounded-lg duration-500 text-center bg-blue-400 w-3 cursor-pointer text-white font-bold hover:bg-blue-300 hover:text-gray-700">
+											<CopyToClipboard text={`${item.idProduct}`}>
+												<div className="text-sm">id: {index + 1}</div>
+											</CopyToClipboard>
+										</div>
+										<div className="text-red-700 text-lg flex flex-row-reverse cursor-pointer"><RiDeleteBin5Line onClick={() => onDeleteCurrentProduct(`${item.id}`)} /></div>
+									</div>
 									<div className="flex justify-between mb-2">
 										<img className="w-[50px] h-[50px] mr-2" src={item.image} alt={item.name} />
 										<p className="text-gray-500 font-semibold capitalize">{item.name}</p>
@@ -195,7 +212,7 @@ const RegistroVenta = () => {
 										<div className="text-gray-600 text-md font-semibold mt-1">cantidad:</div>
 										<div className="p-1 w-[68px] text-right leading-normal font-bold text-blue-700">{item.cantidad}</div>
 									</div>
-									<div className="text-red-700 flex flex-row-reverse cursor-pointer"><RiDeleteBin5Line onClick={() => onDeleteCurrentProduct(`${item.id}`)}/></div>
+
 								</li>
 							)
 						})
