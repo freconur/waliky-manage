@@ -19,7 +19,7 @@ export interface SearchById {
   id: string
 }
 export interface InputValueVentas {
-  id: string
+  id?: string
   cantidad?: number,
   location?:string,
   newStock?: number
