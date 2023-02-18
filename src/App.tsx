@@ -7,13 +7,14 @@ import { RegistroVenta } from './pages/RegistroVenta';
 import { TablaVentas } from './pages/TablaVentas';
 import { SearchIdProduct } from './pages/SearchIdProduct';
 import { Productos } from './pages/Productos';
+import { Home } from './pages/Home';
 
 function App() {
   return (
     <BrowserRouter>
       <Layout>
         <Routes>
-          {/* <Route path="/" element={<Home />} /> */}
+          <Route path="/" element={<Home />} />
           <Route path="/registro-de-ventas" element={<RegistroVenta />} />
           <Route path="/ventas" element={<TablaVentas />} />
           <Route path="/busqueda-de-producto" element={<SearchIdProduct />} />
