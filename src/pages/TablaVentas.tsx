@@ -2,9 +2,7 @@ import { useEffect, useReducer, useState } from "react"
 import { getProductsSold } from "../reducer"
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer"
 
-
 const TablaVentas = () => {
-
   const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
   const { productsSold, salesMonth, currentDate } = state
   useEffect(() => {
@@ -48,16 +46,14 @@ const TablaVentas = () => {
                       <td className="text-left p-1 capitalize text-gray-400 w-40 bg-white text-md">{item.date}</td>
                       <td className="text-center p-1 capitalize text-gray-400  bg-white text-md">{item.cantidad}</td>
                     </tr>
-
                   )
                 })}
-
             </tbody>
           </table>
           <ul className="hidden max-xsm:block">
             {productsSold.map(({name, id, date, cantidad, price}, index) => {
               return (
-                <li className="rounded-lg bg-slate-200 m-2 p-1">
+                <li key={id} className="rounded-lg bg-slate-200 m-2 p-1">
                   <div className="flex justify-between">
                     <span className="text-blue-500 font-semibold mr-2">id:{index + 1}</span>
                     <span>{date}</span>
@@ -75,7 +71,5 @@ const TablaVentas = () => {
       </div>
     </>
   )
-
 }
-
 export { TablaVentas }

@@ -33,8 +33,7 @@ const RegistroVenta = () => {
     location: location.pathname,
     newStock: 0,
     pathProduct: pathProduct,
-  });
-  console.log("product", product);
+   });
   useEffect(() => {
     getCurrentProductSell(dispatch);
     setInputValue({

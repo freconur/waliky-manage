@@ -1,4 +1,4 @@
-import { funcionDate } from "../date/date";
+import { funcionDate, functionDateConvert } from "../date/date";
 import { Options, Product, ProductSold } from "../types";
 import { TYPES } from "./action";
 // import { GET_PRODUCT_BY_ID } from "./action";
@@ -60,7 +60,8 @@ export const searchIdReducer = (
       const rtaaa = action.payload.map((item) => {
         return {
           ...item,
-          date: item.timestamp.toDate().toString().slice(0, 21),
+          // date: item.timestamp.toDate().toString().slice(0, 21),
+          date: functionDateConvert(item.timestamp.toDate())
         };
       });
       return {
