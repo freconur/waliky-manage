@@ -55,9 +55,7 @@ export const searchIdReducer = (
       let ventaTotalMes = 0
       let date = funcionDate()
       action.payload.map(item => {
-        console.log('itemVenta', item)
         let ventaTotalProducto: number = parseFloat(`${item.price}`) * parseFloat(`${item.cantidad}`)
-        // ventaTotalMes = ventaTotalMes + parseInt(`${item.price}`,10)
         ventaTotalMes = ventaTotalMes + ventaTotalProducto
       })
       const rtaaa = action.payload.map((item) => {
