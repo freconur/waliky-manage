@@ -79,8 +79,8 @@ export const getProductById = async (
   const btsCategories = await getBtsCategories();
   let findProduct;
   let product: Product | undefined;
-  console.log("pruebita", InputId);
-  console.log("pruebita2", `${InputId}`);
+  // console.log("pruebita", InputId);
+  // console.log("pruebita2", `${InputId}`);
   const colRef = doc(db, "kawaii", `${InputId}`);
   findProduct = await getDoc(colRef);
   product = { ...findProduct.data(), idProduct: `${InputId}` };
@@ -91,7 +91,7 @@ export const getProductById = async (
   btsCategories.map(async (category) => {
     const colRef = doc(db, `bts/${category.id}/${category.name}`, `${InputId}`);
     findProduct = await getDoc(colRef);
-    product = { ...findProduct.data(), id: `${InputId}` };
+    product = { ...findProduct.data(), idProduct: `${InputId}` };
     if (findProduct.exists()) {
       dispatch({
         type: "getProductById",

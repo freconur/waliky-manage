@@ -43,6 +43,7 @@ const RegistroVenta = () => {
       pathProduct: pathProduct,
     });
   }, [product, pathProduct, cantidadProduct]);
+  // console.log('product', product)
   const onChangeIdProduct = (e: React.ChangeEvent<HTMLInputElement>) => {
     setId(e.target.value);
     getProductById(dispatch, inputValue, e.target.value);
@@ -54,16 +55,21 @@ const RegistroVenta = () => {
     });
   };
   const addProductToSell = () => {
+    // console.log('currentProductSell', currentProductSell)
+    console.log('product',product)
     if (currentProductSell.length >= 1) {
       const rtaaddProductToSell = currentProductSell.find(
         (item) => item.idProduct === product.idProduct
       );
-      if (rtaaddProductToSell?.stock === 0) {
-        // return console.log("ya no hay stock suficiente")
-        return dispatch({
-          type: "warningStock",
-          payload: "no hay stock suficiente",
-        });
+      console.log('rtaaddProductToSell', rtaaddProductToSell)
+      if (rtaaddProductToSell) {
+        if (rtaaddProductToSell.stock === 0) {
+          // return console.log("ya no hay stock suficiente")
+          return dispatch({
+            type: "warningStock",
+            payload: "no hay stock suficiente",
+          });
+        }
       }
     }
     if (Object.entries(product).length === 0 || product.stock === 0) {
