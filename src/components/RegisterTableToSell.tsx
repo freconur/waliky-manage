@@ -66,7 +66,7 @@ return (
 							return (
 								<li key={item.id} className="p-2 bg-green-100 rounded-sm shadow mb-2">
 									<div className="mb-1 flex justify-between">
-										<div className=" rounded-lg duration-500 text-center bg-blue-400 w-3 cursor-pointer text-white font-bold hover:bg-blue-300 hover:text-gray-700">
+										<div className=" rounded-full duration-500 text-center bg-blue-400 w-10 cursor-pointer text-white font-bold hover:bg-blue-300 hover:text-gray-700">
 											<CopyToClipboard text={`${item.idProduct}`}>
 												<div className="text-sm">id: {index + 1}</div>
 											</CopyToClipboard>
