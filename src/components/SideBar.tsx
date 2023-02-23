@@ -31,8 +31,8 @@ const SideBar = () => {
     {Array.isArray((options)) &&
       options?.map((item, index) => {
         return (
-          <li key={index} className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2  rounded-md mt-2 capitalize   hover:bg-red-200">
-            <Link to={`${item.path}`} className="w-48">
+          <li key={index} className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer  rounded-md mt-2 capitalize   hover:bg-red-200 hover:text-gray-500 whitespace-nowrap">
+            <Link to={`${item.path}`} className="w-56 p-2">
               <img className="text-2xl block float-left" src={item.image} alt="" />
               {/* <span className="text-2xl block float-left"><BsFillGrid1X2Fill/></span> */}
               <span className={`text-base flex-1 ml-2 font-semibold max-cs:hidden ${!openSidebar && "hidden"}`}>{item.option}</span>
