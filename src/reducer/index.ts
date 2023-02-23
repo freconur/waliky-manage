@@ -11,6 +11,7 @@ import {
   onSnapshot,
   Timestamp,
 } from "firebase/firestore";
+import { currentMonth } from "../date/date";
 import { app } from "../firebase/firebase.config";
 import {
   InputValueVentas,
@@ -79,8 +80,6 @@ export const getProductById = async (
   const btsCategories = await getBtsCategories();
   let findProduct;
   let product: Product | undefined;
-  // console.log("pruebita", InputId);
-  // console.log("pruebita2", `${InputId}`);
   const colRef = doc(db, "kawaii", `${InputId}`);
   findProduct = await getDoc(colRef);
   product = { ...findProduct.data(), idProduct: `${InputId}` };
@@ -168,15 +167,27 @@ export const getOptions = (dispatch: (action: any) => void) => {
   });
 };
 
-export const getProductsSold = (dispatch: (action: any) => void) => {
-  const colref = collection(db,"/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/febrero-2023");
-  onSnapshot(colref, (snapshot) => {
-    const getSolds: ProductSold[] = [];
-    snapshot.docs.forEach((doc) => {
-      getSolds.push({ ...doc.data(), id: doc.id });
+export const getProductsSold = (dispatch: (action: any) => void, month:string | void) => {
+  let currentMonths:string = currentMonth()
+  if(!month) {
+    const colref = collection(db,`/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${currentMonths}-2023`);
+    onSnapshot(colref, (snapshot) => {
+      const getSolds: ProductSold[] = [];
+      snapshot.docs.forEach((doc) => {
+        getSolds.push({ ...doc.data(), id: doc.id });
+      });
+      dispatch({ type: "getProductsSold", payload: getSolds, payload2: currentMonths});
     });
-    dispatch({ type: "getProductsSold", payload: getSolds });
-  });
+  }else { 
+    const colref = collection(db,`/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${month}-2023`);
+    onSnapshot(colref, (snapshot) => {
+      const getSolds: ProductSold[] = [];
+      snapshot.docs.forEach((doc) => {
+        getSolds.push({ ...doc.data(), id: doc.id });
+      });
+      dispatch({ type: "getProductsSold", payload: getSolds, payload2: month });
+    });
+  }
 };
 
 export const getCurrentProductSell = async (

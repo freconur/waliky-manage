@@ -1,19 +1,27 @@
 import { useEffect, useReducer, useState } from "react"
+import { OptionsSellMonths } from "../components/OptionsSellMonths"
+import { currentMonth } from "../date/date"
 import { getProductsSold } from "../reducer"
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer"
+import { initialStateVentas, ventasReducer } from "../reducer/ventas.reducer"
 
 const TablaVentas = () => {
   const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
-  const { productsSold, salesMonth, currentDate } = state
+  const { productsSold, salesMonth, currentDate, currentMonth } = state
   useEffect(() => {
     getProductsSold(dispatch)
   }, [])
+  const onChangeValueSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		getProductsSold(dispatch, e.target.value)
+	}
+  console.log('currentMonth',currentMonth)
   return (
     <>
       <div className="m-7 max-sm:mr-2 max-sm:ml-2 max-sm:mt-2">
         <div className="flex flex-row-reverse max-cs:mr-0 mr-5 text-lg text-gray-400 capitalize">{currentDate}</div>
+          <OptionsSellMonths onChangeValueSelect={onChangeValueSelect} />
         <div className="flex justify-between max-xs:flex-col-reverse">
-          <h1 className="text-cyan-700 uppercase font-bold text-3xl max-xs:text-xl">ventas de febrero</h1>
+          <h1 className="text-cyan-700 uppercase font-bold text-3xl max-xs:text-xl">ventas de {currentMonth}</h1>
           <div className="flex justify-end">
             <div></div>
             <div className="bg-yellow-300 w-32 rounded-lg text-center drop-shadow-lg mr-5 max-cs:mr-0 max-sm:mb-4">
@@ -35,7 +43,7 @@ const TablaVentas = () => {
             <tbody className="divide-y divide-gray-100">
               {Array.isArray(productsSold)
                 &&
-                productsSold.map((item, index) => {
+                productsSold?.map((item, index) => {
                   return (
                     <tr key={index} className="w-auto text-center">
                       <td className=" cursor-pointer duration-900 bg-white p-1 capitalize text-gray-400 text-md ">{index + 1}</td>
@@ -51,7 +59,7 @@ const TablaVentas = () => {
             </tbody>
           </table>
           <ul className="hidden max-xsm:block">
-            {productsSold.map(({name, id, date, cantidad, price}, index) => {
+            {productsSold?.map(({name, id, date, cantidad, price}, index) => {
               return (
                 <li key={id} className="rounded-lg bg-slate-200 m-2 p-1">
                   <div className="flex justify-between">

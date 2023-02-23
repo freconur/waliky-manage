@@ -42,3 +42,14 @@ timestamp?: Date | string |toDate
 date?:Date | string |toDate | Timestamp
 id?: string
 }
+
+export interface ProductSoldPerMonth {
+  cantidad?: string
+idProduct?:string
+name?: string
+price?:string
+timestamp?: Date | string |toDate
+date?:Date | string |toDate | Timestamp
+id?: string
+}
+export type MonthsAvialable = []

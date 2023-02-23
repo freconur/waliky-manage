@@ -1,5 +1,5 @@
-import { funcionDate, functionDateConvert } from "../date/date";
-import { Options, Product, ProductSold } from "../types";
+import { currentMonth, funcionDate, functionDateConvert } from "../date/date";
+import { Options, Product, ProductSold, ProductSoldPerMonth } from "../types";
 import { TYPES } from "./action";
 // import { GET_PRODUCT_BY_ID } from "./action";
 
@@ -8,12 +8,14 @@ type FormReducerAction =
   | { type: "getCartucherasBts"; payload: Product[] }
   // | { type: "getOptions", payload: Product[]}
   | { type: "getOptions"; payload: Options[] }
-  | { type: "getProductsSold"; payload: ProductSold[] }
+  | { type: "getProductsSold"; payload: ProductSold[], payload2: string }
   | { type: "getCurrentProductSell"; payload: Product[] }
   | { type: "plus"; payload: number, payload2:number}
   | { type: "less"; payload: number, payload2:number}
   | { type: "getAllProducts"; payload: Product[]}
   | { type: "warningStock"; payload: string}
+  |{type: "getSoldProductsPerMoth",payload: ProductSoldPerMonth[]}
+|{type: "monthsAvailable",payload: string[]}
 export const initialStateProducts = {
   product: [] as Product,
   prueba: [] as Product[],
@@ -27,8 +29,11 @@ export const initialStateProducts = {
   dailySales: 0 as number,
   salesMonth: 0 as number,
   currentDate: '' as string,
-  warningStock: '' as string
-};
+  currentMonth: '' as string,
+  warningStock: '' as string,
+  productVentas: [] as ProductSoldPerMonth[],
+	monthsAvailable: [] as string[],
+}
 export const searchIdReducer = (
   state: typeof initialStateProducts,
   action: FormReducerAction
@@ -69,7 +74,8 @@ export const searchIdReducer = (
         ...state,
         productsSold: rtaaa,
         salesMonth: ventaTotalMes,
-        currentDate: date
+        currentDate: date,
+        currentMonth: action.payload2
       };
     case "getCurrentProductSell":
       return {
@@ -101,7 +107,16 @@ export const searchIdReducer = (
           ...state,
           warningStockCantidad:action.payload
         }
-    default:
-      return state;
+        case "getSoldProductsPerMoth":
+      return {
+        ...state,
+        productVentas: action.payload,
+      };
+    case "monthsAvailable":
+      return {
+        ...state,
+        monthsAvailable: action.payload,
+      };
   }
+    
 };
