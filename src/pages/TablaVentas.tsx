@@ -1,5 +1,6 @@
 import { useEffect, useReducer, useState } from "react"
 import { OptionsSellMonths } from "../components/OptionsSellMonths"
+import { OptionsSort } from "../components/OptionsSort"
 import { currentMonth } from "../date/date"
 import { getProductsSold } from "../reducer"
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer"
@@ -7,28 +8,35 @@ import { initialStateVentas, ventasReducer } from "../reducer/ventas.reducer"
 
 const TablaVentas = () => {
   const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
-  const { productsSold, salesMonth, currentDate, currentMonth } = state
+  const { productsSold, salesMonth, currentDate, currentMonth, numberOfItems } = state
   useEffect(() => {
     getProductsSold(dispatch)
   }, [])
   const onChangeValueSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		getProductsSold(dispatch, e.target.value)
 	}
-  console.log('currentMonth',currentMonth)
+  const onChangeOptionsSort = (e:React.ChangeEvent<HTMLSelectElement>) => {
+    // console.log('target', e.target.value)
+      dispatch({type: "optionsSort", payload: e.target.value, payload2: productsSold})
+  }
   return (
     <>
       <div className="m-7 max-sm:mr-2 max-sm:ml-2 max-sm:mt-2">
         <div className="flex flex-row-reverse max-cs:mr-0 mr-5 text-lg text-gray-400 capitalize">{currentDate}</div>
-          <OptionsSellMonths onChangeValueSelect={onChangeValueSelect} />
         <div className="flex justify-between max-xs:flex-col-reverse">
           <h1 className="text-cyan-700 uppercase font-bold text-3xl max-xs:text-xl">ventas de {currentMonth}</h1>
-          <div className="flex justify-end">
-            <div></div>
+        {/* <div>total de articulos: {numberOfItems}</div> */}
+          <div className="flex justify-end mt-2">
+            <div className="bg-blue-500 w-32 rounded-lg text-center drop-shadow-lg mr-5 max-cs:mr-2 max-sm:mb-4">
+              <h2 className="text-white font-bold capitalize">items vendidos</h2><span className="text-white text-xl font-bold">{numberOfItems}</span>
+            </div>
             <div className="bg-yellow-300 w-32 rounded-lg text-center drop-shadow-lg mr-5 max-cs:mr-0 max-sm:mb-4">
               <h2 className="text-white font-bold capitalize">venta del mes</h2><span className="text-green-500 text-xl font-bold">S/{salesMonth}</span>
             </div>
           </div>
         </div>
+          <OptionsSellMonths onChangeValueSelect={onChangeValueSelect} />
+          <OptionsSort onChangeOptionsSort={onChangeOptionsSort}/>
         <div className="rounded-lg shadow max-cs:mr-0 mt-5 mr-5 overflow-auto">
           <table className="w-full overflow-auto max-xsm:hidden">
             <thead className="bg-gray-50 border-b-2 border-gray-200">

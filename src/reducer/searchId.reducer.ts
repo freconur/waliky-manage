@@ -6,16 +6,16 @@ import { TYPES } from "./action";
 type FormReducerAction =
   | { type: "getProductById"; payload: Product; payload2: string }
   | { type: "getCartucherasBts"; payload: Product[] }
-  // | { type: "getOptions", payload: Product[]}
   | { type: "getOptions"; payload: Options[] }
-  | { type: "getProductsSold"; payload: ProductSold[], payload2: string }
+  | { type: "getProductsSold"; payload: ProductSold[]; payload2: string }
   | { type: "getCurrentProductSell"; payload: Product[] }
-  | { type: "plus"; payload: number, payload2:number}
-  | { type: "less"; payload: number, payload2:number}
-  | { type: "getAllProducts"; payload: Product[]}
-  | { type: "warningStock"; payload: string}
-  |{type: "getSoldProductsPerMoth",payload: ProductSoldPerMonth[]}
-|{type: "monthsAvailable",payload: string[]}
+  | { type: "plus"; payload: number; payload2: number }
+  | { type: "less"; payload: number; payload2: number }
+  | { type: "getAllProducts"; payload: Product[] }
+  | { type: "warningStock"; payload: string }
+  | { type: "getSoldProductsPerMoth"; payload: ProductSoldPerMonth[] }
+  | { type: "monthsAvailable"; payload: string[] }
+  | { type: "optionsSort"; payload: string; payload2: ProductSold[]};
 export const initialStateProducts = {
   product: [] as Product,
   prueba: [] as Product[],
@@ -24,16 +24,17 @@ export const initialStateProducts = {
   productsSold: [] as ProductSold[],
   currentProductSell: [] as Product[],
   cantidadProduct: 1 as number,
-  warningStockCantidad: '' as string,
+  warningStockCantidad: "" as string,
   allProducts: [] as Product[],
   dailySales: 0 as number,
   salesMonth: 0 as number,
-  currentDate: '' as string,
-  currentMonth: '' as string,
-  warningStock: '' as string,
+  currentDate: "" as string,
+  currentMonth: "" as string,
+  warningStock: "" as string,
   productVentas: [] as ProductSoldPerMonth[],
-	monthsAvailable: [] as string[],
-}
+  monthsAvailable: [] as string[],
+  numberOfItems: 0 as number,
+};
 export const searchIdReducer = (
   state: typeof initialStateProducts,
   action: FormReducerAction
@@ -57,17 +58,22 @@ export const searchIdReducer = (
         options: action.payload,
       };
     case "getProductsSold":
-      let ventaTotalMes = 0
-      let date = funcionDate()
-      action.payload.map(item => {
-        let ventaTotalProducto: number = parseFloat(`${item.price}`) * parseFloat(`${item.cantidad}`)
-        ventaTotalMes = ventaTotalMes + ventaTotalProducto
-      })
+      let ventaTotalMes = 0;
+      let date = funcionDate();
+      let numberOfItems: number = 0;
+      action.payload.map((item) => {
+        let ventaTotalProducto: number =
+          parseFloat(`${item.price}`) * parseFloat(`${item.cantidad}`);
+        ventaTotalMes = ventaTotalMes + ventaTotalProducto;
+      });
+      action.payload.map(
+        (item) => (numberOfItems = numberOfItems + parseInt(`${item.cantidad}`))
+      );
       const rtaaa = action.payload.map((item) => {
         return {
           ...item,
           // date: item.timestamp.toDate().toString().slice(0, 21),
-          date: functionDateConvert(item.timestamp.toDate())
+          date: functionDateConvert(item.timestamp.toDate()),
         };
       });
       return {
@@ -75,7 +81,8 @@ export const searchIdReducer = (
         productsSold: rtaaa,
         salesMonth: ventaTotalMes,
         currentDate: date,
-        currentMonth: action.payload2
+        currentMonth: action.payload2,
+        numberOfItems: numberOfItems,
       };
     case "getCurrentProductSell":
       return {
@@ -83,31 +90,36 @@ export const searchIdReducer = (
         currentProductSell: action.payload,
       };
     case "plus":
-      if(action.payload >= action.payload2) return {...state, warningStockCantidad: "no puedes agregar mas cantidad ya que no hay suficiente stock"}
+      if (action.payload >= action.payload2)
+        return {
+          ...state,
+          warningStockCantidad:
+            "no puedes agregar mas cantidad ya que no hay suficiente stock",
+        };
       return {
         ...state,
         cantidadProduct: action.payload + 1,
-        warningStockCantidad: ''
+        warningStockCantidad: "",
       };
-      case "less":
-        if(action.payload === 1) return {...state, cantidadProduct: 1}
-          
+    case "less":
+      if (action.payload === 1) return { ...state, cantidadProduct: 1 };
+
       return {
         ...state,
         cantidadProduct: action.payload - 1,
-        warningStockCantidad:''
+        warningStockCantidad: "",
       };
-      case "getAllProducts":
+    case "getAllProducts":
       return {
         ...state,
         allProducts: action.payload,
       };
-      case "warningStock":
-        return {
-          ...state,
-          warningStockCantidad:action.payload
-        }
-        case "getSoldProductsPerMoth":
+    case "warningStock":
+      return {
+        ...state,
+        warningStockCantidad: action.payload,
+      };
+    case "getSoldProductsPerMoth":
       return {
         ...state,
         productVentas: action.payload,
@@ -117,6 +129,65 @@ export const searchIdReducer = (
         ...state,
         monthsAvailable: action.payload,
       };
+    case "optionsSort":
+      let saveProductsSold = action.payload2
+      if(action.payload === "price-ascendente") {
+        saveProductsSold.sort((a:ProductSold,b: ProductSold) => {
+          const first = parseFloat(`${a.price}`)
+          const second = parseFloat(`${b.price}`)
+          if(first < second) return -1
+          if(first > second) return 1
+          return 0
+        })
+      }
+      if(action.payload === "price-descendente") {
+        saveProductsSold.sort((a:ProductSold,b: ProductSold) => {
+          const first = parseFloat(`${a.price}`)
+          const second = parseFloat(`${b.price}`)
+          if(first > second) return -1
+          if(first < second) return 1
+          return 0
+        })
+      }
+      if(action.payload === "mas-vendido") {
+        saveProductsSold.sort((a:ProductSold,b: ProductSold) => {
+          const first = parseInt(`${a.cantidad}`)
+          const second = parseInt(`${b.cantidad}`)
+          if(first > second) return -1
+          if(first < second) return 1
+          return 0
+        })
+      }
+      if(action.payload === "menos-vendido") {
+        saveProductsSold.sort((a:ProductSold,b: ProductSold) => {
+          const first = parseInt(`${a.cantidad}`)
+          const second = parseInt(`${b.cantidad}`)
+          if(first < second) return -1
+          if(first > second) return 1
+          return 0
+        })
+      }
+      if(action.payload === "menos-reciente") {
+        saveProductsSold.sort((a:ProductSold,b: ProductSold) => {
+          const first = parseInt(a.date.slice(0,2))
+          const second = parseInt(b.date.slice(0,2))
+          if(first < second) return -1
+          if(first > second) return 1
+          return 0
+        })
+      }
+      if(action.payload === "mas-reciente") {
+        saveProductsSold.sort((a:ProductSold,b: ProductSold) => {
+          const first = parseInt(a.date.slice(0,2))
+          const second = parseInt(b.date.slice(0,2))
+          if(first > second) return -1
+          if(first < second) return 1
+          return 0
+        })
+      }
+      return {
+        ...state,
+        productsSold: saveProductsSold
+      };
   }
-    
 };

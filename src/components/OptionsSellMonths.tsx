@@ -17,14 +17,10 @@ const OptionsSellMonths = ({onChangeValueSelect}:PropsOptions) => {
 		dispatch({ type: "monthsAvailable", payload: months })
 	}, [productVentas])
 
-	// const onChangeValueSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-	// 	getSoldProductsPerMoth(dispatch, e.target.value)
-	// }
-	console.log('product', productVentas)
 	return (
 		<>
-			<div className="mb-5">
-				<label className="text-gray-500 capitalize font-semibold mr-5">filtrar por mes:</label>
+			<div className="mb-2 mt-5 flex justify-between">
+				<label className="text-gray-500 capitalize font-semibold mr-2">filtrar por mes:</label>
 				<select onChange={onChangeValueSelect} className="px-3 text-gray-400 capitalize font-semibold py-1 rounded-lg shadow-md w-32" name="" id="">
 					<option value="">mes</option>
 					{
