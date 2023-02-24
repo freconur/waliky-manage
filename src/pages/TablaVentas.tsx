@@ -1,10 +1,8 @@
 import { useEffect, useReducer, useState } from "react"
 import { OptionsSellMonths } from "../components/OptionsSellMonths"
 import { OptionsSort } from "../components/OptionsSort"
-import { currentMonth } from "../date/date"
 import { getProductsSold } from "../reducer"
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer"
-import { initialStateVentas, ventasReducer } from "../reducer/ventas.reducer"
 
 const TablaVentas = () => {
   const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
@@ -12,13 +10,13 @@ const TablaVentas = () => {
   useEffect(() => {
     getProductsSold(dispatch)
   }, [])
+  const onChangeOptionsSort = (e:React.ChangeEvent<HTMLSelectElement>) => {
+      dispatch({type: "optionsSort", payload: e.target.value, payload2: productsSold})
+  }
   const onChangeValueSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		getProductsSold(dispatch, e.target.value)
 	}
-  const onChangeOptionsSort = (e:React.ChangeEvent<HTMLSelectElement>) => {
-    // console.log('target', e.target.value)
-      dispatch({type: "optionsSort", payload: e.target.value, payload2: productsSold})
-  }
+  
   return (
     <>
       <div className="m-7 max-sm:mr-2 max-sm:ml-2 max-sm:mt-2">
