@@ -1,5 +1,11 @@
-import { currentMonth, funcionDate, functionDateConvert } from "../date/date";
-import { Options, Product, ProductSold, ProductSoldPerMonth } from "../types";
+import { funcionDate, functionDateConvert } from "../date/date";
+import {
+  Categories,
+  Options,
+  Product,
+  ProductSold,
+  ProductSoldPerMonth,
+} from "../types";
 import { TYPES } from "./action";
 // import { GET_PRODUCT_BY_ID } from "./action";
 
@@ -15,7 +21,10 @@ type FormReducerAction =
   | { type: "warningStock"; payload: string }
   | { type: "getSoldProductsPerMoth"; payload: ProductSoldPerMonth[] }
   | { type: "monthsAvailable"; payload: string[] }
-  | { type: "optionsSort"; payload: string; payload2: ProductSold[]};
+  | { type: "optionsSort"; payload: string; payload2: ProductSold[] }
+  | { type: "getCagories"; payload: Categories[] }
+  | { type: "filterCategory"; payload: Product[]; payload2: string, payload3:Product[] }
+  
 export const initialStateProducts = {
   product: [] as Product,
   prueba: [] as Product[],
@@ -26,6 +35,7 @@ export const initialStateProducts = {
   cantidadProduct: 1 as number,
   warningStockCantidad: "" as string,
   allProducts: [] as Product[],
+  copyAllProducts: [] as Product[],
   dailySales: 0 as number,
   salesMonth: 0 as number,
   currentDate: "" as string,
@@ -34,6 +44,7 @@ export const initialStateProducts = {
   productVentas: [] as ProductSoldPerMonth[],
   monthsAvailable: [] as string[],
   numberOfItems: 0 as number,
+  allCategories: [] as Categories[],
 };
 export const searchIdReducer = (
   state: typeof initialStateProducts,
@@ -113,6 +124,7 @@ export const searchIdReducer = (
       return {
         ...state,
         allProducts: action.payload,
+        copyAllProducts: action.payload
       };
     case "warningStock":
       return {
@@ -129,65 +141,84 @@ export const searchIdReducer = (
         ...state,
         monthsAvailable: action.payload,
       };
+    case "getCagories":
+      return {
+        ...state,
+        allCategories: action.payload,
+      };
+      case "filterCategory":
+        // const products = initialStateProducts.allProducts
+        if(action.payload2 === "all") {
+          return {
+            ...state,
+            allProducts:action.payload3
+          }
+        }
+        const rtaFiltro = action.payload3.filter(item => item.category === action.payload2)
+        console.log('rtaFiltro',rtaFiltro)
+        return {
+          ...state,
+          allProducts:rtaFiltro
+        }
     case "optionsSort":
-      let saveProductsSold = action.payload2
-      if(action.payload === "price-ascendente") {
-        saveProductsSold.sort((a:ProductSold,b: ProductSold) => {
-          const first = parseFloat(`${a.price}`)
-          const second = parseFloat(`${b.price}`)
-          if(first < second) return -1
-          if(first > second) return 1
-          return 0
-        })
+      let saveProductsSold = action.payload2;
+      if (action.payload === "price-ascendente") {
+        saveProductsSold.sort((a: ProductSold, b: ProductSold) => {
+          const first = parseFloat(`${a.price}`);
+          const second = parseFloat(`${b.price}`);
+          if (first < second) return -1;
+          if (first > second) return 1;
+          return 0;
+        });
       }
-      if(action.payload === "price-descendente") {
-        saveProductsSold.sort((a:ProductSold,b: ProductSold) => {
-          const first = parseFloat(`${a.price}`)
-          const second = parseFloat(`${b.price}`)
-          if(first > second) return -1
-          if(first < second) return 1
-          return 0
-        })
+      if (action.payload === "price-descendente") {
+        saveProductsSold.sort((a: ProductSold, b: ProductSold) => {
+          const first = parseFloat(`${a.price}`);
+          const second = parseFloat(`${b.price}`);
+          if (first > second) return -1;
+          if (first < second) return 1;
+          return 0;
+        });
       }
-      if(action.payload === "mas-vendido") {
-        saveProductsSold.sort((a:ProductSold,b: ProductSold) => {
-          const first = parseInt(`${a.cantidad}`)
-          const second = parseInt(`${b.cantidad}`)
-          if(first > second) return -1
-          if(first < second) return 1
-          return 0
-        })
+      if (action.payload === "mas-vendido") {
+        saveProductsSold.sort((a: ProductSold, b: ProductSold) => {
+          const first = parseInt(`${a.cantidad}`);
+          const second = parseInt(`${b.cantidad}`);
+          if (first > second) return -1;
+          if (first < second) return 1;
+          return 0;
+        });
       }
-      if(action.payload === "menos-vendido") {
-        saveProductsSold.sort((a:ProductSold,b: ProductSold) => {
-          const first = parseInt(`${a.cantidad}`)
-          const second = parseInt(`${b.cantidad}`)
-          if(first < second) return -1
-          if(first > second) return 1
-          return 0
-        })
+      if (action.payload === "menos-vendido") {
+        saveProductsSold.sort((a: ProductSold, b: ProductSold) => {
+          const first = parseInt(`${a.cantidad}`);
+          const second = parseInt(`${b.cantidad}`);
+          if (first < second) return -1;
+          if (first > second) return 1;
+          return 0;
+        });
       }
-      if(action.payload === "menos-reciente") {
-        saveProductsSold.sort((a:ProductSold,b: ProductSold) => {
-          const first = parseInt(a.date.slice(0,2))
-          const second = parseInt(b.date.slice(0,2))
-          if(first < second) return -1
-          if(first > second) return 1
-          return 0
-        })
+      if (action.payload === "menos-reciente") {
+        saveProductsSold.sort((a: ProductSold, b: ProductSold) => {
+          const first = parseInt(a.date.slice(0, 2));
+          const second = parseInt(b.date.slice(0, 2));
+          if (first < second) return -1;
+          if (first > second) return 1;
+          return 0;
+        });
       }
-      if(action.payload === "mas-reciente") {
-        saveProductsSold.sort((a:ProductSold,b: ProductSold) => {
-          const first = parseInt(a.date.slice(0,2))
-          const second = parseInt(b.date.slice(0,2))
-          if(first > second) return -1
-          if(first < second) return 1
-          return 0
-        })
+      if (action.payload === "mas-reciente") {
+        saveProductsSold.sort((a: ProductSold, b: ProductSold) => {
+          const first = parseInt(a.date.slice(0, 2));
+          const second = parseInt(b.date.slice(0, 2));
+          if (first > second) return -1;
+          if (first < second) return 1;
+          return 0;
+        });
       }
       return {
         ...state,
-        productsSold: saveProductsSold
+        productsSold: saveProductsSold,
       };
   }
 };

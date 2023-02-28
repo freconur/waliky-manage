@@ -13,7 +13,7 @@ export interface Product {
   option?: string
   cantidad?: number
   pathProduct?: string
-  
+  category?:string
 }
 export interface SearchById {
   id: string
@@ -53,3 +53,8 @@ date?:Date | string |toDate | Timestamp
 id?: string
 }
 export type MonthsAvialable = []
+
+export interface Categories {
+  id?: string
+  name?: string
+}

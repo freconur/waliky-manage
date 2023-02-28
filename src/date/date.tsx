@@ -25,3 +25,4 @@ export const currentMonth = () => {
     const date = new Date()
     return months[date.getMonth()]
 }
+currentMonth()

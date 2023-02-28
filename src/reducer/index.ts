@@ -14,6 +14,7 @@ import {
 import { currentMonth } from "../date/date";
 import { app } from "../firebase/firebase.config";
 import {
+  Categories,
   InputValueVentas,
   Options,
   Product,
@@ -31,14 +32,6 @@ export const getBtsCategories = async () => {
     btsCategories.push({ ...doc.data(), id: doc.id });
   });
   return btsCategories;
-};
-export const getKawaiiProducts = async () => {
-  const rta = await getDocs(collection(db, "kawaii"));
-  const products: Product[] = [];
-  rta.forEach((doc) => {
-    products.push({ ...doc.data(), id: doc.id });
-  });
-  return products;
 };
 
 
@@ -218,4 +211,36 @@ export const addCurrentProductToSell = (
 export const deleteCurrentProduct = async (dispatch:(action:any) => void, id:string) => {
   await deleteDoc(doc(db, "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale", id))
 }
+export const getKawaiiProducts = async () => {
+  const rta = await getDocs(collection(db, "kawaii"));
+  const products: Product[] = [];
+  rta.forEach((doc) => {
+    products.push({ ...doc.data(), id: doc.id });
+  });
+  return products;
+};
 
+export const getCategories = async (dispatch:(action: any) => void) => {
+  const res = collection(db,"categories");
+  onSnapshot(res,(snapshot) => {
+    const categories: Product[] = [];
+    snapshot.docs.forEach((doc) => {
+      categories.push({ ...doc.data(), id: doc.id });
+    });
+    dispatch({ type: "getCagories", payload: categories });
+  })
+}
+
+export const updateItemProv = async (item:Product, category:string) => {
+  const colRef = doc(
+    db,
+    "/kawaii",
+    `${item.id}`
+    // `${id}`
+  );
+  updateDoc(colRef, {
+    // ...currentProduct,
+    category: category
+  });
+  console.log("se agrego la categoria")
+}
