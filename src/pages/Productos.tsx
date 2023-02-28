@@ -23,17 +23,12 @@ const Productos = () => {
       const filtered = allProducts.filter(product => product.name?.toLowerCase().includes(search.toLowerCase()))
       return filtered.slice(currentPage, currentPage + 5)
     }
-
   }
   useEffect(() => {
     getAllProducts(dispatch)
   }, [])
-  console.log('copyAllProducts',copyAllProducts)
   function ModalState (): void {
     setModalActive(!modalActive)
-  }
-  const onClickResetCurrentPage = () => {
-    setCurrentPage(0)
   }
   const onChangeCategories = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch({type:"filterCategory", payload:allProducts, payload2: e.target.value, payload3:copyAllProducts})
@@ -62,7 +57,7 @@ const Productos = () => {
       {/* <OptionFilterCategories /> */}
       <div className="mt-2 mr-5">
         <p className="capitalize text-xl text-gray-500 mb-2">buscar</p>
-        <input className="border-2 w-full p-2 rounded-lg" onClick={onClickResetCurrentPage} onChange={onSearchChange} value={search} type="text" />
+        <input className="border-2 w-full p-2 rounded-lg" onClick={() => setCurrentPage(0)} onChange={onSearchChange} value={search} type="text" />
       </div>
 
       <div className="overflow-auto rounded-lg shadow mt-2 mr-5">
@@ -79,7 +74,7 @@ const Productos = () => {
           <tbody className="divide-y divide-gray-100 ">
             {filterProducts().map((item, index) => {
               return (
-                <tr onClick={() => {setModalActive(!modalActive); item && setItemInfo(item)}} key={item.id} className="duration-1000 relative cursor-pointer bg-blue-700">
+                <tr onClick={() => {setModalActive(!modalActive); item && setItemInfo(item)}} key={item.id} className="duration-1000 relative cursor-pointer">
                   {/* <Link to="/"> */}
                   <td className=" cursor-pointer duration-900  bg-white p-3 capitalize text-gray-400 text-md ">
                     <div className="duration-500 rounded-full font-bold hover:underline hover:bg-blue-200 text-center bg-blue-400 text-white h-[25px] w-[25px]">

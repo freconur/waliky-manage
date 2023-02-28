@@ -42,7 +42,7 @@ export const getBtsProducts = async () => {
   bts.map(async (category) => {
     const rta = await getDocs(collection(db,`/bts/${category.id}/${category.name}`));
     rta.forEach((doc) => {
-      btsProducts.push({ ...doc.data(), id: doc.id });
+      btsProducts.push({ ...doc.data(), id: doc.id, pathProduct: `/bts/${category.id}/${category.name}` });
     });
   });
   return new Promise((resolve:(value: Product[]) => void, reject) => {
