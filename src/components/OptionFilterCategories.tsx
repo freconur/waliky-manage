@@ -24,7 +24,7 @@ const OptionFilterCategories = ({onChangeCategories}: PropsCategories) => {
 						allCategories?.map(({name, id}, index) => {
 							return (
 								<option key={index} value={name}>{name}</option>
-
+										
 							)
 						})
 					}
