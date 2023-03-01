@@ -133,7 +133,7 @@ export const updateStockProduct = async (
       cantidad: currentProduct.cantidad,
     };
     await addDoc(
-      collection(db, "/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/febrero-2023"),
+      collection(db, `/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${currentMonth()}-2023`),
       docData
     );
     await deleteDoc(
@@ -231,16 +231,18 @@ export const getCategories = async (dispatch:(action: any) => void) => {
   })
 }
 
-export const updateItemProv = async (item:Product, category:string) => {
+export const updateItemProv = async (item:Product) => {
   const colRef = doc(
     db,
-    "/kawaii",
+    `${item.pathProduct}`,
     `${item.id}`
-    // `${id}`
   );
   updateDoc(colRef, {
     // ...currentProduct,
-    category: category
+    category: item?.category,
+    name: item?.name,
+    price: item?.price,
+    stock: item?.stock
   });
   console.log("se agrego la categoria")
 }

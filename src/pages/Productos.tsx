@@ -51,7 +51,7 @@ const Productos = () => {
   return (
 
     <div className="max-cz:ml-5 ml-10 mt-5 w-auto">
-      {modalActive && <ProductModal onChangeCategories={ModalState} itemInfo={itemInfo} />}
+      {modalActive && <ProductModal modalState={ModalState} itemInfo={itemInfo} />}
       <h1 className="capitalize text-3xl font-bold text-gray-600">tus productos</h1>
       <OptionFilterCategories onChangeCategories={onChangeCategories}/>
       {/* <OptionFilterCategories /> */}
