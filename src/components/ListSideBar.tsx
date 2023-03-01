@@ -28,12 +28,13 @@ const ListSidebar = ({ openSidebar }: Props) => {
 				</Link>
 			</li>
 			<li className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer  rounded-md mt-2 capitalize   hover:bg-red-200 hover:text-gray-500 whitespace-nowrap">
-				{/* <Link to="/registro-de-productos" className="w-56 p-2"> */}
+				<Link to="/registro-de-productos" className="w-56 p-2">
 				<div>
 					<RiArchiveDrawerFill className="text-2xl block float-left" />
 					<span className={`text-base flex-1 ml-2 font-semibold max-cs:hidden ${!openSidebar && "hidden"}`}>productos</span>
 				</div>
-				<div>
+				</Link>
+				{/* <div>
 					<ul>
 						<li className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer  rounded-md mt-2 capitalize   hover:bg-red-200 hover:text-gray-500 whitespace-nowrap">
 							mis productos
@@ -42,7 +43,7 @@ const ListSidebar = ({ openSidebar }: Props) => {
 							agregar producto
 						</li>
 					</ul>
-				</div>
+				</div> */}
 			</li>
 		</ul>
 	)
