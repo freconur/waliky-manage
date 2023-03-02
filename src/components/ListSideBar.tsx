@@ -33,7 +33,7 @@ const ListSidebar = ({ openSidebar, pruebita }: Props) => {
 			</li>
 			<li  onClick={() => pruebita(!openSidebar)} className=" text-sm items-center gap-x-4 cursor-pointer overflow-hidden   mt-2 capitalize whitespace-nowrap">
 				{/* <Link to="/registro-de-productos" className="w-56 p-2"> */}
-				<div onClick={() => setProductActive(!productActive)} className={`flex  duration-300 p-2 rounded-lg hover:bg-red-200 text-gray-300 hover:text-gray-500 ${productActive && "rounded-none rounded-t-lg bg-red-200 text-gray-500"}`}>
+				<div onClick={() => setProductActive(!productActive)} className={`flex  duration-300 p-2 rounded-lg hover:bg-red-200 text-gray-300 hover:text-gray-500 ${productActive && openSidebar && "rounded-none rounded-t-lg bg-red-200 text-gray-500"}`}>
 					<RiArchiveDrawerFill className="text-2xl block float-left " />
 					<span className={` text-base flex-1 ml-2 font-semibold   ${!openSidebar && "hidden"}`}>productos</span>
 					<RiArrowDownSLine className={`text-[30px] duration-300  ${!openSidebar && "hidden" } ${productActive && "rotate-180"}`} />
