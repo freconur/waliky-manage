@@ -9,7 +9,7 @@ import { ListSidebar } from "./ListSideBar";
 
 
 const SideBar = () => {
-  const [openSidebar, setOpenSidebar] = useState<boolean>(true)
+  const [openSidebar, setOpenSidebar] = useState<boolean>(false)
   const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
   const [arrowAnimation, setArrowAnimation] = useState(false)
   useEffect(() => {
