@@ -11,6 +11,8 @@ import {
   onSnapshot,
   Timestamp,
 } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 import { currentMonth } from "../date/date";
 import { app } from "../firebase/firebase.config";
 import {
@@ -24,6 +26,7 @@ import {
 import { TYPES } from "./action";
 
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 export const getBtsCategories = async () => {
   const colRefBtsCategories = await getDocs(collection(db, "bts"));
@@ -228,6 +231,37 @@ export const getCategories = async (dispatch:(action: any) => void) => {
       categories.push({ ...doc.data(), id: doc.id });
     });
     dispatch({ type: "getCagories", payload: categories });
+  })
+}
+export const getSubcategories = async (dispatch:(action: any) => void, category:string, allCategories:Categories[]) => {
+  allCategories.map(async item => {
+    if(item.name === category){
+      console.log('item.id',item.id)
+      const subcategories: Product[] = [];
+      const res = await getDocs(collection(db,`/categories/${item.id}/subcategorias`));
+        res.forEach((doc) => {
+          subcategories.push({ ...doc.data(), id: doc.id });
+        });
+      return dispatch({ type: "getSubcategories", payload: subcategories });
+
+    }
+  })
+}
+  // export const uploadFile = async (dispatch:(action:any) => void, files:FileList | null, newProduct: Product) => {
+    export const uploadFile = async (dispatch:(action:any) => void, files: any | null  , newProduct: Product) => {
+  const archivoRef = ref(storage, `/${newProduct.category}/${newProduct.subcategory}/${newProduct.name}`);
+    await uploadBytes(archivoRef, files[0]);
+    const urlImage = await getDownloadURL(archivoRef);
+    return urlImage
+}
+export const getBrands = async (dispatch:(action: any) => void) => {
+  const res = collection(db,"brands");
+  onSnapshot(res,(snapshot) => {
+    const brands: Product[] = [];
+    snapshot.docs.forEach((doc) => {
+      brands.push({ ...doc.data(), id: doc.id });
+    });
+    dispatch({ type: "getBrands", payload: brands });
   })
 }
 

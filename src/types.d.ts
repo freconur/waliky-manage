@@ -14,6 +14,7 @@ export interface Product {
   cantidad?: number;
   pathProduct?: string;
   category?: string;
+  subcategory?: string;
 }
 export interface SearchById {
   id: string;
@@ -62,4 +63,16 @@ export type MonthsAvialable = [];
 export interface Categories {
   id?: string;
   name?: string;
+}
+export interface Brands {
+  id?: string;
+  name?: string;
+}
+
+export interface FilesImage {
+  lastModified?: Date
+name?: string
+size?: undefined
+type?: string
+webkitRelativePath?: ""
 }

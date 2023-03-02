@@ -8,6 +8,7 @@ import { TablaVentas } from './pages/TablaVentas';
 import { SearchIdProduct } from './pages/SearchIdProduct';
 import { Productos } from './pages/Productos';
 import { Home } from './pages/Home';
+import { AddProduct } from './pages/AddProduct';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/ventas" element={<TablaVentas />} />
           <Route path="/busqueda-de-producto" element={<SearchIdProduct />} />
           <Route path="/registro-de-productos" element={<Productos />} />
+          <Route path="/agregar-producto" element={<AddProduct />} />
         </Routes>
       </Layout>
     </BrowserRouter>

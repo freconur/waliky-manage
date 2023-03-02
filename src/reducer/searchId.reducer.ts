@@ -1,5 +1,6 @@
 import { funcionDate, functionDateConvert } from "../date/date";
 import {
+  Brands,
   Categories,
   Options,
   Product,
@@ -23,8 +24,10 @@ type FormReducerAction =
   | { type: "monthsAvailable"; payload: string[] }
   | { type: "optionsSort"; payload: string; payload2: ProductSold[] }
   | { type: "getCagories"; payload: Categories[] }
-  | { type: "filterCategory"; payload: Product[]; payload2: string, payload3:Product[] }
-  
+  | { type: "getSubcategories"; payload: Categories[] }
+  | { type: "filterCategory"; payload: Product[]; payload2: string; payload3: Product[]}
+  | { type: "getBrands"; payload: Brands[] }
+
 export const initialStateProducts = {
   product: [] as Product,
   prueba: [] as Product[],
@@ -45,6 +48,8 @@ export const initialStateProducts = {
   monthsAvailable: [] as string[],
   numberOfItems: 0 as number,
   allCategories: [] as Categories[],
+  allSubcategories: [] as Categories[],
+  allBrands: [] as Brands[],
 };
 export const searchIdReducer = (
   state: typeof initialStateProducts,
@@ -52,6 +57,16 @@ export const searchIdReducer = (
 ) => {
   switch (action.type) {
     // case TYPES.GET_PRODUCT_BY_ID:
+    case "getSubcategories":
+      return {
+        ...state,
+        allSubcategories:action.payload
+      }
+    case "getBrands":
+      return {
+        ...state,
+        allBrands:action.payload
+      }
     case "getProductById":
       return {
         ...state,
@@ -124,7 +139,7 @@ export const searchIdReducer = (
       return {
         ...state,
         allProducts: action.payload,
-        copyAllProducts: action.payload
+        copyAllProducts: action.payload,
       };
     case "warningStock":
       return {
@@ -146,20 +161,22 @@ export const searchIdReducer = (
         ...state,
         allCategories: action.payload,
       };
-      case "filterCategory":
-        // const products = initialStateProducts.allProducts
-        if(action.payload2 === "all") {
-          return {
-            ...state,
-            allProducts:action.payload3
-          }
-        }
-        const rtaFiltro = action.payload3.filter(item => item.category === action.payload2)
-        console.log('rtaFiltro',rtaFiltro)
+    case "filterCategory":
+      // const products = initialStateProducts.allProducts
+      if (action.payload2 === "all") {
         return {
           ...state,
-          allProducts:rtaFiltro
-        }
+          allProducts: action.payload3,
+        };
+      }
+      const rtaFiltro = action.payload3.filter(
+        (item) => item.category === action.payload2
+      );
+      console.log("rtaFiltro", rtaFiltro);
+      return {
+        ...state,
+        allProducts: rtaFiltro,
+      };
     case "optionsSort":
       let saveProductsSold = action.payload2;
       if (action.payload === "price-ascendente") {
