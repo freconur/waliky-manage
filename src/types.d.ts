@@ -16,6 +16,15 @@ export interface Product {
   category?: string;
   subcategory?: string;
 }
+export interface ProductValidation {
+  image?: string;
+  marca?: string;
+  name?: string;
+  price?: string;
+  stock?: number;
+  category?: string;
+  subcategory?: string;
+}
 export interface SearchById {
   id: string;
 }

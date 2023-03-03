@@ -21,6 +21,7 @@ import {
   Options,
   Product,
   ProductSold,
+  ProductValidation,
   SearchById,
 } from "../types";
 import { TYPES } from "./action";
@@ -236,19 +237,19 @@ export const getCategories = async (dispatch:(action: any) => void) => {
 export const getSubcategories = async (dispatch:(action: any) => void, category:string, allCategories:Categories[]) => {
   allCategories.map(async item => {
     if(item.name === category){
-      console.log('item.id',item.id)
       const subcategories: Product[] = [];
       const res = await getDocs(collection(db,`/categories/${item.id}/subcategorias`));
         res.forEach((doc) => {
           subcategories.push({ ...doc.data(), id: doc.id });
         });
-      return dispatch({ type: "getSubcategories", payload: subcategories });
+        // console.log('subcategories', subcategories)
+       return dispatch({ type: "getSubcategories", payload: subcategories });
 
     }
   })
 }
   // export const uploadFile = async (dispatch:(action:any) => void, files:FileList | null, newProduct: Product) => {
-    export const uploadFile = async (dispatch:(action:any) => void, files: any | null  , newProduct: Product) => {
+    export const uploadFile = async (files: any | null  , newProduct: Product) => {
   const archivoRef = ref(storage, `/${newProduct.category}/${newProduct.subcategory}/${newProduct.name}`);
     await uploadBytes(archivoRef, files[0]);
     const urlImage = await getDownloadURL(archivoRef);
@@ -264,7 +265,47 @@ export const getBrands = async (dispatch:(action: any) => void) => {
     dispatch({ type: "getBrands", payload: brands });
   })
 }
-
+export const validationValues = (dispatch:(action:any) => void, newProduct:Product, allSubcategories:Categories[]) => {
+  
+  if(allSubcategories.length > 0){
+    const copiaNewProduct = {...newProduct}
+  delete copiaNewProduct.image
+  for(let prop in copiaNewProduct) {
+      const key = prop as keyof Product;
+      if(copiaNewProduct[key]?.toString() === ""){
+        console.log("debes de llenar todos los campos")
+        return ("debes de llenar todos los campos")
+      }
+    }
+    return false
+  }
+  if(allSubcategories.length === 0) {
+    const copiaNewProduct = {...newProduct}
+    delete copiaNewProduct.image
+    delete copiaNewProduct.subcategory
+    for(let prop in copiaNewProduct) {
+      
+      const key = prop as keyof Product;
+      if(copiaNewProduct[key]?.toString() === ""){
+        console.log("debes de llenar todos los campos")
+        return ("debes de llenar todos los campos")
+      }
+    }
+    return false
+  }
+}
+export const NewProductValues = (dispatch:(action:any) => void, newProduct:Product, allSubcategories:Categories[]) => {
+  // console.log('newProduct',newProduct)
+  // console.log('allSubcategories',allSubcategories)
+  // if(allSubcategories.length){
+  //   for(let prop in newProduct) {
+  //     const key = prop as keyof Product;
+  //     if(newProduct[key]?.toString() === ""){
+  //       console.log("debes de llenar todos los campos")
+  //     }
+  //   }
+  // }
+}
 export const updateItemProv = async (item:Product) => {
   const colRef = doc(
     db,
