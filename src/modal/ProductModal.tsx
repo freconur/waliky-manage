@@ -3,7 +3,6 @@ import ReactDOM from "react-dom"
 import { getCategories, updateItemProv } from "../reducer"
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer"
 import { Product } from "../types"
-import { RiEdit2Fill } from "react-icons/ri";
 import { PriceInput } from "../components/inputsUpdate/PriceInput"
 import { StockInput } from "../components/inputsUpdate/StockInput"
 import { NameInput } from "../components/inputsUpdate/NameInput"
@@ -40,12 +39,8 @@ const ProductModal = ({ modalState, itemInfo }: Props) => {
 	}
 	const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		console.log('item', item)
 		updateItemProv(item)
 	}
-	// const updateItem = () => {
-	// }
-	console.log('itemInfo', itemInfo)
 	return ReactDOM.createPortal(
 		<form onSubmit={onSubmitForm} className="absolute inset-0 bg-white flex justify-center ">
 			<div className="border-4 p-2 rounded-lg w-full m-3 ">

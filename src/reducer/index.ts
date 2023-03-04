@@ -38,26 +38,31 @@ export const getBtsCategories = async () => {
   return btsCategories;
 };
 
-
 export const getBtsProducts = async () => {
   const bts = await getBtsCategories();
   let btsProducts: Product[] = [];
   // let productsBtsCategory:Product[] = []
   bts.map(async (category) => {
-    const rta = await getDocs(collection(db,`/bts/${category.id}/${category.name}`));
+    const rta = await getDocs(
+      collection(db, `/bts/${category.id}/${category.name}`)
+    );
     rta.forEach((doc) => {
-      btsProducts.push({ ...doc.data(), id: doc.id, pathProduct: `/bts/${category.id}/${category.name}` });
+      btsProducts.push({
+        ...doc.data(),
+        id: doc.id,
+        pathProduct: `/bts/${category.id}/${category.name}`,
+      });
     });
   });
-  return new Promise((resolve:(value: Product[]) => void, reject) => {
-      resolve(btsProducts)
-  })
+  return new Promise((resolve: (value: Product[]) => void, reject) => {
+    resolve(btsProducts);
+  });
 };
-export const getAllProducts = async (dispatch:(action:any) => void) => {
+export const getAllProducts = async (dispatch: (action: any) => void) => {
   const bts = await getBtsProducts();
   const kawaii = await getKawaiiProducts();
-  const allProducts:Product[] = bts.concat(kawaii)
-  dispatch({type:"getAllProducts", payload: allProducts})
+  const allProducts: Product[] = bts.concat(kawaii);
+  dispatch({ type: "getAllProducts", payload: allProducts });
 };
 export const setProductToSell = async (product: Product) => {
   await addDoc(
@@ -132,12 +137,15 @@ export const updateStockProduct = async (
     const docData = {
       idProduct: currentProduct.idProduct,
       name: currentProduct.name,
-      price:currentProduct.price,
+      price: currentProduct.price,
       timestamp: Timestamp.fromDate(new Date()),
       cantidad: currentProduct.cantidad,
     };
     await addDoc(
-      collection(db, `/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${currentMonth()}-2023`),
+      collection(
+        db,
+        `/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${currentMonth()}-2023`
+      ),
       docData
     );
     await deleteDoc(
@@ -164,19 +172,32 @@ export const getOptions = (dispatch: (action: any) => void) => {
   });
 };
 
-export const getProductsSold = (dispatch: (action: any) => void, month:string | void) => {
-  let currentMonths:string = currentMonth()
-  if(!month) {
-    const colref = collection(db,`/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${currentMonths}-2023`);
+export const getProductsSold = (
+  dispatch: (action: any) => void,
+  month: string | void
+) => {
+  let currentMonths: string = currentMonth();
+  if (!month) {
+    const colref = collection(
+      db,
+      `/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${currentMonths}-2023`
+    );
     onSnapshot(colref, (snapshot) => {
       const getSolds: ProductSold[] = [];
       snapshot.docs.forEach((doc) => {
         getSolds.push({ ...doc.data(), id: doc.id });
       });
-      dispatch({ type: "getProductsSold", payload: getSolds, payload2: currentMonths});
+      dispatch({
+        type: "getProductsSold",
+        payload: getSolds,
+        payload2: currentMonths,
+      });
     });
-  }else { 
-    const colref = collection(db,`/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${month}-2023`);
+  } else {
+    const colref = collection(
+      db,
+      `/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${month}-2023`
+    );
     onSnapshot(colref, (snapshot) => {
       const getSolds: ProductSold[] = [];
       snapshot.docs.forEach((doc) => {
@@ -191,14 +212,17 @@ export const getCurrentProductSell = async (
   dispatch: (action: any) => void
 ) => {
   // const item = await getDocs(collection(db,"/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale"));
-  const item = collection(db,"/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale");
-  onSnapshot(item,(snapshot) => {
+  const item = collection(
+    db,
+    "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale"
+  );
+  onSnapshot(item, (snapshot) => {
     const currentProductToSell: Product[] = [];
     snapshot.docs.forEach((doc) => {
       currentProductToSell.push({ ...doc.data(), id: doc.id });
     });
     dispatch({ type: "getCurrentProductSell", payload: currentProductToSell });
-  })
+  });
 };
 
 export const addCurrentProductToSell = (
@@ -212,9 +236,18 @@ export const addCurrentProductToSell = (
     getCurrentProductSell(dispatch);
   }
 };
-export const deleteCurrentProduct = async (dispatch:(action:any) => void, id:string) => {
-  await deleteDoc(doc(db, "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale", id))
-}
+export const deleteCurrentProduct = async (
+  dispatch: (action: any) => void,
+  id: string
+) => {
+  await deleteDoc(
+    doc(
+      db,
+      "/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale",
+      id
+    )
+  );
+};
 export const getKawaiiProducts = async () => {
   const rta = await getDocs(collection(db, "kawaii"));
   const products: Product[] = [];
@@ -224,100 +257,140 @@ export const getKawaiiProducts = async () => {
   return products;
 };
 
-export const getCategories = async (dispatch:(action: any) => void) => {
-  const res = collection(db,"categories");
-  onSnapshot(res,(snapshot) => {
+export const getCategories = async (dispatch: (action: any) => void) => {
+  const res = collection(db, "categories");
+  onSnapshot(res, (snapshot) => {
     const categories: Product[] = [];
     snapshot.docs.forEach((doc) => {
       categories.push({ ...doc.data(), id: doc.id });
     });
     dispatch({ type: "getCagories", payload: categories });
-  })
-}
-export const getSubcategories = async (dispatch:(action: any) => void, category:string, allCategories:Categories[]) => {
-  allCategories.map(async item => {
-    if(item.name === category){
+  });
+};
+export const getSubcategories = async (
+  dispatch: (action: any) => void,
+  category: string,
+  allCategories: Categories[]
+) => {
+  allCategories.map(async (item) => {
+    if (item.name === category) {
       const subcategories: Product[] = [];
-      const res = await getDocs(collection(db,`/categories/${item.id}/subcategorias`));
-        res.forEach((doc) => {
-          subcategories.push({ ...doc.data(), id: doc.id });
-        });
-        // console.log('subcategories', subcategories)
-       return dispatch({ type: "getSubcategories", payload: subcategories });
-
+      const res = await getDocs(
+        collection(db, `/categories/${item.id}/subcategorias`)
+      );
+      res.forEach((doc) => {
+        subcategories.push({ ...doc.data(), id: doc.id });
+      });
+      // console.log('subcategories', subcategories)
+      return dispatch({ type: "getSubcategories", payload: subcategories });
     }
-  })
-}
-  // export const uploadFile = async (dispatch:(action:any) => void, files:FileList | null, newProduct: Product) => {
-    export const uploadFile = async (files: any | null  , newProduct: Product) => {
-  const archivoRef = ref(storage, `/${newProduct.category}/${newProduct.subcategory}/${newProduct.name}`);
-    await uploadBytes(archivoRef, files[0]);
-    const urlImage = await getDownloadURL(archivoRef);
-    return urlImage
-}
-export const getBrands = async (dispatch:(action: any) => void) => {
-  const res = collection(db,"brands");
-  onSnapshot(res,(snapshot) => {
+  });
+};
+// export const uploadFile = async (dispatch:(action:any) => void, files:FileList | null, newProduct: Product) => {
+export const uploadFile = async (files: any | null, newProduct: Product) => {
+  const archivoRef = ref(
+    storage,
+    `/${newProduct.category}/${newProduct.subcategory}/${newProduct.name}`
+  );
+  await uploadBytes(archivoRef, files[0]);
+  const urlImage = await getDownloadURL(archivoRef);
+  return urlImage;
+};
+export const getBrands = async (dispatch: (action: any) => void) => {
+  const res = collection(db, "brands");
+  onSnapshot(res, (snapshot) => {
     const brands: Product[] = [];
     snapshot.docs.forEach((doc) => {
       brands.push({ ...doc.data(), id: doc.id });
     });
     dispatch({ type: "getBrands", payload: brands });
-  })
-}
-export const validationValues = (dispatch:(action:any) => void, newProduct:Product, allSubcategories:Categories[]) => {
-  
-  if(allSubcategories.length > 0){
-    const copiaNewProduct = {...newProduct}
-  delete copiaNewProduct.image
-  for(let prop in copiaNewProduct) {
+  });
+};
+export const validationValues = (
+  dispatch: (action: any) => void,
+  newProduct: Product,
+  allSubcategories: Categories[]
+) => {
+  if (allSubcategories.length > 0) {
+    const copiaNewProduct = { ...newProduct };
+    delete copiaNewProduct.image;
+    for (let prop in copiaNewProduct) {
       const key = prop as keyof Product;
-      if(copiaNewProduct[key]?.toString() === ""){
-        console.log("debes de llenar todos los campos")
-        return ("debes de llenar todos los campos")
+      if (copiaNewProduct[key]?.toString() === "") {
+        console.log("debes de llenar todos los campos");
+        return "debes de llenar todos los campos";
       }
     }
-    return false
+    return false;
   }
-  if(allSubcategories.length === 0) {
-    const copiaNewProduct = {...newProduct}
-    delete copiaNewProduct.image
-    delete copiaNewProduct.subcategory
-    for(let prop in copiaNewProduct) {
-      
+  if (allSubcategories.length === 0) {
+    const copiaNewProduct = { ...newProduct };
+    if (newProduct.image) {
+      delete copiaNewProduct.subcategory;
+      for (let prop in copiaNewProduct) {
+        const key = prop as keyof Product;
+        if (copiaNewProduct[key]?.toString() === "") {
+          console.log("debes de llenar todos los campos");
+          return "debes de llenar todos los campos";
+        }
+      }
+      return false;
+    }
+    delete copiaNewProduct.image;
+    delete copiaNewProduct.subcategory;
+    for (let prop in copiaNewProduct) {
       const key = prop as keyof Product;
-      if(copiaNewProduct[key]?.toString() === ""){
-        console.log("debes de llenar todos los campos")
-        return ("debes de llenar todos los campos")
+      if (copiaNewProduct[key]?.toString() === "") {
+        console.log("debes de llenar todos los campos");
+        return "debes de llenar todos los campos";
       }
     }
-    return false
+    return false;
   }
-}
-export const NewProductValues = (dispatch:(action:any) => void, newProduct:Product, allSubcategories:Categories[]) => {
-  // console.log('newProduct',newProduct)
-  // console.log('allSubcategories',allSubcategories)
-  // if(allSubcategories.length){
-  //   for(let prop in newProduct) {
-  //     const key = prop as keyof Product;
-  //     if(newProduct[key]?.toString() === ""){
-  //       console.log("debes de llenar todos los campos")
-  //     }
-  //   }
-  // }
-}
-export const updateItemProv = async (item:Product) => {
-  const colRef = doc(
-    db,
-    `${item.pathProduct}`,
-    `${item.id}`
+};
+export const NewProductValues = async (
+  newProduct: Product,
+  allCategories: Categories[]
+) => {
+  const btsCategories = await getBtsCategories();
+  const findSubcategory = btsCategories.find(
+    (category) => category.name === newProduct.subcategory
   );
+
+  if (`${newProduct.image}`.length === 0) {
+    console.log("agrega una imagen");
+  } else {
+    if (newProduct.subcategory) {
+      const findCollection = allCategories.find(
+        (item) => item.name === newProduct.category
+      );
+      console.log("con subcategory");
+
+      await addDoc(
+        collection(db, `/${findCollection?.name}/${findSubcategory?.id}/${newProduct.subcategory}`),
+        newProduct
+      );
+    } else {
+      const findCollection = allCategories.find(
+        (item) => item.name === newProduct.category
+      );
+      console.log("sin subcategory");
+
+      await addDoc(
+        collection(db, `/${findCollection?.name}/`),
+        newProduct
+      );
+    }
+  }
+};
+export const updateItemProv = async (item: Product) => {
+  const colRef = doc(db, `${item.pathProduct}`, `${item.id}`);
   updateDoc(colRef, {
     // ...currentProduct,
     category: item?.category,
     name: item?.name,
     price: item?.price,
-    stock: item?.stock
+    stock: item?.stock,
   });
-  console.log("se agrego la categoria")
-}
+  console.log("se agrego la categoria");
+};
