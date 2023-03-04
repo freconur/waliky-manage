@@ -5,12 +5,14 @@ import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reduc
 import { Product } from "../types"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { RiLoader4Line } from "react-icons/ri";
 const AddProduct = () => {
 	const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
-	const { allCategories, allBrands, allSubcategories, warningFile } = state
+	const { allCategories, allBrands, allSubcategories, warningFile, addProductWarning } = state
 	const [subcategoryActive, setSubcategoryActive] = useState<boolean>(true)
 	const [inputFilesActive, setInputFilesActive] = useState<boolean>(true)
+	const [loaderImage, setLoaderImage] = useState<boolean>(false)
+	const [loaderProduct, setLoaderProduct] = useState<boolean>(false)
 	const [newProductValues, setNewProductValues] = useState<Product>(initialNewProductValues)
 	const ref = useRef<HTMLInputElement | null>(null)
 	const refSelect = useRef<HTMLSelectElement | null>(null)
@@ -21,7 +23,19 @@ const AddProduct = () => {
 		getSubcategories(dispatch, `${newProductValues.category}`, allCategories)
 		const rtaValidationToInputFiles = validationValues(dispatch, newProductValues, allSubcategories)
 		if (rtaValidationToInputFiles === false) setInputFilesActive(false)
-		
+if (addProductWarning.length > 0) {
+			toast.success(addProductWarning, {
+				position: "top-center",
+				autoClose: 2000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "colored",
+			});
+			setLoaderProduct(false)
+		}
 	}, [newProductValues, warningFile])
 
 	const onChangenewProductValues = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -34,37 +48,42 @@ const AddProduct = () => {
 
 	}
 	const fileHandler = async (files: FileList | null) => {
+		setLoaderImage(true)
 		const url = await uploadFile(dispatch, files, newProductValues)
 		setNewProductValues({
 			...newProductValues,
 			image: url
 		})
-		validationValues(dispatch, newProductValues, allSubcategories)
-		if(url) {
+		if (url) {
 			toast.success('Se cargo la imagen del producto!', {
 				position: "top-center",
-				autoClose: 5000,
+				autoClose: 2000,
 				hideProgressBar: false,
 				closeOnClick: true,
 				pauseOnHover: true,
 				draggable: true,
 				progress: undefined,
 				theme: "colored",
-				});
-		}
+			});
+			setLoaderImage(false)
+		} 
+		// else {
+		// 	validationValues(dispatch, newProductValues, allSubcategories)
+		// }
 	};
-	const onClickRegisterNewProduct = (e: React.FormEvent<HTMLFormElement>) => {
+	const onClickRegisterNewProduct = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		NewProductValues(dispatch,newProductValues, allCategories)
-		setNewProductValues(initialNewProductValues)
+		setLoaderProduct(true)
+		NewProductValues(dispatch, newProductValues, allCategories)
 		if (ref.current) ref.current.value = ""
 		if (refSelect.current) refSelect.current.value = ""
 		setSubcategoryActive(true)
-		
+		setNewProductValues(initialNewProductValues)
 	}
 	return (
 		<form onSubmit={onClickRegisterNewProduct} className="mr-2">
 			{warningFile && <ToastContainer />}
+			{addProductWarning && <ToastContainer />}
 			<h1 className="text-cyan-700 font-bold uppercase">Registrar nuevo producto</h1>
 			<div className="ml-5">
 				<div className="w-full">
@@ -117,8 +136,28 @@ const AddProduct = () => {
 					<label className="text-gray-400 font-medium capitalize text-lg">agregar imagen:</label>
 					<input ref={ref} disabled={inputFilesActive} onChange={(e) => fileHandler(e.currentTarget.files)} name="image" type="file" className="border-2 rounded-lg w-full" />
 					{warningFile && warningFile}
-					
 				</div>
+				{/* loader */}
+				{loaderImage
+					&&
+					<div className="w-full flex justify-center mt-5">
+						<div className="items-center">
+							<RiLoader4Line className="animate-spin text-3xl text-blue-500 m-auto " />
+							<p className="text-gray-400">subiendo imagen...</p>
+						</div>
+					</div>}
+
+					{loaderProduct
+					?
+					<div className="w-full flex justify-center mt-5">
+						<div className="items-center">
+							<RiLoader4Line className="animate-spin text-3xl text-blue-500 m-auto " />
+							<p className="text-gray-400">subiendo imagen...</p>
+						</div>
+					</div>
+					:	loaderProduct && addProductWarning && <div></div>
+					}
+
 				<div className="flex justify-end mt-3">
 					<button type="submit" className="border-2 text-lg bg-blue-600 p-2 font-semibold text-white rounded-lg drop-shadow-lg capitalize">registrar</button>
 				</div>

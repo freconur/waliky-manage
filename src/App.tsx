@@ -9,6 +9,7 @@ import { SearchIdProduct } from './pages/SearchIdProduct';
 import { Productos } from './pages/Productos';
 import { Home } from './pages/Home';
 import { AddProduct } from './pages/AddProduct';
+import { Statistics } from './pages/Statistics';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/busqueda-de-producto" element={<SearchIdProduct />} />
           <Route path="/registro-de-productos" element={<Productos />} />
           <Route path="/agregar-producto" element={<AddProduct />} />
+          <Route path="/estadisticas" element={<Statistics />} />
         </Routes>
       </Layout>
     </BrowserRouter>

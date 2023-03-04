@@ -12,6 +12,7 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { RiTable2 } from "react-icons/ri";
 
 import { currentMonth } from "../date/date";
 import { app } from "../firebase/firebase.config";
@@ -102,14 +103,30 @@ export const getProductById = async (
     }
   });
 };
-export const getCartucherasBts = (dispatch: (action: any) => void) => {
-  const colRef = collection(db, "bts/Xq9UGyUn6d4OukEb1jPk/cartucheras");
-  onSnapshot(colRef, (snapshot) => {
-    let cartucheras: Product[] = [];
-    snapshot.docs.forEach((doc) => {
-      cartucheras.push({ ...doc.data(), id: doc.id });
-    });
-    dispatch({ type: "getCartucherasBts", payload: cartucheras });
+export const getCartucherasBts = async (dispatch: (action: any) => void) => {
+  // const colRef = collection(db, "bts/Xq9UGyUn6d4OukEb1jPk/cartucherass");
+  //   onSnapshot(colRef, (snapshot) => {
+  //     let cartucheras: Product[] = [];
+  //     snapshot.docs.forEach((doc) => {
+  //       cartucheras.push({ ...doc.data(), id: doc.id });
+  //     });
+  //     dispatch({ type: "getCartucherasBts", payload: cartucheras });
+  //   });
+  // }
+
+  await getDocs(collection(db, "kawaiia")).then((res) => {
+    const products: Product[] = [];
+    if (res.docs.length > 0) {
+      res.forEach((doc) => {
+        products.push({ ...doc.data(), id: doc.id });
+      });
+      dispatch({ type: "getCartucherasBts", payload: products });
+    } else {
+      dispatch({
+        type: "getErrorProducts",
+        payload: "ups, algo paso!, no se pudieron cargar los productos",
+      });
+    }
   });
 };
 export const updateStockProduct = async (
@@ -287,18 +304,25 @@ export const getSubcategories = async (
   });
 };
 // export const uploadFile = async (dispatch:(action:any) => void, files:FileList | null, newProduct: Product) => {
-export const uploadFile = async (dispatch:(action:any) => void, files: any | null, newProduct: Product) => {
+export const uploadFile = async (
+  dispatch: (action: any) => void,
+  files: any | null,
+  newProduct: Product
+) => {
   const archivoRef = ref(
     storage,
     `/${newProduct.category}/${newProduct.subcategory}/${newProduct.name}`
   );
   await uploadBytes(archivoRef, files[0]);
   const urlImage = await getDownloadURL(archivoRef);
-  if(urlImage) {
-    dispatch({type: "warningFile", payload:"se cargo la imagen del producto"})
+  if (urlImage) {
+    dispatch({
+      type: "warningFile",
+      payload: "se cargo la imagen del producto",
+    });
   }
   return urlImage;
-}
+};
 export const getBrands = async (dispatch: (action: any) => void) => {
   const res = collection(db, "brands");
   onSnapshot(res, (snapshot) => {
@@ -320,8 +344,7 @@ export const validationValues = (
     for (let prop in copiaNewProduct) {
       const key = prop as keyof Product;
       if (copiaNewProduct[key]?.toString() === "") {
-        console.log("debes de llenar todos los campos");
-        return "debes de llenar todos los campos";
+        // console.log("debes de llenar todos los campos");
       }
     }
     return false;
@@ -333,8 +356,7 @@ export const validationValues = (
       for (let prop in copiaNewProduct) {
         const key = prop as keyof Product;
         if (copiaNewProduct[key]?.toString() === "") {
-          console.log("debes de llenar todos los campos");
-          return "debes de llenar todos los campos";
+          // console.log("debes de llenar todos los campos");
         }
       }
       return false;
@@ -344,15 +366,14 @@ export const validationValues = (
     for (let prop in copiaNewProduct) {
       const key = prop as keyof Product;
       if (copiaNewProduct[key]?.toString() === "") {
-        console.log("debes de llenar todos los campos");
-        return "debes de llenar todos los campos";
+        // console.log("debes de llenar todos los campos");
       }
     }
     return false;
   }
 };
 export const NewProductValues = async (
-  dispatch:(action:any) => void,
+  dispatch: (action: any) => void,
   newProduct: Product,
   allCategories: Categories[]
 ) => {
@@ -360,34 +381,32 @@ export const NewProductValues = async (
   const findSubcategory = btsCategories.find(
     (category) => category.name === newProduct.subcategory
   );
-
   if (`${newProduct.image}`.length === 0) {
-    console.log("agrega una imagen");
+      console.log("tienes que agregar una imagen")
   } else {
     if (newProduct.subcategory) {
       const findCollection = allCategories.find(
         (item) => item.name === newProduct.category
       );
-      console.log("con subcategory");
-
-      await addDoc(
-        collection(db, `/${findCollection?.name}/${findSubcategory?.id}/${newProduct.subcategory}`),
-        newProduct
-      );
-    dispatch({type: "warningFile", payload:""})
-
+        await addDoc(
+          collection(
+            db,
+            `/${findCollection?.name}/${findSubcategory?.id}/${newProduct.subcategory}`
+          ),
+          newProduct
+        ).then(rta => {
+          dispatch({ type: "warningFile", payload: "" });
+          dispatch({ type: "addProductWarning", payload: "se agrego el producto satisfactoriamente" });
+        }).catch(error => {dispatch({ type: "addProductWarning", payload: error })})
     } else {
       const findCollection = allCategories.find(
         (item) => item.name === newProduct.category
       );
-      console.log("sin subcategory");
-
-      await addDoc(
-        collection(db, `/${findCollection?.name}/`),
-        newProduct
-      );
-    dispatch({type: "warningFile", payload:""})
-
+      await addDoc(collection(db, `/${findCollection?.name}/`), newProduct)
+      .then(rta => {
+        dispatch({ type: "warningFile", payload: "" });
+        dispatch({ type: "addProductWarning", payload: "se agrego el producto satisfactoriamente" });
+      }).catch(error => {dispatch({ type: "addProductWarning", payload: error })})
     }
   }
 };

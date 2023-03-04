@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react"
 import { useLocation } from "react-router-dom"
-import { getCartucherasBts, getProductById } from "../reducer"
+import { getProductById } from "../reducer"
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer"
 import { InputValueVentas, Product, SearchById } from "../types"
 
@@ -20,7 +20,7 @@ const SearchIdProduct = () => {
 	const { product, prueba } = state
 
 	useEffect(() => {
-		getCartucherasBts(dispatch)
+		// getCartucherasBts(dispatch)
 	}, [product])
 
 	const handleChangeForm = (e: React.ChangeEvent<HTMLInputElement>) => {

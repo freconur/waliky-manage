@@ -28,6 +28,8 @@ type FormReducerAction =
   | { type: "filterCategory"; payload: Product[]; payload2: string; payload3: Product[]}
   | { type: "getBrands"; payload: Brands[] }
   | { type: "warningFile"; payload: string }
+  | { type: "getErrorProducts"; payload: string }
+  | { type: "addProductWarning"; payload: string }
   
 export const initialStateProducts = {
   product: [] as Product,
@@ -52,6 +54,8 @@ export const initialStateProducts = {
   allSubcategories: [] as Categories[],
   allBrands: [] as Brands[],
   warningFile: '' as string,
+  warningGetErrorProducts: '' as string,
+  addProductWarning: '' as string
 };
 export const searchIdReducer = (
   state: typeof initialStateProducts,
@@ -59,6 +63,16 @@ export const searchIdReducer = (
 ) => {
   switch (action.type) {
     // case TYPES.GET_PRODUCT_BY_ID:
+    case "addProductWarning":
+      return {
+        ...state,
+        addProductWarning:action.payload
+      }
+    case "getErrorProducts":
+      return {
+        ...state,
+        warningGetErrorProducts: action.payload
+      }
     case "warningFile": 
     return {
       ...state,
