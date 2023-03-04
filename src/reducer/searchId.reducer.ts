@@ -27,7 +27,8 @@ type FormReducerAction =
   | { type: "getSubcategories"; payload: Categories[] }
   | { type: "filterCategory"; payload: Product[]; payload2: string; payload3: Product[]}
   | { type: "getBrands"; payload: Brands[] }
-
+  | { type: "warningFile"; payload: string }
+  
 export const initialStateProducts = {
   product: [] as Product,
   prueba: [] as Product[],
@@ -50,6 +51,7 @@ export const initialStateProducts = {
   allCategories: [] as Categories[],
   allSubcategories: [] as Categories[],
   allBrands: [] as Brands[],
+  warningFile: '' as string,
 };
 export const searchIdReducer = (
   state: typeof initialStateProducts,
@@ -57,6 +59,11 @@ export const searchIdReducer = (
 ) => {
   switch (action.type) {
     // case TYPES.GET_PRODUCT_BY_ID:
+    case "warningFile": 
+    return {
+      ...state,
+      warningFile: action.payload
+    }
     case "getSubcategories":
       return {
         ...state,

@@ -287,15 +287,18 @@ export const getSubcategories = async (
   });
 };
 // export const uploadFile = async (dispatch:(action:any) => void, files:FileList | null, newProduct: Product) => {
-export const uploadFile = async (files: any | null, newProduct: Product) => {
+export const uploadFile = async (dispatch:(action:any) => void, files: any | null, newProduct: Product) => {
   const archivoRef = ref(
     storage,
     `/${newProduct.category}/${newProduct.subcategory}/${newProduct.name}`
   );
   await uploadBytes(archivoRef, files[0]);
   const urlImage = await getDownloadURL(archivoRef);
+  if(urlImage) {
+    dispatch({type: "warningFile", payload:"se cargo la imagen del producto"})
+  }
   return urlImage;
-};
+}
 export const getBrands = async (dispatch: (action: any) => void) => {
   const res = collection(db, "brands");
   onSnapshot(res, (snapshot) => {
@@ -349,6 +352,7 @@ export const validationValues = (
   }
 };
 export const NewProductValues = async (
+  dispatch:(action:any) => void,
   newProduct: Product,
   allCategories: Categories[]
 ) => {
@@ -370,6 +374,8 @@ export const NewProductValues = async (
         collection(db, `/${findCollection?.name}/${findSubcategory?.id}/${newProduct.subcategory}`),
         newProduct
       );
+    dispatch({type: "warningFile", payload:""})
+
     } else {
       const findCollection = allCategories.find(
         (item) => item.name === newProduct.category
@@ -380,6 +386,8 @@ export const NewProductValues = async (
         collection(db, `/${findCollection?.name}/`),
         newProduct
       );
+    dispatch({type: "warningFile", payload:""})
+
     }
   }
 };
