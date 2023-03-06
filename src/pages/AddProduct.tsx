@@ -155,7 +155,7 @@ if (addProductWarning.length > 0) {
 							<p className="text-gray-400">subiendo imagen...</p>
 						</div>
 					</div>
-					:	loaderProduct && addProductWarning && <div></div>
+					:	loaderProduct && addProductWarning && null
 					}
 
 				<div className="flex justify-end mt-3">

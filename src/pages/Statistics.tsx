@@ -2,8 +2,7 @@ import { useEffect, useReducer, useState } from 'react';
 import { Bar, Line } from 'react-chartjs-2';
 import { dataforGraphics, getProductsSold } from '../reducer';
 import { initialStateProducts, searchIdReducer } from '../reducer/searchId.reducer';
-import { RiLoader4Line } from "react-icons/ri";
-import { Graphics } from '../types';
+import { RiArrowDownFill, RiLoader4Line, RiArrowUpFill } from "react-icons/ri";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -85,13 +84,23 @@ const Statistics = () => {
               &&
               dataForCard.map((data, index) => {
                 return (
-                  <li key={index} className="p-2 m-2 border-4 border-blue-200 rounded-md drop-shadow-lg bg-blue-100 w-40">
+                  <li key={index} className="p-2 m-2 border-4 border-blue-200 rounded-md drop-shadow-lg bg-blue-100 w-34">
                     <p className='uppercase font-semibold text-blue-400'>{data.nameMonth}</p>
                     <p className='text-gray-500 capitalize'>venta: <span className={`ml-1 text-green-500 ${data.sales < 0 && "text-red-600"} `}>S/ {data.sales}</span> </p>
                     {
                       data.salesGrowth
                         ?
-                        <p className='text-gray-500 capitalize'>%: <span className={`ml-1 text-green-500 ${data.salesGrowth < 0 && "text-red-600"} `}>{data.salesGrowth?.toFixed(2)}%</span>  </p>
+                        <div className='text-gray-500 capitalize flex'>
+                          %: <div className={`ml-1 text-green-500 ${data.salesGrowth < 0 && "text-red-600"} `}>
+                            <div className='flex'>
+                            {data.salesGrowth < 0 
+                            ? <RiArrowDownFill className='animate-bounce' /> 
+                            : <RiArrowUpFill className='animate-bounce' />
+                            }
+                            {data.salesGrowth?.toFixed(2)}
+                            </div>
+                          </div>
+                        </div>
                         :
                         null
                     }
