@@ -47,7 +47,7 @@ const Statistics = () => {
     dataforGraphics(dispatch)
     // setTimeout(() => { setLoader(!loader) }, 1000)
   }, [])
-  const data = {
+  const ventas = {
     labels: monthAvailableGraphics,
     datasets: [{
       label: 'Venta del Mes',
@@ -73,7 +73,7 @@ const Statistics = () => {
         &&
         dataForCard.map((data, index) => {
           return(
-            <li key={index} className="p-2 m-2 border-2 border-cyan-500 rounded-md drop-shadow-lg bg-blue-100 w-40">
+            <li key={index} className="p-2 m-2 border-4 border-blue-200 rounded-md drop-shadow-lg bg-blue-100 w-40">
               <p className='uppercase font-semibold text-blue-400'>{data.nameMonth}</p>
               <p className='text-gray-500 capitalize'>venta: <span className={`ml-1 text-green-500 ${data.sales < 0 && "text-red-600"} `}>S/ {data.sales}</span> </p>
               {
@@ -92,8 +92,8 @@ const Statistics = () => {
         
       <h2 className='w-full text-xl text-cyan-600 font-semibold capitalize mt-5'>grafico lineal de ventas</h2>
 
-        <Line data={data} />
       </div>
+        <Line data={ventas} />
 
     </div>
   )
