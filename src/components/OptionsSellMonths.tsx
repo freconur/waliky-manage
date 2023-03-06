@@ -19,9 +19,9 @@ const OptionsSellMonths = ({onChangeValueSelect}:PropsOptions) => {
 	console.log('statesells', state)
 	return (
 		<>
-			<div className="mb-2 mt-5 flex justify-between">
+			<div className="mb-2 mt-5 flex justify-between w-full">
 				<label className="text-gray-500 capitalize font-semibold mr-2">filtrar por mes:</label>
-				<select onChange={onChangeValueSelect} className="px-3 text-gray-400 capitalize font-semibold py-1 rounded-lg shadow-md w-32" name="" id="">
+				<select onChange={onChangeValueSelect} className=" px-3 text-gray-400 capitalize font-semibold py-1 rounded-lg shadow-md" name="" id="">
 					<option value="">mes</option>
 					{
 						monthsAvailable.map((month, index) => {

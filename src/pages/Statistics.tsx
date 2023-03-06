@@ -121,8 +121,8 @@ const Statistics = () => {
 
       <div className='w-full '>
         <h2 className='w-full text-xl text-cyan-600 font-semibold capitalize mt-5'>grafico lineal de ventas</h2>
-      </div>
       <Line data={ventas} />
+      </div>
     </div>
   )
 }

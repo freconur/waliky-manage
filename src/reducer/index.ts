@@ -273,7 +273,7 @@ setTimeout(() => {
       })
       //SE OBTINENE ARRAY DE LOS MESES DISPONIBLES
       dispatch({ type: "dataForGraphics", payload: sellPerMonth, payload2: getNameMonths, payload3: allProductsSoldPerMonths});
-}, 1000)
+}, 1500)
 // console.log('allProductsSoldPerMonths', allProductsSoldPerMonths)
 // SE OBTIENE LAS VENTAS HECHAS POR MESES
 }
