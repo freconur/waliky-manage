@@ -1,4 +1,4 @@
-import { funcionDate, functionDateConvert } from "../date/date";
+import { currentYear, funcionDate, functionDateConvert } from "../date/date";
 import {
   Brands,
   Categories,
@@ -65,7 +65,9 @@ export const initialStateProducts = {
   addProductWarning: "" as string,
   totalSales: [] as number[],
   monthAvailableGraphics: [] as string[],
-  dataForCard: [] as DataForCard[]
+  dataForCard: [] as DataForCard[],
+  currentYear: '' as string,
+  totalSalesPerYear: 0  as number
 };
 export const searchIdReducer = (
   state: typeof initialStateProducts,
@@ -74,10 +76,13 @@ export const searchIdReducer = (
   switch (action.type) {
     // case TYPES.GET_PRODUCT_BY_ID:
     case "dataForGraphics":
+      const year:string = currentYear()
       const dataForCard:DataForCard[] = []
+      let totalSalesPerYear:number = 0 
       action.payload3.map((product, index) => {
         let totalSales = 0
         product.products?.map(item => {
+          totalSalesPerYear = totalSalesPerYear + (parseInt(`${item.cantidad}`, 10) * parseFloat(`${item.price}`))
           totalSales = totalSales + (parseInt(`${item.cantidad}`, 10) * parseFloat(`${item.price}`))
           
         })
@@ -88,11 +93,9 @@ export const searchIdReducer = (
           } 
           dataForCard.push(data)
         }else {
-          
           const data: DataForCard = {
             nameMonth: `${product.nameMonth}`,
             sales: totalSales,
-            // salesGrowth:parseFloat(`${((dataForCard[index-1].sales/totalSales)-1)*100}`)
             salesGrowth:((totalSales/dataForCard[index-1].sales)-1)*100
           } 
           dataForCard.push(data)
@@ -102,7 +105,9 @@ export const searchIdReducer = (
         ...state,
         totalSales: action.payload,
         monthAvailableGraphics: action.payload2,
-        dataForCard: dataForCard
+        dataForCard: dataForCard,
+        currentYear: year,
+        totalSalesPerYear: totalSalesPerYear
       };
     case "addProductWarning":
       return {

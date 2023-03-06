@@ -43,6 +43,11 @@ export const currentMonth = () => {
     const date = new Date()
     return months[date.getMonth()]
 }
+export const currentYear = () => {
+    const date = new Date()
+    console.log(`${date.getFullYear()}`)
+    return `${date.getFullYear()}`
+}
 // currentMonth()
 // MonthsAvailable()
 // MothsAvailableForGraphics()
