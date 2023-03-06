@@ -12,20 +12,19 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { RiTable2 } from "react-icons/ri";
 
-import { currentMonth } from "../date/date";
+import { currentMonth, MonthsAvailable, MothsAvailableForGraphics } from "../date/date";
 import { app } from "../firebase/firebase.config";
 import {
   Categories,
   InputValueVentas,
+  MonthsAvailableType,
   Options,
   Product,
   ProductSold,
-  ProductValidation,
-  SearchById,
+  ProductSoldPerMonth,
+  ProductsPerMonth,
 } from "../types";
-import { TYPES } from "./action";
 
 const db = getFirestore(app);
 const storage = getStorage(app);
@@ -224,6 +223,61 @@ export const getProductsSold = (
     });
   }
 };
+export const getAllProductsSoldPerMonth = async ():Promise<ProductsPerMonth[]> => {
+ const MonthAviable:MonthsAvailableType[] = MothsAvailableForGraphics()
+const allProductsMonthAviable:ProductsPerMonth[] = []
+ MonthAviable.map(async month => {
+  const colref = await getDocs(collection(db, `/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${month.nameMonth}-2023`));
+    const getSolds: ProductSold[] = [];
+    colref.docs.forEach((doc) => {
+      getSolds.push({ ...doc.data(), id: doc.id });
+    });
+    const rtaProductsPerMonth: ProductsPerMonth = {
+      id:month.id,
+      nameMonth: month.nameMonth,
+      products: getSolds
+    }
+    allProductsMonthAviable.push(rtaProductsPerMonth)
+})
+return new Promise((resolve: (value: ProductsPerMonth[]) => void, reject) => {
+  resolve(allProductsMonthAviable);
+});
+//  return allProductsMonthAviable
+
+}
+
+export const dataforGraphics =  async (dispatch:(action:any) => void):Promise<void> => {
+  const allProductsSoldPerMonths = await getAllProductsSoldPerMonth()
+// SE OBTIENE LAS VENTAS HECHAS POR MESES
+let sellPerMonth:number[] = [] 
+setTimeout(() => {
+  allProductsSoldPerMonths?.sort((a, b) => {
+    const first = parseInt(`${a.id}`);
+    const second = parseInt(`${b.id}`);
+    if (first < second) return -1;
+    if (first > second) return 1;
+    return 0;
+  });
+  allProductsSoldPerMonths.map( product => {
+    let totalSales:number  = 0
+    product.products?.map(item => {
+      totalSales = totalSales + (parseInt(`${item.cantidad}`, 10) * parseFloat(`${item.price}`))
+        })
+        let totalSalesToString:string = totalSales.toString()
+        sellPerMonth.push(totalSales)
+      })
+      //SE OBTINENE ARRAY DE LOS MESES DISPONIBLES
+      const getNameMonths:string[] = []
+      MothsAvailableForGraphics().map(month => {
+        getNameMonths.push(`${month.nameMonth}`)
+      })
+      //SE OBTINENE ARRAY DE LOS MESES DISPONIBLES
+      dispatch({ type: "dataForGraphics", payload: sellPerMonth, payload2: getNameMonths, payload3: allProductsSoldPerMonths});
+}, 1000)
+// console.log('allProductsSoldPerMonths', allProductsSoldPerMonths)
+// SE OBTIENE LAS VENTAS HECHAS POR MESES
+}
+
 
 export const getCurrentProductSell = async (
   dispatch: (action: any) => void

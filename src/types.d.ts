@@ -46,7 +46,7 @@ export interface Options {
     option?: string;
     path?: string;
     image?: string;
-  }[]
+  }[];
 }
 export interface ProductSold {
   cantidad?: string;
@@ -79,9 +79,39 @@ export interface Brands {
 }
 
 export interface FilesImage {
-  lastModified?: Date
-name?: string
-size?: undefined
-type?: string
-webkitRelativePath?: ""
+  lastModified?: Date;
+  name?: string;
+  size?: undefined;
+  type?: string;
+  webkitRelativePath?: "";
+}
+
+export interface ProductsPerMonth {
+  id?: number;
+  nameMonth?: string;
+  products?: ProductSoldPerMonth[];
+}
+export interface ProductsPerMonthPromise {
+  id?: number;
+  nameMonth?: string;
+  products?: Promise<ProductSoldPerMonth[]>;
+}
+export interface MonthsAvailableType {
+  id?: number;
+  nameMonth?: string;
+}
+export interface Graphics {
+  labels: string[];
+  datasets: [{
+    label: string;
+    data: string[];
+    backgroundColor: string[];
+    borderColor: string[];
+    borderWidth: number;
+  }];
+}
+export interface DataForCard {
+  nameMonth: string,
+  sales:number,
+  salesGrowth?: number
 }

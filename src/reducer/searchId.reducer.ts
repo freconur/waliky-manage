@@ -2,13 +2,15 @@ import { funcionDate, functionDateConvert } from "../date/date";
 import {
   Brands,
   Categories,
+  DataForCard,
   Options,
   Product,
   ProductSold,
   ProductSoldPerMonth,
+  ProductsPerMonth,
+  ProductsPerMonthPromise,
 } from "../types";
 import { TYPES } from "./action";
-// import { GET_PRODUCT_BY_ID } from "./action";
 
 type FormReducerAction =
   | { type: "getProductById"; payload: Product; payload2: string }
@@ -25,12 +27,17 @@ type FormReducerAction =
   | { type: "optionsSort"; payload: string; payload2: ProductSold[] }
   | { type: "getCagories"; payload: Categories[] }
   | { type: "getSubcategories"; payload: Categories[] }
-  | { type: "filterCategory"; payload: Product[]; payload2: string; payload3: Product[]}
+  | {
+      type: "filterCategory";
+      payload: Product[];
+      payload2: string;
+      payload3: Product[];
+    }
   | { type: "getBrands"; payload: Brands[] }
   | { type: "warningFile"; payload: string }
   | { type: "getErrorProducts"; payload: string }
   | { type: "addProductWarning"; payload: string }
-  
+  | { type: "dataForGraphics"; payload: number[]; payload2: string[], payload3: ProductsPerMonth[] };
 export const initialStateProducts = {
   product: [] as Product,
   prueba: [] as Product[],
@@ -53,9 +60,12 @@ export const initialStateProducts = {
   allCategories: [] as Categories[],
   allSubcategories: [] as Categories[],
   allBrands: [] as Brands[],
-  warningFile: '' as string,
-  warningGetErrorProducts: '' as string,
-  addProductWarning: '' as string
+  warningFile: "" as string,
+  warningGetErrorProducts: "" as string,
+  addProductWarning: "" as string,
+  totalSales: [] as number[],
+  monthAvailableGraphics: [] as string[],
+  dataForCard: [] as DataForCard[]
 };
 export const searchIdReducer = (
   state: typeof initialStateProducts,
@@ -63,31 +73,62 @@ export const searchIdReducer = (
 ) => {
   switch (action.type) {
     // case TYPES.GET_PRODUCT_BY_ID:
+    case "dataForGraphics":
+      const dataForCard:DataForCard[] = []
+      action.payload3.map((product, index) => {
+        let totalSales = 0
+        product.products?.map(item => {
+          totalSales = totalSales + (parseInt(`${item.cantidad}`, 10) * parseFloat(`${item.price}`))
+          
+        })
+        if(index === 0) {
+          const data: DataForCard = {
+            nameMonth: `${product.nameMonth}`,
+            sales: totalSales,
+          } 
+          dataForCard.push(data)
+        }else {
+          
+          const data: DataForCard = {
+            nameMonth: `${product.nameMonth}`,
+            sales: totalSales,
+            // salesGrowth:parseFloat(`${((dataForCard[index-1].sales/totalSales)-1)*100}`)
+            salesGrowth:((totalSales/dataForCard[index-1].sales)-1)*100
+          } 
+          dataForCard.push(data)
+        }
+      })
+      return {
+        ...state,
+        totalSales: action.payload,
+        monthAvailableGraphics: action.payload2,
+        dataForCard: dataForCard
+      };
     case "addProductWarning":
       return {
         ...state,
-        addProductWarning:action.payload
-      }
+        addProductWarning: action.payload,
+      };
     case "getErrorProducts":
       return {
         ...state,
-        warningGetErrorProducts: action.payload
-      }
-    case "warningFile": 
-    return {
-      ...state,
-      warningFile: action.payload
-    }
+        warningGetErrorProducts: action.payload,
+      };
+    case "warningFile":
+      return {
+        ...state,
+        warningFile: action.payload,
+      };
     case "getSubcategories":
       return {
         ...state,
-        allSubcategories:action.payload
-      }
+        allSubcategories: action.payload,
+      };
     case "getBrands":
       return {
         ...state,
-        allBrands:action.payload
-      }
+        allBrands: action.payload,
+      };
     case "getProductById":
       return {
         ...state,
