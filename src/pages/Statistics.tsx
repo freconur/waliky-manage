@@ -58,7 +58,9 @@ const Statistics = () => {
       borderColor: [
         'rgb(153, 102, 255)'
       ],
-      borderWidth: 1
+      borderWidth: 3,
+      tension: 0.5,
+      pointRadius: 6
     }]
   }
   console.log('dataForCard', dataForCard)
