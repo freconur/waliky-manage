@@ -3,6 +3,7 @@ import {
   Brands,
   Categories,
   DataForCard,
+  DataPerYear,
   Options,
   Product,
   ProductSold,
@@ -37,7 +38,8 @@ type FormReducerAction =
   | { type: "warningFile"; payload: string }
   | { type: "getErrorProducts"; payload: string }
   | { type: "addProductWarning"; payload: string }
-  | { type: "dataForGraphics"; payload: number[]; payload2: string[], payload3: ProductsPerMonth[] };
+  | { type: "dataForGraphics"; payload: number[]; payload2: string[], payload3: ProductsPerMonth[] }
+  | { type: "getDataPerYear"; payload: DataPerYear[] }
 export const initialStateProducts = {
   product: [] as Product,
   prueba: [] as Product[],
@@ -67,7 +69,8 @@ export const initialStateProducts = {
   monthAvailableGraphics: [] as string[],
   dataForCard: [] as DataForCard[],
   currentYear: '' as string,
-  totalSalesPerYear: 0  as number
+  totalSalesPerYear: 0  as number,
+  dataPerYear: [] as DataPerYear[]
 };
 export const searchIdReducer = (
   state: typeof initialStateProducts,
@@ -75,6 +78,11 @@ export const searchIdReducer = (
 ) => {
   switch (action.type) {
     // case TYPES.GET_PRODUCT_BY_ID:
+    case "getDataPerYear":
+      return {
+        ...state,
+        dataPerYear: action.payload
+      }
     case "dataForGraphics":
       const year:string = currentYear()
       const dataForCard:DataForCard[] = []

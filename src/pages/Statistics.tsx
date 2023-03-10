@@ -15,6 +15,7 @@ import {
   Legend,
   ChartData,
 } from 'chart.js';
+import { Data2022 } from '../reducer/statistics';
 
 ChartJS.register(
   // CategoryScale,
@@ -38,12 +39,15 @@ interface LineProps {
 }
 const Statistics = () => {
   const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
-  const { currentDate, totalSales, currentYear, monthAvailableGraphics, dataForCard, totalSalesPerYear } = state
+  const { currentDate, totalSales, currentYear, monthAvailableGraphics, dataForCard, totalSalesPerYear, dataPerYear } = state
   const [loader, setLoader] = useState<boolean>(true)
   const [dataForGraphics, setDataForGraphics] = useState<LineProps["data"]>()
+
+
   useEffect(() => {
     getProductsSold(dispatch)
     dataforGraphics(dispatch)
+    Data2022(dispatch)
     // setTimeout(() => { setLoader(!loader) }, 1000)
   }, [])
   const ventas = {
@@ -62,6 +66,7 @@ const Statistics = () => {
       pointRadius: 6
     }]
   }
+  console.log('dataPerYear', dataPerYear)
   return (
     <div className='ml-5 my-5 mr-2'>
       <div className='flex justify-end my-4'><p className='text-gray-400 text-lg font-medium capitalize'>{currentDate}</p></div>
@@ -70,7 +75,19 @@ const Statistics = () => {
         ?
         <div>
           <div className='flex justify-end'>
-            <div className='bg-yellow-300 drop-shadow-lg rounded-lg border-4 border-yellow-400 p-1'>
+            {dataPerYear && dataPerYear.map(data => {
+              return (
+                <div className='bg-yellow-300 drop-shadow-lg rounded-lg border-4 border-yellow-400 p-1 mr-1'>
+                  <div className='m-auto flex justify-center'>
+                    <span className='block capitalize text-md font-semibold text-white'><span className='capitalize text-md font-semibold text-white mr-1'>año</span>{data.name}</span>
+                  </div>
+                  <span className='block text-green-500 font-semibold'><span className='capitalize text-md font-semibold text-white mr-1'>total:</span>S/{data.utilidad}</span>
+                </div>
+              )
+            })
+            }
+
+            <div className='bg-yellow-300 drop-shadow-lg rounded-lg border-4 border-yellow-400 p-1 mr-1'>
               <div className='m-auto flex justify-center'>
                 <span className='block capitalize text-md font-semibold text-white'><span className='capitalize text-md font-semibold text-white mr-1'>año</span>{currentYear}</span>
               </div>
@@ -93,11 +110,11 @@ const Statistics = () => {
                         <div className='text-gray-500 capitalize flex'>
                           %: <div className={`ml-1 text-green-500 ${data.salesGrowth < 0 && "text-red-600"} `}>
                             <div className='flex'>
-                            {data.salesGrowth < 0 
-                            ? <RiArrowDownFill className='animate-bounce' /> 
-                            : <RiArrowUpFill className='animate-bounce' />
-                            }
-                            {data.salesGrowth?.toFixed(2)}
+                              {data.salesGrowth < 0
+                                ? <RiArrowDownFill className='animate-bounce' />
+                                : <RiArrowUpFill className='animate-bounce' />
+                              }
+                              {data.salesGrowth?.toFixed(2)}
                             </div>
                           </div>
                         </div>
@@ -121,7 +138,7 @@ const Statistics = () => {
 
       <div className='w-full '>
         <h2 className='w-full text-xl text-cyan-600 font-semibold capitalize mt-5'>grafico lineal de ventas</h2>
-      <Line data={ventas} />
+        <Line data={ventas} />
       </div>
     </div>
   )

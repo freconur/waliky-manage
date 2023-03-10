@@ -115,3 +115,9 @@ export interface DataForCard {
   sales:number,
   salesGrowth?: number
 }
+export interface DataPerYear {
+  id?: string
+  year?: string,
+  utilidad?:number,
+  name?: string
+}
