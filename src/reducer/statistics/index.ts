@@ -26,11 +26,18 @@ export const Data2022 = async (dispatch: (action: any) => void) => {
       "/registro-de-ventas/7UFfjMMZ2SCyCKgPAdHb/resultado-del-ejercicio"
     )
   );
-  console.log("colRefDataPerYear", colRefDataPerYear);
   const dataPerYear: DataPerYear[] = [];
   colRefDataPerYear.forEach((doc) => {
     dataPerYear.push({ ...doc.data(), id: doc.id });
   });
-  dispatch({type:"getDataPerYear", payload: dataPerYear})
-    // return dataPerYear;
+  let utilidad:number | undefined = 0;
+  dataPerYear.map((data) => {
+    utilidad = data?.utilidad;
+  });
+  dispatch({
+    type: "getDataPerYear",
+    payload: dataPerYear,
+    payload2: utilidad,
+  });
+  // return dataPerYear;
 };

@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-import { currentMonth, MonthsAvailable, MothsAvailableForGraphics } from "../date/date";
+import { currentMonth, MothsAvailableForGraphics } from "../date/date";
 import { app } from "../firebase/firebase.config";
 import {
   Categories,
