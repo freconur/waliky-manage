@@ -80,9 +80,9 @@ const Statistics = () => {
           <div className='flex justify-end'>
             <div className='bg-blue-400 border-4 border-blue-500 drop-shadow-lg rounded-lg p-1'>
               <p className="text-lg text-white  capitalize font-semibold">ingreso total:</p>
-              <div className='flex justify-center'>
+              <div className='flex justify-center'> 
                 <p className='text-white font-semibold mx-auto'>
-                  {totalSalesPerYear && utilidad2022
+                  S/ {totalSalesPerYear && utilidad2022
                     &&
                     totalSalesPerYear + utilidad2022
                   }
