@@ -18,7 +18,7 @@ const TablaVentas = () => {
 	}
   
   return (
-      <div className="m-2 max-xsm:w-full max-sm:mr-2 max-sm:ml-2 max-sm:mt-2">
+      <div className="m-2  max-sm:mr-2 max-sm:ml-2 max-sm:mt-2">
         <div className="flex flex-row-reverse max-cs:mr-0 mr-5 text-lg text-gray-400 capitalize">{currentDate}</div>
         <div className="flex justify-between max-xs:flex-col-reverse">
           <h1 className="text-cyan-700 uppercase font-bold text-3xl max-xs:text-xl">ventas de {currentMonth}</h1>
