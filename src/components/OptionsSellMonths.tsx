@@ -16,7 +16,6 @@ const OptionsSellMonths = ({onChangeValueSelect}:PropsOptions) => {
 		let months:string[] = MonthsAvailable()
 		dispatch({ type: "monthsAvailable", payload: months })
 	}, [productVentas])
-	console.log('statesells', state)
 	return (
 		<>
 			<div className="mb-2 mt-5 flex justify-between w-full">

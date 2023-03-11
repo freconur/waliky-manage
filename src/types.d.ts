@@ -56,6 +56,7 @@ export interface ProductSold {
   timestamp?: Date | string | toDate;
   date?: Date | string | toDate | Timestamp;
   id?: string;
+  marca?: string
 }
 
 export interface ProductSoldPerMonth {
@@ -65,6 +66,7 @@ export interface ProductSoldPerMonth {
   price?: string;
   timestamp?: Date | string | toDate;
   date?: Date | string | toDate | Timestamp;
+  marca?: string
   id?: string;
 }
 export type MonthsAvialable = [];

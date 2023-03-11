@@ -6,6 +6,8 @@ import {
   getDoc,
   getDocs,
   setDoc,
+  query,
+  where,
   deleteDoc,
   addDoc,
   onSnapshot,
@@ -187,7 +189,38 @@ export const getOptions = (dispatch: (action: any) => void) => {
     dispatch({ type: "getOptions", payload: getOptions });
   });
 };
+export const getProductSoldByMarca = async(dispatch:(action:any)=> void,productsSold:ProductSold[], brand:string, selectMonth:string) => {
+  const filterByMarca = productsSold.filter(product => product.marca === brand )
 
+  if(!selectMonth){
+    let currentMonths: string = currentMonth();
+    const colref = collection(
+      db,
+      `/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${currentMonths}-2023`
+    );
+    const q = query(colref, where("marca", "==", `${brand}`));
+    const querySnapshot = await getDocs(q)
+    const getSolds:ProductSold[] = []
+    querySnapshot.forEach((doc) => {
+      getSolds.push({ ...doc.data(), id: doc.id });
+    });
+    dispatch({type:"filterProductSoldByMarca", payload: getSolds})
+  }else {
+    const colref = collection(
+      db,
+      `/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${selectMonth}-2023`
+    );
+    const q = query(colref, where("marca", "==", `${brand}`));
+    const querySnapshot = await getDocs(q)
+    const getSolds:ProductSold[] = []
+    querySnapshot.forEach((doc) => {
+      getSolds.push({ ...doc.data(), id: doc.id });
+    });
+    dispatch({type:"filterProductSoldByMarca", payload: getSolds})
+
+  }
+
+}
 export const getProductsSold = (
   dispatch: (action: any) => void,
   month: string | void

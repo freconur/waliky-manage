@@ -1,12 +1,13 @@
-import { useEffect, useReducer, useState } from "react"
+import React, { useEffect, useReducer, useState } from "react"
+import { OptionProductSoldByMarca } from "../components/OptionProductSoldByMarca"
 import { OptionsSellMonths } from "../components/OptionsSellMonths"
 import { OptionsSort } from "../components/OptionsSort"
-import { getProductsSold } from "../reducer"
+import { getProductSoldByMarca, getProductsSold } from "../reducer"
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer"
 
 const TablaVentas = () => {
   const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
-  const { productsSold, salesMonth, currentDate, currentMonth, numberOfItems } = state
+  const { productsSold, salesMonth, currentDate, currentMonth, numberOfItems, selectMonth } = state
   useEffect(() => {
     getProductsSold(dispatch)
   }, [])
@@ -14,9 +15,12 @@ const TablaVentas = () => {
       dispatch({type: "optionsSort", payload: e.target.value, payload2: productsSold})
   }
   const onChangeValueSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    dispatch({type:"selectMonth", payload: e.target.value})
 		getProductsSold(dispatch, e.target.value)
 	}
-  
+  const filterProductSoldByMarca = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    getProductSoldByMarca(dispatch, productsSold, e.target.value, selectMonth)
+  }
   return (
       <div className="m-2  max-sm:mr-2 max-sm:ml-2 max-sm:mt-2">
         <div className="flex flex-row-reverse max-cs:mr-0 mr-5 text-lg text-gray-400 capitalize">{currentDate}</div>
@@ -33,6 +37,7 @@ const TablaVentas = () => {
           </div>
         </div>
           <OptionsSellMonths onChangeValueSelect={onChangeValueSelect} />
+          <OptionProductSoldByMarca filterProductSoldByMarca={filterProductSoldByMarca} />
           <OptionsSort onChangeOptionsSort={onChangeOptionsSort}/>
         <div className="rounded-lg shadow max-cs:mr-0 mt-5 mr-5 overflow-auto">
           <table className="w-full overflow-auto max-xsm:hidden">
@@ -46,8 +51,7 @@ const TablaVentas = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {Array.isArray(productsSold)
-                &&
+              {
                 productsSold?.map((item, index) => {
                   return (
                     <tr key={index} className="w-auto text-center">

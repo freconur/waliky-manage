@@ -19,7 +19,6 @@ export const functionDateConvert = (date: Date) => {
 export const MonthsAvailable = () => {
     const date = new Date()
     const monthOnNumber = monthNumber[date.getMonth()]
-    console.log(months.slice(0,parseInt(monthOnNumber)))
     return months.slice(0,parseInt(monthOnNumber))
 }
 export const MothsAvailableForGraphics = () => {
@@ -45,7 +44,6 @@ export const currentMonth = () => {
 }
 export const currentYear = () => {
     const date = new Date()
-    console.log(`${date.getFullYear()}`)
     return `${date.getFullYear()}`
 }
 // currentMonth()
