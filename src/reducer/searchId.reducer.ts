@@ -75,7 +75,7 @@ export const initialStateProducts = {
   dataPerYear: [] as DataPerYear[],
   utilidad2022: 0 as number,
   warningProductsSold: '' as string,
-  selectMonth: '' as string
+  selectMonth: '' as string,
 };
 export const searchIdReducer = (
   state: typeof initialStateProducts,
@@ -89,9 +89,14 @@ export const searchIdReducer = (
         selectMonth: action.payload
       }
     case "filterProductSoldByMarca":
+      let amount:number = 0
+      action.payload.map(item => {
+        amount = amount + parseFloat(`${item.price}`)
+      })
         return{
           ...state,
-          productsSold: action.payload
+          productsSold: action.payload,
+          salesMonth:amount
         }
     case "getDataPerYear":
       

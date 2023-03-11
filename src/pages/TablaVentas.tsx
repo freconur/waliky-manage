@@ -10,6 +10,7 @@ const TablaVentas = () => {
   const { productsSold, salesMonth, currentDate, currentMonth, numberOfItems, selectMonth } = state
   useEffect(() => {
     getProductsSold(dispatch)
+      
   }, [])
   const onChangeOptionsSort = (e:React.ChangeEvent<HTMLSelectElement>) => {
       dispatch({type: "optionsSort", payload: e.target.value, payload2: productsSold})

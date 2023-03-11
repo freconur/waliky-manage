@@ -217,9 +217,7 @@ export const getProductSoldByMarca = async(dispatch:(action:any)=> void,products
       getSolds.push({ ...doc.data(), id: doc.id });
     });
     dispatch({type:"filterProductSoldByMarca", payload: getSolds})
-
   }
-
 }
 export const getProductsSold = (
   dispatch: (action: any) => void,
