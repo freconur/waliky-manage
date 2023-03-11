@@ -323,7 +323,7 @@ export const getKawaiiProducts = async () => {
   const rta = await getDocs(collection(db, "kawaii"));
   const products: Product[] = [];
   rta.forEach((doc) => {
-    products.push({ ...doc.data(), id: doc.id });
+    products.push({ ...doc.data(), id: doc.id, pathProduct: "/kawaii" });
   });
   return products;
 };
@@ -472,6 +472,7 @@ export const updateItemProv = async (item: Product) => {
     name: item?.name,
     price: item?.price,
     stock: item?.stock,
+    marca: item?.marca,
   });
   console.log("se agrego la categoria");
 };

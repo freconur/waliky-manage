@@ -1,12 +1,13 @@
 import React, { useEffect, useReducer, useRef, useState } from "react"
 import ReactDOM from "react-dom"
-import { getCategories, updateItemProv } from "../reducer"
+import { getBrands, getCategories, updateItemProv } from "../reducer"
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer"
 import { Product } from "../types"
 import { PriceInput } from "../components/inputsUpdate/PriceInput"
 import { StockInput } from "../components/inputsUpdate/StockInput"
 import { NameInput } from "../components/inputsUpdate/NameInput"
 import { CategorySelect } from "../components/inputsUpdate/CategorySelect"
+import { MarcaInput } from "../components/inputsUpdate/MarcaInput"
 
 
 interface Props {
@@ -16,7 +17,7 @@ interface Props {
 const ProductModal = ({ modalState, itemInfo }: Props) => {
 
 	const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
-	const { allCategories } = state
+	const { allCategories, allBrands } = state
 	const [item, setItem] = useState<Product>(
 		{
 			name: itemInfo.name,
@@ -30,6 +31,7 @@ const ProductModal = ({ modalState, itemInfo }: Props) => {
 	)
 	useEffect(() => {
 		getCategories(dispatch)
+		getBrands(dispatch)
 	}, [])
 	const onChangeOptionValue = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
 		setItem({
@@ -58,6 +60,7 @@ const ProductModal = ({ modalState, itemInfo }: Props) => {
 					</div>
 					<NameInput onChangeOptionValue={onChangeOptionValue} item={item} names={`${itemInfo.name}`} />
 					<CategorySelect onChangeOptionValue={onChangeOptionValue} allCategories={allCategories} category={`${itemInfo.category}`} />
+					<MarcaInput allBrands={allBrands} onChangeOptionValue={onChangeOptionValue} marca={`${itemInfo.marca}`}/>
 					<div>
 						<label className="text-gray-400 text-lg font-semibold capitalize">estado:</label>
 						<div>
