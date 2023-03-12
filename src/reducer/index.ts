@@ -43,7 +43,7 @@ export const getBtsCategories = async () => {
 export const getBtsProducts = async () => {
   const bts = await getBtsCategories();
   let btsProducts: Product[] = [];
-  // let productsBtsCategory:Product[] = []
+
   bts.map(async (category) => {
     const rta = await getDocs(
       collection(db, `/bts/${category.id}/${category.name}`)
@@ -256,11 +256,14 @@ export const getProductsSold = (
 };
 export const getAllProductsSoldPerMonth = async ():Promise<ProductsPerMonth[]> => {
  const MonthAviable:MonthsAvailableType[] = MothsAvailableForGraphics()
-const allProductsMonthAviable:ProductsPerMonth[] = []
- MonthAviable.map(async month => {
+
+let allProductsMonthAviable:ProductsPerMonth[] = []
+let getSolds: ProductSold[] = [];
+
+ MonthAviable.map(async (month) => {
   const colref = await getDocs(collection(db, `/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${month.nameMonth}-2023`));
-    const getSolds: ProductSold[] = [];
-    colref.docs.forEach((doc) => {
+    
+    colref.forEach((doc) => {
       getSolds.push({ ...doc.data(), id: doc.id });
     });
     const rtaProductsPerMonth: ProductsPerMonth = {
@@ -274,7 +277,11 @@ return new Promise((resolve: (value: ProductsPerMonth[]) => void, reject) => {
   resolve(allProductsMonthAviable);
 });
 //  return allProductsMonthAviable
+}
 
+export const totalSalesPerMarca = async (dispatch:(action:any) => void) => {
+  const productsSales = await getAllProductsSoldPerMonth()
+  console.log('productsSales',productsSales)
 }
 
 export const dataforGraphics =  async (dispatch:(action:any) => void):Promise<void> => {

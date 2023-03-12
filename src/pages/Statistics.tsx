@@ -17,6 +17,7 @@ import {
 } from 'chart.js';
 import { Data2022 } from '../reducer/statistics';
 import { DataPerYear } from '../types';
+import { SalesPerMarca } from '../components/SalesPerMarca';
 
 ChartJS.register(
   // CategoryScale,
@@ -161,6 +162,7 @@ const Statistics = () => {
         <h2 className='w-full text-xl text-cyan-600 font-semibold capitalize mt-5'>grafico lineal de ventas</h2>
         <Line data={ventas} />
       </div>
+      <SalesPerMarca />
     </div>
   )
 }
