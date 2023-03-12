@@ -123,3 +123,9 @@ export interface DataPerYear {
   utilidad?:number,
   name?: string
 }
+
+export interface TotalSalesPerMarca {
+  // id?:string,
+  nameMarca?:string,
+  totalSales?:number
+}

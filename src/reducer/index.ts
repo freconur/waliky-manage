@@ -26,6 +26,7 @@ import {
   ProductSold,
   ProductSoldPerMonth,
   ProductsPerMonth,
+  TotalSalesPerMarca,
 } from "../types";
 
 const db = getFirestore(app);
@@ -65,6 +66,12 @@ export const getAllProducts = async (dispatch: (action: any) => void) => {
   const kawaii = await getKawaiiProducts();
   const allProducts: Product[] = bts.concat(kawaii);
   dispatch({ type: "getAllProducts", payload: allProducts });
+};
+export const getAllProduct = async () => {
+  const bts = await getBtsProducts();
+  const kawaii = await getKawaiiProducts();
+  const allProducts: Product[] = bts.concat(kawaii);
+  return allProducts;
 };
 export const setProductToSell = async (product: Product) => {
   await addDoc(
@@ -189,36 +196,43 @@ export const getOptions = (dispatch: (action: any) => void) => {
     dispatch({ type: "getOptions", payload: getOptions });
   });
 };
-export const getProductSoldByMarca = async(dispatch:(action:any)=> void,productsSold:ProductSold[], brand:string, selectMonth:string) => {
-  const filterByMarca = productsSold.filter(product => product.marca === brand )
+export const getProductSoldByMarca = async (
+  dispatch: (action: any) => void,
+  productsSold: ProductSold[],
+  brand: string,
+  selectMonth: string
+) => {
+  const filterByMarca = productsSold.filter(
+    (product) => product.marca === brand
+  );
 
-  if(!selectMonth){
+  if (!selectMonth) {
     let currentMonths: string = currentMonth();
     const colref = collection(
       db,
       `/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${currentMonths}-2023`
     );
     const q = query(colref, where("marca", "==", `${brand}`));
-    const querySnapshot = await getDocs(q)
-    const getSolds:ProductSold[] = []
+    const querySnapshot = await getDocs(q);
+    const getSolds: ProductSold[] = [];
     querySnapshot.forEach((doc) => {
       getSolds.push({ ...doc.data(), id: doc.id });
     });
-    dispatch({type:"filterProductSoldByMarca", payload: getSolds})
-  }else {
+    dispatch({ type: "filterProductSoldByMarca", payload: getSolds });
+  } else {
     const colref = collection(
       db,
       `/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${selectMonth}-2023`
     );
     const q = query(colref, where("marca", "==", `${brand}`));
-    const querySnapshot = await getDocs(q)
-    const getSolds:ProductSold[] = []
+    const querySnapshot = await getDocs(q);
+    const getSolds: ProductSold[] = [];
     querySnapshot.forEach((doc) => {
       getSolds.push({ ...doc.data(), id: doc.id });
     });
-    dispatch({type:"filterProductSoldByMarca", payload: getSolds})
+    dispatch({ type: "filterProductSoldByMarca", payload: getSolds });
   }
-}
+};
 export const getProductsSold = (
   dispatch: (action: any) => void,
   month: string | void
@@ -254,61 +268,101 @@ export const getProductsSold = (
     });
   }
 };
-export const getAllProductsSoldPerMonth = async ():Promise<ProductsPerMonth[]> => {
- const MonthAviable:MonthsAvailableType[] = MothsAvailableForGraphics()
-const allProductsMonthAviable:ProductsPerMonth[] = []
- MonthAviable.map(async month => {
-  const colref = await getDocs(collection(db, `/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${month.nameMonth}-2023`));
+export const getAllProductsSoldPerMonth = (): Promise<ProductsPerMonth[]> => {
+  const MonthAviable: MonthsAvailableType[] = MothsAvailableForGraphics();
+  let allProductsMonthAviable: ProductsPerMonth[] = [];
+  MonthAviable.map(async (month) => {
+    const colref = await getDocs(
+      collection(
+        db,
+        `/registro-de-ventas/B4gSu9UHEHPAhVQ6U6C5/${month.nameMonth}-2023`
+      )
+    );
     const getSolds: ProductSold[] = [];
-    colref.docs.forEach((doc) => {
+    colref.forEach((doc) => {
       getSolds.push({ ...doc.data(), id: doc.id });
     });
     const rtaProductsPerMonth: ProductsPerMonth = {
-      id:month.id,
+      id: month.id,
       nameMonth: month.nameMonth,
-      products: getSolds
-    }
-    allProductsMonthAviable.push(rtaProductsPerMonth)
-})
-return new Promise((resolve: (value: ProductsPerMonth[]) => void, reject) => {
-  resolve(allProductsMonthAviable);
-});
-//  return allProductsMonthAviable
-
-}
-
-export const dataforGraphics =  async (dispatch:(action:any) => void):Promise<void> => {
-  const allProductsSoldPerMonths = await getAllProductsSoldPerMonth()
-// SE OBTIENE LAS VENTAS HECHAS POR MESES
-let sellPerMonth:number[] = [] 
-setTimeout(() => {
-  allProductsSoldPerMonths?.sort((a, b) => {
-    const first = parseInt(`${a.id}`);
-    const second = parseInt(`${b.id}`);
-    if (first < second) return -1;
-    if (first > second) return 1;
-    return 0;
+      products: getSolds,
+    };
+    allProductsMonthAviable.push(rtaProductsPerMonth);
   });
-  allProductsSoldPerMonths.map( product => {
-    let totalSales:number  = 0
-    product.products?.map(item => {
-      totalSales = totalSales + (parseInt(`${item.cantidad}`, 10) * parseFloat(`${item.price}`))
-        })
-        let totalSalesToString:string = totalSales.toString()
-        sellPerMonth.push(totalSales)
-      })
-      //SE OBTINENE ARRAY DE LOS MESES DISPONIBLES
-      const getNameMonths:string[] = []
-      MothsAvailableForGraphics().map(month => {
-        getNameMonths.push(`${month.nameMonth}`)
-      })
-      //SE OBTINENE ARRAY DE LOS MESES DISPONIBLES
-      dispatch({ type: "dataForGraphics", payload: sellPerMonth, payload2: getNameMonths, payload3: allProductsSoldPerMonths});
-}, 1500)
-// console.log('allProductsSoldPerMonths', allProductsSoldPerMonths)
-// SE OBTIENE LAS VENTAS HECHAS POR MESES
-}
+  return new Promise((resolve: (value: ProductsPerMonth[]) => void, reject) => {
+    resolve(allProductsMonthAviable);
+  });
+};
 
+export const totalSalesPerMarca = async (dispatch: (action: any) => void) => {
+  const rtaPerMonth = await getAllProductsSoldPerMonth();
+  const rtaBrands = await getBrand();
+  let rtaTotalSalesPerMarca: ProductSoldPerMonth[] = [];
+  let totalSalesPerMarca: TotalSalesPerMarca[] = [];
+  let totalSalesByMarca: TotalSalesPerMarca;
+  rtaPerMonth.map((month) => {
+    month.products?.map((product) => {
+      rtaTotalSalesPerMarca.push(product);
+    });
+  });
+
+  rtaBrands.map((brand) => {
+    let salesAmount: number = 0;
+    rtaTotalSalesPerMarca.map((item) => {
+      if (item.marca === brand.name) {
+        salesAmount =
+          salesAmount +
+          parseFloat(`${item.price}`) * parseInt(`${item.cantidad}`, 10);
+      }
+    });
+    totalSalesByMarca = {
+      nameMarca: `${brand.name}`,
+      totalSales: salesAmount,
+    };
+    totalSalesPerMarca.push(totalSalesByMarca);
+  });
+  dispatch({type:"getSalesPerMarca", payload:totalSalesPerMarca})
+};
+export const dataforGraphics = async (
+  dispatch: (action: any) => void
+): Promise<void> => {
+  const allProductsSoldPerMonths = await getAllProductsSoldPerMonth();
+  // SE OBTIENE LAS VENTAS HECHAS POR MESES
+  let sellPerMonth: number[] = [];
+  setTimeout(() => {
+    allProductsSoldPerMonths?.sort((a, b) => {
+      const first = parseInt(`${a.id}`);
+      const second = parseInt(`${b.id}`);
+      if (first < second) return -1;
+      if (first > second) return 1;
+      return 0;
+    });
+    allProductsSoldPerMonths.map((product) => {
+      let totalSales: number = 0;
+      product.products?.map((item) => {
+        totalSales =
+          totalSales +
+          parseInt(`${item.cantidad}`, 10) * parseFloat(`${item.price}`);
+      });
+      let totalSalesToString: string = totalSales.toString();
+      sellPerMonth.push(totalSales);
+    });
+    //SE OBTINENE ARRAY DE LOS MESES DISPONIBLES
+    const getNameMonths: string[] = [];
+    MothsAvailableForGraphics().map((month) => {
+      getNameMonths.push(`${month.nameMonth}`);
+    });
+    //SE OBTINENE ARRAY DE LOS MESES DISPONIBLES
+    dispatch({
+      type: "dataForGraphics",
+      payload: sellPerMonth,
+      payload2: getNameMonths,
+      payload3: allProductsSoldPerMonths,
+    });
+  }, 1500);
+  // console.log('allProductsSoldPerMonths', allProductsSoldPerMonths)
+  // SE OBTIENE LAS VENTAS HECHAS POR MESES
+};
 
 export const getCurrentProductSell = async (
   dispatch: (action: any) => void
@@ -408,15 +462,21 @@ export const uploadFile = async (
   }
   return urlImage;
 };
-export const getBrands = async (dispatch: (action: any) => void) => {
-  const res = collection(db, "brands");
-  onSnapshot(res, (snapshot) => {
-    const brands: Product[] = [];
-    snapshot.docs.forEach((doc) => {
-      brands.push({ ...doc.data(), id: doc.id });
-    });
-    dispatch({ type: "getBrands", payload: brands });
+export const getBrands = async (dispatch: (action: any) => void | void) => {
+  const res = await getDocs(collection(db, "brands"));
+  const brands: Product[] = [];
+  res.forEach((doc) => {
+    brands.push({ ...doc.data(), id: doc.id });
   });
+  dispatch({ type: "getBrands", payload: brands });
+};
+export const getBrand = async () => {
+  const res = await getDocs(collection(db, "brands"));
+  const brands: Product[] = [];
+  res.forEach((doc) => {
+    brands.push({ ...doc.data(), id: doc.id });
+  });
+  return brands;
 };
 export const validationValues = (
   dispatch: (action: any) => void,
@@ -467,31 +527,44 @@ export const NewProductValues = async (
     (category) => category.name === newProduct.subcategory
   );
   if (`${newProduct.image}`.length === 0) {
-      console.log("tienes que agregar una imagen")
+    console.log("tienes que agregar una imagen");
   } else {
     if (newProduct.subcategory) {
       const findCollection = allCategories.find(
         (item) => item.name === newProduct.category
       );
-        await addDoc(
-          collection(
-            db,
-            `/${findCollection?.name}/${findSubcategory?.id}/${newProduct.subcategory}`
-          ),
-          newProduct
-        ).then(rta => {
+      await addDoc(
+        collection(
+          db,
+          `/${findCollection?.name}/${findSubcategory?.id}/${newProduct.subcategory}`
+        ),
+        newProduct
+      )
+        .then((rta) => {
           dispatch({ type: "warningFile", payload: "" });
-          dispatch({ type: "addProductWarning", payload: "se agrego el producto satisfactoriamente" });
-        }).catch(error => {dispatch({ type: "addProductWarning", payload: error })})
+          dispatch({
+            type: "addProductWarning",
+            payload: "se agrego el producto satisfactoriamente",
+          });
+        })
+        .catch((error) => {
+          dispatch({ type: "addProductWarning", payload: error });
+        });
     } else {
       const findCollection = allCategories.find(
         (item) => item.name === newProduct.category
       );
       await addDoc(collection(db, `/${findCollection?.name}/`), newProduct)
-      .then(rta => {
-        dispatch({ type: "warningFile", payload: "" });
-        dispatch({ type: "addProductWarning", payload: "se agrego el producto satisfactoriamente" });
-      }).catch(error => {dispatch({ type: "addProductWarning", payload: error })})
+        .then((rta) => {
+          dispatch({ type: "warningFile", payload: "" });
+          dispatch({
+            type: "addProductWarning",
+            payload: "se agrego el producto satisfactoriamente",
+          });
+        })
+        .catch((error) => {
+          dispatch({ type: "addProductWarning", payload: error });
+        });
     }
   }
 };

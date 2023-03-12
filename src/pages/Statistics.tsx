@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useState } from 'react';
 import { Bar, Line } from 'react-chartjs-2';
-import { dataforGraphics, getProductsSold } from '../reducer';
+import { dataforGraphics, getProductsSold, totalSalesPerMarca } from '../reducer';
 import { initialStateProducts, searchIdReducer } from '../reducer/searchId.reducer';
 import { RiArrowDownFill, RiLoader4Line, RiArrowUpFill } from "react-icons/ri";
 import {
@@ -17,6 +17,7 @@ import {
 } from 'chart.js';
 import { Data2022 } from '../reducer/statistics';
 import { DataPerYear } from '../types';
+import { SalesPerMarca } from './SalesPerMarca';
 
 ChartJS.register(
   // CategoryScale,
@@ -40,7 +41,7 @@ interface LineProps {
 }
 const Statistics = () => {
   const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
-  const { currentDate, totalSales, currentYear, monthAvailableGraphics, dataForCard, totalSalesPerYear, dataPerYear, utilidad2022 } = state
+  const { currentDate, totalSales, currentYear, monthAvailableGraphics, dataForCard, totalSalesPerYear, dataPerYear, utilidad2022, salesPerMarca } = state
   const [loader, setLoader] = useState<boolean>(true)
   const [dataForGraphics, setDataForGraphics] = useState<LineProps["data"]>()
 
@@ -49,6 +50,7 @@ const Statistics = () => {
     getProductsSold(dispatch)
     dataforGraphics(dispatch)
     Data2022(dispatch)
+    totalSalesPerMarca(dispatch)
     // setTimeout(() => { setLoader(!loader) }, 1000)
   }, [])
   const ventas = {
@@ -67,7 +69,7 @@ const Statistics = () => {
       pointRadius: 6
     }]
   }
-  console.log('utilidad2022', utilidad2022)
+  console.log('salesPerMarca', salesPerMarca)
   console.log('totalSalesPerYear', totalSalesPerYear)
   return (
     <div className='ml-5 my-5 mr-2'>
@@ -161,6 +163,7 @@ const Statistics = () => {
         <h2 className='w-full text-xl text-cyan-600 font-semibold capitalize mt-5'>grafico lineal de ventas</h2>
         <Line data={ventas} />
       </div>
+      <SalesPerMarca salesPerMarca={salesPerMarca}/>
     </div>
   )
 }

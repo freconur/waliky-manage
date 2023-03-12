@@ -10,6 +10,7 @@ import {
   ProductSoldPerMonth,
   ProductsPerMonth,
   ProductsPerMonthPromise,
+  TotalSalesPerMarca,
 } from "../types";
 import { TYPES } from "./action";
 
@@ -42,6 +43,7 @@ type FormReducerAction =
   | { type: "getDataPerYear"; payload: DataPerYear[], payload2: number }
   | { type: "filterProductSoldByMarca"; payload: ProductSold[]}
   | { type: "selectMonth"; payload: string}
+  | {type:"getSalesPerMarca", payload:TotalSalesPerMarca[]}
 export const initialStateProducts = {
   product: [] as Product,
   prueba: [] as Product[],
@@ -76,6 +78,7 @@ export const initialStateProducts = {
   utilidad2022: 0 as number,
   warningProductsSold: '' as string,
   selectMonth: '' as string,
+  salesPerMarca: [] as TotalSalesPerMarca[]
 };
 export const searchIdReducer = (
   state: typeof initialStateProducts,
@@ -83,6 +86,12 @@ export const searchIdReducer = (
 ) => {
   switch (action.type) {
     // case TYPES.GET_PRODUCT_BY_ID:
+    case "getSalesPerMarca":
+      console.log('action.payload',action.payload)
+      return {
+        ...state,
+        salesPerMarca: action.payload
+      }
     case "selectMonth":
       return {
         ...state,
