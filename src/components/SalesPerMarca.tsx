@@ -9,8 +9,8 @@ const SalesPerMarca = () => {
     const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
     const {  } = state
 const [products, setProducts] = useState<Promise<ProductsPerMonth[]>>()
-    useEffect(() => {
-        
+
+useEffect(() => {
         totalSalesPerMarca(dispatch)
     }, [])
     // console.log('products', products)
