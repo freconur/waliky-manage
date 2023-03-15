@@ -21,6 +21,7 @@ import {
   Categories,
   InputValueVentas,
   MonthsAvailableType,
+  NewPurchaseProduct,
   Options,
   Product,
   ProductSold,
@@ -594,3 +595,11 @@ export const updateItemProv = async (item: Product) => {
   });
   console.log("se agrego la categoria");
 };
+
+export const addNewProductPurchase = async(newProductPurchase:NewPurchaseProduct) => {
+  console.log('newProductPurchase',newProductPurchase)
+  await addDoc(collection(db, `/compras/dhvFlqZjmsbfGJ6i9IKK/compras-${currentMonth()}`), {
+    ...newProductPurchase,
+    costoUnitario: (parseFloat(`${newProductPurchase.costoTotal}`) / parseInt(`${newProductPurchase.cantidad}`)).toFixed(2)
+  });
+}
