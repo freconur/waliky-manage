@@ -10,6 +10,7 @@ import { Productos } from './pages/Productos';
 import { Home } from './pages/Home';
 import { AddProduct } from './pages/AddProduct';
 import { Statistics } from './pages/Statistics';
+import { Purchase } from './pages/Purchase';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/registro-de-productos" element={<Productos />} />
           <Route path="/agregar-producto" element={<AddProduct />} />
           <Route path="/estadisticas" element={<Statistics />} />
+          <Route path="/compras" element={<Purchase />} />
         </Routes>
       </Layout>
     </BrowserRouter>

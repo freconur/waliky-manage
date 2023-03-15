@@ -5,6 +5,7 @@ import { RiDraftFill } from "react-icons/ri";
 import { RiArchiveDrawerFill } from "react-icons/ri";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { useState } from "react";
+import { RiShoppingBagFill } from "react-icons/ri";
 interface Props {
 	openSidebar: boolean,
 	pruebita: (aaa:boolean) =>  void
@@ -31,6 +32,7 @@ const ListSidebar = ({ openSidebar, pruebita }: Props) => {
 					<span className={`text-base flex-1 ml-2 font-semibold ${!openSidebar && "hidden"}`}>registro de venta</span>
 				</Link>
 			</li>
+			
 			<li  onClick={() => pruebita(!openSidebar)} className=" text-sm items-center gap-x-4 cursor-pointer overflow-hidden   mt-2 capitalize whitespace-nowrap">
 				{/* <Link to="/registro-de-productos" className="w-56 p-2"> */}
 				<div onClick={() => setProductActive(!productActive)} className={`flex  duration-300 p-2 rounded-lg hover:bg-red-200 text-gray-300 hover:text-gray-500 ${productActive && openSidebar && "rounded-none rounded-t-lg bg-red-200 text-gray-500"}`}>
@@ -53,6 +55,12 @@ const ListSidebar = ({ openSidebar, pruebita }: Props) => {
 						</li>
 					</ul>
 				}
+			</li>
+			<li className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer  rounded-md mt-2 capitalize   hover:bg-red-200 hover:text-gray-500 whitespace-nowrap">
+				<Link to="/compras" className="w-56 p-2">
+					<RiShoppingBagFill className="text-2xl block float-left" />
+					<span className={`text-base flex-1 ml-2 font-semibold ${!openSidebar && "hidden"}`}>compras</span>
+				</Link>
 			</li>
 		</ul>
 	)

@@ -2,7 +2,6 @@ import {
   getFirestore,
   collection,
   doc,
-  updateDoc,
   getDoc,
   getDocs,
   setDoc,
@@ -11,6 +10,7 @@ import {
   deleteDoc,
   addDoc,
   onSnapshot,
+  updateDoc,
   Timestamp,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -137,18 +137,20 @@ export const getCartucherasBts = async (dispatch: (action: any) => void) => {
     }
   });
 };
-export const updateStockProduct = async (
+export const updateStockProduct = (
   inputValues: InputValueVentas,
   currentProductSell: Product[],
   dispatch: (action: any) => void
 ) => {
+  console.log('currentProductSell',currentProductSell)
   currentProductSell.map(async (currentProduct) => {
     const colRef = doc(
       db,
       `${currentProduct.pathProduct}`,
       `${currentProduct.idProduct}`
     );
-    updateDoc(colRef, {
+    console.log('colRef',colRef)
+    await updateDoc(colRef, {
       // ...currentProduct,
       id: currentProduct.idProduct,
       name: currentProduct.name,
@@ -166,6 +168,7 @@ export const updateStockProduct = async (
       timestamp: Timestamp.fromDate(new Date()),
       cantidad: currentProduct.cantidad,
     };
+    console.log('docData',docData)
     await addDoc(
       collection(
         db,
@@ -364,7 +367,8 @@ export const dataforGraphics = async (
   // SE OBTIENE LAS VENTAS HECHAS POR MESES
 };
 
-export const getCurrentProductSell = async (
+export const getCurrentProductSell = (
+  // export const getCurrentProductSell = async (
   dispatch: (action: any) => void
 ) => {
   // const item = await getDocs(collection(db,"/registro-de-ventas/WZyBQviis3XrLbqp6R0Y/currentSale/fPygxZMGLNZUyz0qPIZg/productsCurrentSale"));
@@ -387,7 +391,7 @@ export const addCurrentProductToSell = (
   inputValues: InputValueVentas
 ) => {
   if (inputValues.location === "/registro-de-ventas") {
-    console.log("addCurrentProductToSell", product);
+    // console.log("addCurrentProductToSell", product);
     setProductToSell({ ...product, cantidad: inputValues.cantidad });
     getCurrentProductSell(dispatch);
   }
@@ -538,7 +542,11 @@ export const NewProductValues = async (
           db,
           `/${findCollection?.name}/${findSubcategory?.id}/${newProduct.subcategory}`
         ),
-        newProduct
+        {
+          ...newProduct,
+          stock: parseInt(`${newProduct.stock}`, 10),
+          state: true
+        }
       )
         .then((rta) => {
           dispatch({ type: "warningFile", payload: "" });
@@ -554,7 +562,13 @@ export const NewProductValues = async (
       const findCollection = allCategories.find(
         (item) => item.name === newProduct.category
       );
-      await addDoc(collection(db, `/${findCollection?.name}/`), newProduct)
+      await addDoc(collection(db, `/${findCollection?.name}/`), 
+      {
+        ...newProduct,
+        stock: parseInt(`${newProduct.stock}`, 10),
+        state: true
+      }
+      )
         .then((rta) => {
           dispatch({ type: "warningFile", payload: "" });
           dispatch({

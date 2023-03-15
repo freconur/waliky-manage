@@ -129,3 +129,11 @@ export interface TotalSalesPerMarca {
   nameMarca?:string,
   totalSales?:number
 }
+
+export interface NewPurchaseProduct {
+
+  name?: string,
+  costoTotal?: string,
+  cantidad?: string,
+  // costoUnitario?: number,
+}
