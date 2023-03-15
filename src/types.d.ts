@@ -131,9 +131,9 @@ export interface TotalSalesPerMarca {
 }
 
 export interface NewPurchaseProduct {
-
+  id?:string,
   name?: string,
   costoTotal?: string,
   cantidad?: string,
-  // costoUnitario?: number,
+  costoUnitario?: string,
 }

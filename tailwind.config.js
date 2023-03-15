@@ -17,7 +17,9 @@ module.exports = {
           '2xl': '1536px',
         },
     extend: {
-    
+      colors: {
+        'modal-color': '#00000040'
+      }
     },
   },
   plugins: [],

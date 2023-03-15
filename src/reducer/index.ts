@@ -596,10 +596,20 @@ export const updateItemProv = async (item: Product) => {
   console.log("se agrego la categoria");
 };
 
-export const addNewProductPurchase = async(newProductPurchase:NewPurchaseProduct) => {
+export const addNewProductPurchase = async(dispatch:(action:any) => void,newProductPurchase:NewPurchaseProduct) => {
   console.log('newProductPurchase',newProductPurchase)
-  await addDoc(collection(db, `/compras/dhvFlqZjmsbfGJ6i9IKK/compras-${currentMonth()}`), {
-    ...newProductPurchase,
-    costoUnitario: (parseFloat(`${newProductPurchase.costoTotal}`) / parseInt(`${newProductPurchase.cantidad}`)).toFixed(2)
-  });
+  if(newProductPurchase.cantidad === "" || newProductPurchase.costoTotal === "" || newProductPurchase.name === "") {
+    console.log('debes de llenar todos los campos')
+    dispatch({type:"warningMessagePurchaseInput", payload: "debes llenar todos los campos"})
+
+  }else {
+    dispatch({type:"warningMessagePurchaseInput", payload: ""})
+    await addDoc(collection(db, `/compras/dhvFlqZjmsbfGJ6i9IKK/compras-${currentMonth()}`), {
+      ...newProductPurchase,
+      costoUnitario: (parseFloat(`${newProductPurchase.costoTotal}`) / parseInt(`${newProductPurchase.cantidad}`)).toFixed(2)
+    }).then(res => {
+      dispatch({type:"warningMessagePurchase", payload: `${newProductPurchase.name} se agrego a la lista de compras`})
+    })
+  }
 }
+
