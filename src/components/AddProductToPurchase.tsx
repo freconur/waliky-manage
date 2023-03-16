@@ -15,21 +15,21 @@ const AddProductToPurchase = ({ newPurchase }: Props) => {
     const { warningMessagePurchase, warningMessagePurchaseInput } = state;
 
     useEffect(() => {
-        if(warningMessagePurchase){
+        if (warningMessagePurchase) {
             toast.success(warningMessagePurchase, {
-				position: "top-center",
-				autoClose: 2000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-				theme: "colored",
-			});
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
             // dispatch({type:"warningMessagePurchase", payload: ''})
         }
-        
-    },[warningMessagePurchase, warningMessagePurchaseInput])
+
+    }, [warningMessagePurchase, warningMessagePurchaseInput])
     const [newPurchaseValues, setNewPurchaseValues] = useState<NewPurchaseProduct>({
         name: "",
         costoTotal: "",
@@ -41,11 +41,11 @@ const AddProductToPurchase = ({ newPurchase }: Props) => {
             [e.target.name]: e.target.value
         })
     }
-    const addProductToList = (e:React.FormEvent<HTMLFormElement>) => {
+    const addProductToList = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log('newPurchaseValues',newPurchaseValues)
+        console.log('newPurchaseValues', newPurchaseValues)
         newPurchase(newPurchaseValues)
-        addNewProductPurchase(dispatch,newPurchaseValues)
+        addNewProductPurchase(dispatch, newPurchaseValues)
     }
     return (
         <form className="block my-5" onSubmit={addProductToList}>
@@ -59,11 +59,11 @@ const AddProductToPurchase = ({ newPurchase }: Props) => {
                     <input value={newPurchaseValues.costoTotal} onChange={handleChangeNewPurchase} name="costoTotal" className="my-2  px-2 py-1 border-2 bg-blue-100 rounded-lg border-blue-200" type="number" placeholder="ingresa el costo total" />
                 </div>
                 <div className="mx-1">
-                    <label  className="block text-gray-400 font-semibold ">catidad</label>
+                    <label className="block text-gray-400 font-semibold ">catidad</label>
                     <input value={newPurchaseValues.cantidad} onChange={handleChangeNewPurchase} name="cantidad" className="my-2  px-2 py-1 border-2 bg-blue-100 rounded-lg border-blue-200" type="number" placeholder="ingresa la cantidad" />
                 </div>
                 <div className="mx-1">
-                    <label  className="block text-gray-400 font-semibold ">costo unitario</label>
+                    <label className="block text-gray-400 font-semibold ">costo unitario</label>
                     <input onChange={handleChangeNewPurchase} disabled={true}
                         placeholder={`${newPurchaseValues.costoTotal && newPurchaseValues.cantidad ?
                             (parseFloat(newPurchaseValues.costoTotal) / parseInt(newPurchaseValues.cantidad, 10)).toString()
@@ -72,7 +72,7 @@ const AddProductToPurchase = ({ newPurchase }: Props) => {
                             }`} name="costoUnitario" className="my-2  px-2 py-1 border-2 bg-blue-100 rounded-lg border-blue-200" type="number" />
                 </div>
             </div>
-{warningMessagePurchaseInput && <p className="text-red-500 font-semibold ml-2">*{warningMessagePurchaseInput}</p>}
+            {warningMessagePurchaseInput && <p className="text-red-500 font-semibold ml-2">*{warningMessagePurchaseInput}</p>}
             <button className="mt-3 bg-blue-500 text-white font-semibold rounded-lg drop-shadow-lg p-2 capitalize border-2 border-blue-600 hover:bg-blue-400 duration-300 hover:border-blue-500">agregar producto</button>
         </form>
     )

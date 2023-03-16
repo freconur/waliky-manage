@@ -83,7 +83,7 @@ const ListPurchaseProducts = ({ productsPurchases }: Props) => {
 				<ul>
 					{productsPurchases.map((item, index) => {
 						return (
-							<li key={index} className="bg-blue-50 rounded-lg min-w-[300px] border-4 border-blue-100 overflow-hidden drop-shadow-md">
+							<li key={index} className="bg-blue-50 rounded-lg my-4 min-w-[300px] border-4 border-blue-100 overflow-hidden drop-shadow-md">
 								<div className="bg-blue-100 pl-2">
 									<p className="text-gray-400 font-semibold capitalize text-lg">{item.name}</p>
 								</div>
