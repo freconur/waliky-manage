@@ -15,7 +15,7 @@ const ListPurchaseProducts = ({ productsPurchases }: Props) => {
 	const ModalState = (): void => {
 		setPurchaseModal(!purchaseModal)
 	}
-	const handleDeleteProductPurchase = (product:NewPurchaseProduct) => {
+	const handleDeleteProductPurchase = (product: NewPurchaseProduct) => {
 		// deleteProductPurchase(product)
 
 		Swal.fire({
@@ -23,24 +23,24 @@ const ListPurchaseProducts = ({ productsPurchases }: Props) => {
 			title: 'Eliminar Compra',
 			text: 'Estas seguro que quieres borrar esta compra?',
 			showDenyButton: true,
-			denyButtonText:'cancelar',
-			confirmButtonText:'eliminar'
-		}).then( purchase => {
-			if(purchase.isConfirmed) {
-				 deleteProductPurchase(product)
-				Swal.fire('Exito','La compra se elimino correctamente', 'success')
-			}else {
-				Swal.fire('cancelado','tranquilo no paso nada', 'success')
+			denyButtonText: 'cancelar',
+			confirmButtonText: 'eliminar'
+		}).then(purchase => {
+			if (purchase.isConfirmed) {
+				deleteProductPurchase(product)
+				Swal.fire('Exito', 'La compra se elimino correctamente', 'success')
+			} else {
+				Swal.fire('cancelado', 'tranquilo no paso nada', 'success')
 
 			}
 		})
 	}
 	return (
 		<>
-			<div className="rounded-lg shadow overflow-hidden ">
+			<div className="rounded-lg shadow overflow-hidden max-xm:hidden">
 				{purchaseModal &&
-								<PurchaseModal productModal={productModal} modalState={ModalState} />
-							}
+					<PurchaseModal productModal={productModal} modalState={ModalState} />
+				}
 				<table className="w-full overflow-auto">
 					<thead className="bg-gray-50 border-b-2 border-gray-200">
 						<tr className="">
@@ -54,31 +54,65 @@ const ListPurchaseProducts = ({ productsPurchases }: Props) => {
 					<tbody className="divide-y divide-gray-100">
 						{productsPurchases.length > 0 ?
 
-						productsPurchases.map((product, index) => {
-							
-							return (
-								<tr className="w-auto text-center" key={index}>
-									<td className="text-left duration-900 bg-white pl-3 p-1 capitalize text-gray-400 text-md ">{product.name}</td>
-									<td className=" duration-900 bg-white p-1 capitalize text-gray-400 text-md ">{product.cantidad}</td>
-									<td className=" duration-900 bg-white p-1 capitalize text-gray-400 text-md ">{product.costoTotal}</td>
-									<td className=" duration-900 bg-white p-1 capitalize text-gray-400 text-md ">{product.costoUnitario}</td>
-									<td className=" duration-900 bg-white p-1 capitalize text-gray-400 text-md ">
-										<div className="flex justify-center">
+							productsPurchases.map((product, index) => {
 
-											<RiEdit2Fill onClick={() => {setPurchaseModal(!purchaseModal); product && setProductModal(product)}} className="cursor-pointer mx-2 bg-yellow-400 text-black rounded-sm " />
-											
-											<RiDeleteBin5Line onClick={() => {handleDeleteProductPurchase(product)}} className="cursor-pointer mx-2 text-red-600" />
-										</div>
-									</td>
-								</tr>
-							)
-						})
-					:
-					<tr className="text-left w-full"><td className="text-gray-400 font-semibold pl-3 ">aun hay compras</td></tr>
-					}
+								return (
+									<tr className="w-auto text-center" key={index}>
+										<td className="text-left duration-900 bg-white pl-3 p-1 capitalize text-gray-400 text-md ">{product.name}</td>
+										<td className=" duration-900 bg-white p-1 capitalize text-gray-400 text-md ">{product.cantidad}</td>
+										<td className=" duration-900 bg-white p-1 capitalize text-gray-400 text-md ">{product.costoTotal}</td>
+										<td className=" duration-900 bg-white p-1 capitalize text-gray-400 text-md ">{product.costoUnitario}</td>
+										<td className=" duration-900 bg-white p-1 capitalize text-gray-400 text-md ">
+											<div className="flex justify-center">
+
+												<RiEdit2Fill onClick={() => { setPurchaseModal(!purchaseModal); product && setProductModal(product) }} className="cursor-pointer mx-2 bg-yellow-400 text-black rounded-sm " />
+
+												<RiDeleteBin5Line onClick={() => { handleDeleteProductPurchase(product) }} className="cursor-pointer mx-2 text-red-600" />
+											</div>
+										</td>
+									</tr>
+								)
+							})
+							:
+							<tr className="text-left w-full"><td className="text-gray-400 font-semibold pl-3 ">aun hay compras</td></tr>
+						}
 					</tbody>
 				</table>
+			</div>
+			<div className="hidden max-xm:block">
+				<ul>
+					{productsPurchases.map((item, index) => {
+						return (
+							<li key={index} className="bg-blue-50 rounded-lg min-w-[300px] border-4 border-blue-100 overflow-hidden drop-shadow-md">
+								<div className="bg-blue-100 pl-2">
+									<p className="text-gray-400 font-semibold capitalize text-lg">{item.name}</p>
+								</div>
+								<div className="flex">
+									<div className="w-full mr-2  flex text-red-500 justify-between px-1 text-sm">
+										<div className="font-semibold uppercase">ct:</div>
+										<div className="font-semibold uppercase">S/ {item.costoTotal}</div>
+									</div>
+									<div className="w-full mr-2  flex text-green-500 justify-between px-1 text-sm">
+										<p className="font-semibold uppercase">un:</p>
+										<span className="font-semibold uppercase">S/ {item.cantidad}</span>
+									</div>
+									<div className="w-full mr-2  flex text-cyan-500 justify-between px-1 text-sm">
+										<p className="font-semibold uppercase">cu:</p>
+										<span className="font-semibold uppercase">S/ {item.costoUnitario}</span>
+									</div>
 
+								</div>
+									<div className="flex justify-end my-1">
+										<div className="flex">
+										<RiEdit2Fill onClick={() => { setPurchaseModal(!purchaseModal); item && setProductModal(item) }} className="cursor-pointer mx-2 bg-yellow-400 text-black rounded-sm " />
+
+										<RiDeleteBin5Line onClick={() => { handleDeleteProductPurchase(item) }} className="cursor-pointer mx-2 text-red-600" />
+										</div>
+									</div>
+							</li>
+						)
+					})}
+				</ul>
 			</div>
 		</>
 	)

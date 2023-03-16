@@ -52,24 +52,24 @@ const AddProductToPurchase = ({ newPurchase }: Props) => {
             {warningMessagePurchase && <ToastContainer />}
             <h2 className="text-cyan-500 uppercase font-bold text-xl max-xs:text-xl my-3">nueva compra</h2>
 
-            <input value={newPurchaseValues.name} name="name" onChange={handleChangeNewPurchase} className="my-2 w-full  px-2 py-1 border-2 bg-blue-100 rounded-lg border-blue-200" type="text" placeholder="ingresa el nombre del producto" />
-            <div className="flex justify-around">
+            <input value={newPurchaseValues.name} name="name" onChange={handleChangeNewPurchase} className="my-2  px-2 py-1 border-2 bg-blue-100 rounded-lg border-blue-200" type="text" placeholder="ingresa el nombre del producto" />
+            <div className="flex  justify-around max-md:block">
                 <div className="mx-1">
-                    <label>costo total</label>
-                    <input value={newPurchaseValues.costoTotal} onChange={handleChangeNewPurchase} name="costoTotal" className="my-2 w-full  px-2 py-1 border-2 bg-blue-100 rounded-lg border-blue-200" type="number" placeholder="ingresa el costo total" />
+                    <label className="block text-gray-400 font-semibold ">costo total</label>
+                    <input value={newPurchaseValues.costoTotal} onChange={handleChangeNewPurchase} name="costoTotal" className="my-2  px-2 py-1 border-2 bg-blue-100 rounded-lg border-blue-200" type="number" placeholder="ingresa el costo total" />
                 </div>
                 <div className="mx-1">
-                    <label>catidad</label>
-                    <input value={newPurchaseValues.cantidad} onChange={handleChangeNewPurchase} name="cantidad" className="my-2 w-full  px-2 py-1 border-2 bg-blue-100 rounded-lg border-blue-200" type="number" placeholder="ingresa la cantidad" />
+                    <label  className="block text-gray-400 font-semibold ">catidad</label>
+                    <input value={newPurchaseValues.cantidad} onChange={handleChangeNewPurchase} name="cantidad" className="my-2  px-2 py-1 border-2 bg-blue-100 rounded-lg border-blue-200" type="number" placeholder="ingresa la cantidad" />
                 </div>
                 <div className="mx-1">
-                    <label>costo unitario</label>
+                    <label  className="block text-gray-400 font-semibold ">costo unitario</label>
                     <input onChange={handleChangeNewPurchase} disabled={true}
                         placeholder={`${newPurchaseValues.costoTotal && newPurchaseValues.cantidad ?
                             (parseFloat(newPurchaseValues.costoTotal) / parseInt(newPurchaseValues.cantidad, 10)).toString()
                             :
                             "costo unitario"
-                            }`} name="costoUnitario" className="my-2 w-full  px-2 py-1 border-2 bg-blue-100 rounded-lg border-blue-200" type="number" />
+                            }`} name="costoUnitario" className="my-2  px-2 py-1 border-2 bg-blue-100 rounded-lg border-blue-200" type="number" />
                 </div>
             </div>
 {warningMessagePurchaseInput && <p className="text-red-500 font-semibold ml-2">*{warningMessagePurchaseInput}</p>}
