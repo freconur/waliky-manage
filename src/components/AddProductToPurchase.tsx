@@ -48,7 +48,7 @@ const AddProductToPurchase = ({ newPurchase }: Props) => {
         addNewProductPurchase(dispatch, newPurchaseValues)
     }
     return (
-        <form className="block my-5" onSubmit={addProductToList}>
+        <form className="block my-5 w-full" onSubmit={addProductToList}>
             {warningMessagePurchase && <ToastContainer />}
             <h2 className="text-cyan-500 uppercase font-bold text-xl max-xs:text-xl my-3">nueva compra</h2>
 

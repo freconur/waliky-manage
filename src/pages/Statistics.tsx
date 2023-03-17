@@ -72,14 +72,14 @@ const Statistics = () => {
   console.log('salesPerMarca', salesPerMarca)
   console.log('totalSalesPerYear', totalSalesPerYear)
   return (
-    <div className='ml-5 my-5 mr-2'>
+    <div className='ml-5 my-5 mr-2 w-3/5  max-xm:w-min'>
       <div className='flex justify-end my-4'><p className='text-gray-400 text-lg font-medium capitalize'>{currentDate}</p></div>
       <h1 className='text-2xl text-cyan-700 font-semibold capitalize'>estadisticas</h1>
 
       {currentDate && totalSales && currentYear && monthAvailableGraphics && dataForCard && totalSalesPerYear
         ?
         <div>
-          <div className='flex justify-end'>
+          <div className='w-full flex justify-end'>
             <div className='bg-blue-400 border-4 border-blue-500 drop-shadow-lg rounded-lg p-1'>
               <p className="text-lg text-white  capitalize font-semibold">ingreso total:</p>
               <div className='flex justify-center'> 
