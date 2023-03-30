@@ -168,6 +168,7 @@ export const updateStockProduct = (
       price: currentProduct.price,
       timestamp: Timestamp.fromDate(new Date()),
       cantidad: currentProduct.cantidad,
+      marca: currentProduct.marca
     };
     console.log('docData',docData)
     await addDoc(

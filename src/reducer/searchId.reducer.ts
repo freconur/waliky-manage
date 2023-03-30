@@ -216,8 +216,8 @@ export const searchIdReducer = (
       let date = funcionDate();
       let numberOfItems: number = 0;
       action.payload.map((item) => {
-        let ventaTotalProducto: number =
-          parseFloat(`${item.price}`) * parseFloat(`${item.cantidad}`);
+        let ventaTotalProducto: number = parseFloat(`${item.price}`) * parseFloat(`${item.cantidad}`);
+        // let ventaTotalProducto:  number = Math.floor(item.price).toFixed(2) * parseInt(`${item?.cantidad}`);
         ventaTotalMes = ventaTotalMes + ventaTotalProducto;
       });
       action.payload.map(

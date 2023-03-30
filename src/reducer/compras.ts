@@ -6,6 +6,7 @@ import {
     getDocs,
     setDoc,
     query,
+    orderBy,
     where,
     deleteDoc,
     addDoc,
@@ -39,7 +40,18 @@ export const getProductsPurchase =  (dispatch:(action:any)=>void) => {
         });
         
   }
-
+export const getProductPurchaseByOrder = async(dispatch:(action:any)=>void, valueSelect:string) => {
+  const month:string = currentMonth()
+  const colRef = collection(db, `/compras/dhvFlqZjmsbfGJ6i9IKK/compras-${month}`)
+  const q = query(colRef, orderBy("name"))
+  const querySnapshot = await (getDocs(q));
+  const getPurchase: NewPurchaseProduct[] = []
+  querySnapshot.forEach((doc) => {
+    getPurchase.push({...doc.data(), id: doc.id})
+  })
+  dispatch({ type: "getProductsPurchase", payload: getPurchase });
+  console.log('getPurchase',getPurchase)
+}
 export const updateProductPurchase = async (dispatch:(action:any)=>void, product:NewPurchaseProduct) => {
   const colRef = doc(
     db,

@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useState } from 'react';
-import { Bar, Line } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import { dataforGraphics, getProductsSold, totalSalesPerMarca } from '../reducer';
 import { initialStateProducts, searchIdReducer } from '../reducer/searchId.reducer';
 import { RiArrowDownFill, RiLoader4Line, RiArrowUpFill } from "react-icons/ri";
@@ -82,7 +82,7 @@ const Statistics = () => {
           <div className='w-full flex justify-end'>
             <div className='bg-blue-400 border-4 border-blue-500 drop-shadow-lg rounded-lg p-1'>
               <p className="text-lg text-white  capitalize font-semibold">ingreso total:</p>
-              <div className='flex justify-center'> 
+              <div className='flex justify-center'>
                 <p className='text-white font-semibold mx-auto'>
                   S/ {totalSalesPerYear && utilidad2022
                     &&
@@ -126,7 +126,7 @@ const Statistics = () => {
                 return (
                   <li key={index} className="p-2 m-2 border-4 border-blue-200 rounded-md drop-shadow-lg bg-blue-100 w-34">
                     <p className='uppercase font-semibold text-blue-400'>{data.nameMonth}</p>
-                    <p className='text-gray-500 capitalize'>venta: <span className={`ml-1 text-green-500 ${data.sales < 0 && "text-red-600"} `}>S/ {data.sales}</span> </p>
+                    <p className='text-gray-500 capitalize'>venta: <span className={`ml-1 text-green-500 ${data.sales < 0 && "text-red-600"} `}>S/ {data.sales.toFixed(2)}</span> </p>
                     {
                       data.salesGrowth
                         ?
@@ -163,7 +163,7 @@ const Statistics = () => {
         <h2 className='w-full text-xl text-cyan-600 font-semibold capitalize mt-5'>grafico lineal de ventas</h2>
         <Line data={ventas} />
       </div>
-      <SalesPerMarca salesPerMarca={salesPerMarca}/>
+      <SalesPerMarca salesPerMarca={salesPerMarca} />
     </div>
   )
 }

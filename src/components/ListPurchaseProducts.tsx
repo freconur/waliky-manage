@@ -1,17 +1,22 @@
 import { NewPurchaseProduct } from "../types"
 import { RiEdit2Fill } from "react-icons/ri";
 import { RiDeleteBin5Line } from "react-icons/ri"
-import { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { PurchaseModal } from "../modal/PurchaseModal";
-import { deleteProductPurchase } from "../reducer/compras";
+import { deleteProductPurchase, getProductPurchaseByOrder, getProductsPurchase } from "../reducer/compras";
 import Swal from 'sweetalert2'
+import { PurchaseSelectByOrder } from "./inputsUpdate/purchaseComponents/PurchaseSelectByOrder";
+import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer";
 
 interface Props {
-	productsPurchases: NewPurchaseProduct[]
+	// productsPurchases: NewPurchaseProduct[],
+  handleNewValueSelectOrderBy: (orderBy:string) => void
 }
-const ListPurchaseProducts = ({ productsPurchases }: Props) => {
+const ListPurchaseProducts = ({ handleNewValueSelectOrderBy }: Props) => {
+  const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
 	const [productModal, setProductModal] = useState<NewPurchaseProduct | undefined>({})
 	const [purchaseModal, setPurchaseModal] = useState(false)
+  const { productsPurchases } = state
 	const ModalState = (): void => {
 		setPurchaseModal(!purchaseModal)
 	}
@@ -35,8 +40,16 @@ const ListPurchaseProducts = ({ productsPurchases }: Props) => {
 			}
 		})
 	}
+  const byOrderHandler = (e:React.ChangeEvent<HTMLSelectElement>) => {
+    handleNewValueSelectOrderBy(e.target.value)
+    getProductPurchaseByOrder(dispatch, e.target.value)
+  }
+  useEffect(() => {
+    getProductsPurchase(dispatch)
+},[])
 	return (
 		<>
+			<PurchaseSelectByOrder byOrderHandler={byOrderHandler} />
 			<div className="rounded-lg shadow overflow-hidden max-xm:hidden">
 				{purchaseModal &&
 					<PurchaseModal productModal={productModal} modalState={ModalState} />
@@ -102,13 +115,13 @@ const ListPurchaseProducts = ({ productsPurchases }: Props) => {
 									</div>
 
 								</div>
-									<div className="flex justify-end my-1">
-										<div className="flex">
+								<div className="flex justify-end my-1">
+									<div className="flex">
 										<RiEdit2Fill onClick={() => { setPurchaseModal(!purchaseModal); item && setProductModal(item) }} className="cursor-pointer mx-2 bg-yellow-400 text-black rounded-sm " />
 
 										<RiDeleteBin5Line onClick={() => { handleDeleteProductPurchase(item) }} className="cursor-pointer mx-2 text-red-600" />
-										</div>
 									</div>
+								</div>
 							</li>
 						)
 					})}

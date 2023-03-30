@@ -33,7 +33,7 @@ const TablaVentas = () => {
               <h2 className="text-white font-bold capitalize">items vendidos</h2><span className="text-white text-xl font-bold">{numberOfItems}</span>
             </div>
             <div className="bg-yellow-300 w-32 rounded-lg text-center drop-shadow-lg mr-5 max-cs:mr-0 max-sm:mb-4">
-              <h2 className="text-white font-bold capitalize">venta del mes</h2><span className="text-green-500 text-xl font-bold">S/{salesMonth}</span>
+              <h2 className="text-white font-bold capitalize">venta del mes</h2><span className="text-green-500 text-xl font-bold">S/{salesMonth.toFixed(2)}</span>
             </div>
           </div>
         </div>
