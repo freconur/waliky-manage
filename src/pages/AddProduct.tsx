@@ -82,7 +82,7 @@ const AddProduct = () => {
   }
   return (
     <form onSubmit={onClickRegisterNewProduct} className="m-2 ">
-      <div className="border-4 rounded-lg border-blue-100 bg-blue-50 p-1">
+      <div className="border-4 rounded-lg border-blue-100 bg-blue-50 p-2 pb-4">
 
         {warningFile && <ToastContainer />}
         {addProductWarning && <ToastContainer />}
