@@ -69,8 +69,6 @@ const Statistics = () => {
       pointRadius: 6
     }]
   }
-  console.log('salesPerMarca', salesPerMarca)
-  console.log('totalSalesPerYear', totalSalesPerYear)
   return (
     <div className='ml-5 my-5 mr-2 w-3/5  max-xm:w-min'>
       <div className='flex justify-end my-4'><p className='text-gray-400 text-lg font-medium capitalize'>{currentDate}</p></div>

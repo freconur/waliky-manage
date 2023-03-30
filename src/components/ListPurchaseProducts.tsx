@@ -42,7 +42,8 @@ const ListPurchaseProducts = ({ handleNewValueSelectOrderBy }: Props) => {
 	}
   const byOrderHandler = (e:React.ChangeEvent<HTMLSelectElement>) => {
     handleNewValueSelectOrderBy(e.target.value)
-    getProductPurchaseByOrder(dispatch, e.target.value)
+    // getProductPurchaseByOrder(dispatch, e.target.value)
+		dispatch({type:"purchaseOrderBy", payload:e.target.value, payload2: productsPurchases})
   }
   useEffect(() => {
     getProductsPurchase(dispatch)
@@ -109,11 +110,10 @@ const ListPurchaseProducts = ({ handleNewValueSelectOrderBy }: Props) => {
 										<p className="font-semibold uppercase">un:</p>
 										<span className="font-semibold uppercase">S/ {item.cantidad}</span>
 									</div>
-									<div className="w-full mr-2  flex text-cyan-500 justify-between px-1 text-sm">
+									<div className="w-full mr-2  flex text-cyan-500 justify-between px-1 text-sm">I
 										<p className="font-semibold uppercase">cu:</p>
 										<span className="font-semibold uppercase">S/ {item.costoUnitario}</span>
 									</div>
-
 								</div>
 								<div className="flex justify-end my-1">
 									<div className="flex">

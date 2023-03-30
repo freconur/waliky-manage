@@ -25,7 +25,6 @@ const Purchase = () => {
     const handleNewValueSelectOrderBy = (orderBy:string):void => {
         setValueSelect(orderBy)
     }
-    console.log('productsPurchases',productsPurchases)
     return (
         <div className="m-3">
             <h1 className="text-cyan-700 uppercase font-bold text-3xl max-xs:text-xl">Compras de {currentMonth()}</h1>

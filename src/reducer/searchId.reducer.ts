@@ -40,14 +40,20 @@ type FormReducerAction =
   | { type: "warningFile"; payload: string }
   | { type: "getErrorProducts"; payload: string }
   | { type: "addProductWarning"; payload: string }
-  | { type: "dataForGraphics"; payload: number[]; payload2: string[], payload3: ProductsPerMonth[] }
-  | { type: "getDataPerYear"; payload: DataPerYear[], payload2: number }
-  | { type: "filterProductSoldByMarca"; payload: ProductSold[]}
-  | { type: "selectMonth"; payload: string}
-  | {type:"getSalesPerMarca", payload:TotalSalesPerMarca[]}
-  | {type:"getProductsPurchase", payload:NewPurchaseProduct[]}
-  | {type:"warningMessagePurchase", payload:string}
-  | {type:"warningMessagePurchaseInput", payload:string}
+  | {
+      type: "dataForGraphics";
+      payload: number[];
+      payload2: string[];
+      payload3: ProductsPerMonth[];
+    }
+  | { type: "getDataPerYear"; payload: DataPerYear[]; payload2: number }
+  | { type: "filterProductSoldByMarca"; payload: ProductSold[] }
+  | { type: "selectMonth"; payload: string }
+  | { type: "getSalesPerMarca"; payload: TotalSalesPerMarca[] }
+  | { type: "getProductsPurchase"; payload: NewPurchaseProduct[] }
+  | { type: "warningMessagePurchase"; payload: string }
+  | { type: "warningMessagePurchaseInput"; payload: string }
+  | { type: "purchaseOrderBy"; payload: string, payload2: NewPurchaseProduct[] }
 export const initialStateProducts = {
   product: [] as Product,
   prueba: [] as Product[],
@@ -76,16 +82,16 @@ export const initialStateProducts = {
   totalSales: [] as number[],
   monthAvailableGraphics: [] as string[],
   dataForCard: [] as DataForCard[],
-  currentYear: '' as string,
-  totalSalesPerYear: 0  as number,
+  currentYear: "" as string,
+  totalSalesPerYear: 0 as number,
   dataPerYear: [] as DataPerYear[],
   utilidad2022: 0 as number,
-  warningProductsSold: '' as string,
-  selectMonth: '' as string,
+  warningProductsSold: "" as string,
+  selectMonth: "" as string,
   salesPerMarca: [] as TotalSalesPerMarca[],
   productsPurchases: [] as NewPurchaseProduct[],
-  warningMessagePurchase: '' as string,
-  warningMessagePurchaseInput: '' as string
+  warningMessagePurchase: "" as string,
+  warningMessagePurchaseInput: "" as string,
 };
 export const searchIdReducer = (
   state: typeof initialStateProducts,
@@ -96,79 +102,80 @@ export const searchIdReducer = (
     case "warningMessagePurchaseInput":
       return {
         ...state,
-        warningMessagePurchaseInput:action.payload
-      }
+        warningMessagePurchaseInput: action.payload,
+      };
     case "warningMessagePurchase":
-      return{
+      return {
         ...state,
-        warningMessagePurchase:action.payload
-      }
+        warningMessagePurchase: action.payload,
+      };
     case "getProductsPurchase":
       return {
         ...state,
-        productsPurchases:action.payload
-      }
+        productsPurchases: action.payload,
+      };
     case "getSalesPerMarca":
-      console.log('action.payload',action.payload)
       return {
         ...state,
-        salesPerMarca: action.payload
-      }
+        salesPerMarca: action.payload,
+      };
     case "selectMonth":
       return {
         ...state,
-        selectMonth: action.payload
-      }
+        selectMonth: action.payload,
+      };
     case "filterProductSoldByMarca":
-      let amount:number = 0
-      action.payload.map(item => {
-        amount = amount + parseFloat(`${item.price}`)
-      })
-        return{
-          ...state,
-          productsSold: action.payload,
-          salesMonth:amount
-        }
+      let amount: number = 0;
+      action.payload.map((item) => {
+        amount = amount + parseFloat(`${item.price}`);
+      });
+      return {
+        ...state,
+        productsSold: action.payload,
+        salesMonth: amount,
+      };
     case "getDataPerYear":
-      
       return {
         ...state,
         dataPerYear: action.payload,
-        utilidad2022: action.payload2
-      }
+        utilidad2022: action.payload2,
+      };
     case "dataForGraphics":
-      const year:string = currentYear()
-      const dataForCard:DataForCard[] = []
-      let totalSalesPerYear:number = 0 
+      const year: string = currentYear();
+      const dataForCard: DataForCard[] = [];
+      let totalSalesPerYear: number = 0;
       action.payload3.map((product, index) => {
-        let totalSales = 0
-        product.products?.map(item => {
-          totalSalesPerYear = totalSalesPerYear + (parseInt(`${item.cantidad}`, 10) * parseFloat(`${item.price}`))
-          totalSales = totalSales + (parseInt(`${item.cantidad}`, 10) * parseFloat(`${item.price}`))
-          
-        })
-        if(index === 0) {
+        let totalSales = 0;
+        product.products?.map((item) => {
+          totalSalesPerYear =
+            totalSalesPerYear +
+            parseInt(`${item.cantidad}`, 10) * parseFloat(`${item.price}`);
+          totalSales =
+            totalSales +
+            parseInt(`${item.cantidad}`, 10) * parseFloat(`${item.price}`);
+        });
+        if (index === 0) {
           const data: DataForCard = {
             nameMonth: `${product.nameMonth}`,
             sales: totalSales,
-          } 
-          dataForCard.push(data)
-        }else {
+          };
+          dataForCard.push(data);
+        } else {
           const data: DataForCard = {
             nameMonth: `${product.nameMonth}`,
             sales: totalSales,
-            salesGrowth:((totalSales/dataForCard[index-1].sales)-1)*100
-          } 
-          dataForCard.push(data)
+            salesGrowth: (totalSales / dataForCard[index - 1].sales - 1) * 100,
+          };
+          dataForCard.push(data);
         }
-      })
+      });
       return {
         ...state,
         totalSales: action.payload,
         monthAvailableGraphics: action.payload2,
         dataForCard: dataForCard,
         currentYear: year,
-        totalSalesPerYear: totalSalesPerYear
+        totalSalesPerYear: totalSalesPerYear,
       };
     case "addProductWarning":
       return {
@@ -216,7 +223,8 @@ export const searchIdReducer = (
       let date = funcionDate();
       let numberOfItems: number = 0;
       action.payload.map((item) => {
-        let ventaTotalProducto: number = parseFloat(`${item.price}`) * parseFloat(`${item.cantidad}`);
+        let ventaTotalProducto: number =
+          parseFloat(`${item.price}`) * parseFloat(`${item.cantidad}`);
         // let ventaTotalProducto:  number = Math.floor(item.price).toFixed(2) * parseInt(`${item?.cantidad}`);
         ventaTotalMes = ventaTotalMes + ventaTotalProducto;
       });
@@ -305,6 +313,50 @@ export const searchIdReducer = (
         ...state,
         allProducts: rtaFiltro,
       };
+
+      case "purchaseOrderBy":
+      let saveProductPurchase = action.payload2
+      if (action.payload === "price-desc") {
+        saveProductPurchase.sort((a: NewPurchaseProduct, b: NewPurchaseProduct) => {
+          const first = parseFloat(`${a.costoUnitario}`);
+          const second = parseFloat(`${b.costoUnitario}`);
+          if (first < second) return -1;
+          if (first > second) return 1;
+          return 0;
+        });
+      }
+      if (action.payload === "price-asc") {
+        saveProductPurchase.sort((a: NewPurchaseProduct, b: NewPurchaseProduct) => {
+          const first = parseFloat(`${a.costoUnitario}`);
+          const second = parseFloat(`${b.costoUnitario}`);
+          if (first > second) return -1;
+          if (first < second) return 1;
+          return 0;
+        });
+      }
+      if (action.payload === "z-a") {
+        saveProductPurchase.sort((a: NewPurchaseProduct, b: NewPurchaseProduct) => {
+          const first = `${a.name}`
+          const second = `${b.name}`
+          if (first > second) return -1;
+          if (first < second) return 1;
+          return 0;
+        });
+      }
+      if (action.payload === "a-z") {
+        saveProductPurchase.sort((a: NewPurchaseProduct, b: NewPurchaseProduct) => {
+          const first = `${a.name}`
+          const second = `${b.name}`
+          if (first < second) return -1;
+          if (first > second) return 1;
+          return 0;
+        });
+      }
+      return {
+        ...state,
+        productsPurchases:saveProductPurchase
+      };
+
     case "optionsSort":
       let saveProductsSold = action.payload2;
       if (action.payload === "price-ascendente") {
@@ -361,9 +413,11 @@ export const searchIdReducer = (
           return 0;
         });
       }
+
       return {
         ...state,
         productsSold: saveProductsSold,
       };
+    
   }
 };
