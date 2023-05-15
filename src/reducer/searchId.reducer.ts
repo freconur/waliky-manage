@@ -11,6 +11,7 @@ import {
   ProductSoldPerMonth,
   ProductsPerMonth,
   ProductsPerMonthPromise,
+  PurchaseProduct,
   TotalSalesPerMarca,
 } from "../types";
 import { TYPES } from "./action";
@@ -54,6 +55,7 @@ type FormReducerAction =
   | { type: "warningMessagePurchase"; payload: string }
   | { type: "warningMessagePurchaseInput"; payload: string }
   | { type: "purchaseOrderBy"; payload: string, payload2: NewPurchaseProduct[] }
+  | { type: "getProductsPurchasePerMnoth"; payload: PurchaseProduct[]}
 export const initialStateProducts = {
   product: [] as Product,
   prueba: [] as Product[],
@@ -89,7 +91,7 @@ export const initialStateProducts = {
   warningProductsSold: "" as string,
   selectMonth: "" as string,
   salesPerMarca: [] as TotalSalesPerMarca[],
-  productsPurchases: [] as NewPurchaseProduct[],
+  productsPurchases: [] as NewPurchaseProduct[] | PurchaseProduct[],
   warningMessagePurchase: "" as string,
   warningMessagePurchaseInput: "" as string,
 };
@@ -99,6 +101,11 @@ export const searchIdReducer = (
 ) => {
   switch (action.type) {
     // case TYPES.GET_PRODUCT_BY_ID:
+    case "getProductsPurchasePerMnoth":
+      return {
+        ...state,
+        productsPurchases: action.payload,
+      }
     case "warningMessagePurchaseInput":
       return {
         ...state,

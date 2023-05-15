@@ -15,10 +15,10 @@ import {
     Timestamp,
   } from "firebase/firestore";
   import { getStorage } from "firebase/storage";
-import { currentMonth } from "../date/date";
+import { currentMonth, currentYear } from "../date/date";
   
   import { app } from "../firebase/firebase.config";
-import { NewPurchaseProduct } from "../types";
+import { NewPurchaseProduct, PurchaseProduct } from "../types";
   
   
   const db = getFirestore(app);
@@ -26,9 +26,20 @@ import { NewPurchaseProduct } from "../types";
 
 //   export const productsPurchase = async(dispatch:(action:any)=>void) => {
 //     const products = await getProductsPurchase()
-
-//     // console.log('products',products)
 //   }
+
+export const getPurchasePerMonth = (dispatch:(action:any)=>void, month:string | void) => {
+  console.log('month', month)
+  const colRef = collection(db,`/compras/dhvFlqZjmsbfGJ6i9IKK/compras-${month}`)
+  onSnapshot(colRef, (snapshot) => {
+    const purchaseProductsPerMonth: PurchaseProduct[] = [];
+        snapshot.docs.forEach((doc) => {
+          purchaseProductsPerMonth.push({ ...doc.data(), id: doc.id });
+        });
+        console.log('purchaseProductsPerMonth',purchaseProductsPerMonth)
+        dispatch({ type: "getProductsPurchasePerMnoth", payload: purchaseProductsPerMonth });
+      }); 
+}
 export const getProductsPurchase =  (dispatch:(action:any)=>void) => {
     const colRef =  collection(db,`/compras/dhvFlqZjmsbfGJ6i9IKK/compras-${currentMonth()}`)
     onSnapshot(colRef, (snapshot) => {

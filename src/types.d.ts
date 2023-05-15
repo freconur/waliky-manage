@@ -137,3 +137,10 @@ export interface NewPurchaseProduct {
   cantidad?: string,
   costoUnitario?: string,
 }
+export interface PurchaseProduct {
+  id?:string,
+  name?: string,
+  costoTotal?: string,
+  cantidad?: string,
+  costoUnitario?: string,
+}

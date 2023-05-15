@@ -3,20 +3,21 @@ import { RiEdit2Fill } from "react-icons/ri";
 import { RiDeleteBin5Line } from "react-icons/ri"
 import React, { useEffect, useReducer, useState } from "react";
 import { PurchaseModal } from "../modal/PurchaseModal";
-import { deleteProductPurchase, getProductPurchaseByOrder, getProductsPurchase } from "../reducer/compras";
+import { deleteProductPurchase, getProductPurchaseByOrder, getProductsPurchase, getPurchasePerMonth } from "../reducer/compras";
 import Swal from 'sweetalert2'
 import { PurchaseSelectByOrder } from "./inputsUpdate/purchaseComponents/PurchaseSelectByOrder";
 import { initialStateProducts, searchIdReducer } from "../reducer/searchId.reducer";
+import { OptionPurchasePerMonth } from "./inputsUpdate/OptionPurchasePerMonth";
 
 interface Props {
 	// productsPurchases: NewPurchaseProduct[],
-  handleNewValueSelectOrderBy: (orderBy:string) => void
+	handleNewValueSelectOrderBy: (orderBy: string) => void
 }
 const ListPurchaseProducts = ({ handleNewValueSelectOrderBy }: Props) => {
-  const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
+	const [state, dispatch] = useReducer(searchIdReducer, initialStateProducts)
 	const [productModal, setProductModal] = useState<NewPurchaseProduct | undefined>({})
 	const [purchaseModal, setPurchaseModal] = useState(false)
-  const { productsPurchases } = state
+	const { productsPurchases } = state
 	const ModalState = (): void => {
 		setPurchaseModal(!purchaseModal)
 	}
@@ -40,17 +41,22 @@ const ListPurchaseProducts = ({ handleNewValueSelectOrderBy }: Props) => {
 			}
 		})
 	}
-  const byOrderHandler = (e:React.ChangeEvent<HTMLSelectElement>) => {
-    handleNewValueSelectOrderBy(e.target.value)
-    // getProductPurchaseByOrder(dispatch, e.target.value)
-		dispatch({type:"purchaseOrderBy", payload:e.target.value, payload2: productsPurchases})
-  }
-  useEffect(() => {
-    getProductsPurchase(dispatch)
-},[])
+	const byOrderHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		handleNewValueSelectOrderBy(e.target.value)
+		// getProductPurchaseByOrder(dispatch, e.target.value)
+		dispatch({ type: "purchaseOrderBy", payload: e.target.value, payload2: productsPurchases })
+	}
+	useEffect(() => {
+		getProductsPurchase(dispatch)
+	}, [])
+	const onChangeValueSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		// dispatch({type:"selectMonth", payload: e.target.value})
+		getPurchasePerMonth(dispatch, e.target.value)
+	}
 	return (
 		<>
 			<PurchaseSelectByOrder byOrderHandler={byOrderHandler} />
+			<OptionPurchasePerMonth onChangeValueSelect={onChangeValueSelect} />
 			<div className="rounded-lg shadow overflow-hidden max-xm:hidden">
 				{purchaseModal &&
 					<PurchaseModal productModal={productModal} modalState={ModalState} />

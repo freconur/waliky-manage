@@ -16,7 +16,7 @@ const TablaVentas = () => {
       dispatch({type: "optionsSort", payload: e.target.value, payload2: productsSold})
   }
   const onChangeValueSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({type:"selectMonth", payload: e.target.value})
+    // dispatch({type:"selectMonth", payload: e.target.value})
 		getProductsSold(dispatch, e.target.value)
 	}
   const filterProductSoldByMarca = (e: React.ChangeEvent<HTMLSelectElement>) => {
