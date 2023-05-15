@@ -34,7 +34,7 @@ const SideBar = () => {
             <h1 className={`text-white origin-left font-medium duration-1000 text-2xl ml-2  ${!openSidebar && "scale-0"}`}> Manage</h1>
           </div>
           <ListSidebar pruebita={pruebita} openSidebar={openSidebar} />
-          z
+          
         </div>
       </div>
     </>
