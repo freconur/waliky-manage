@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom"
 import { RiMenuFill } from "react-icons/ri";
-
+import WalikyUser from '../../assets/user-image/waliky-online.jpg'
 interface Props {
   openSidebar: boolean,
   setOpenSidebar:React.Dispatch<React.SetStateAction<boolean>>
@@ -18,8 +18,10 @@ const Navbar = ({openSidebar, setOpenSidebar}:Props) => {
       </div>
       {/* <div className="capitalize text-gray-500 font-semibold text-xl">{currentLocation.pathname.slice(1).replaceAll('-'," ")}</div> */}
       <div className="flex justify-center items-center gap-3">
-        <div className="bg-blue-500 rounded-full drop-shadow-lg text-center text-lg w-[30px] h-[30px] text-white font-bold">F</div>
-        <div><span className="capitalize font-semibold text-gray-500">franco condori</span></div>
+        <div className="bg-blue-500 overflow-hidden rounded-full drop-shadow-lg text-center text-lg w-[30px] h-[30px] text-white font-bold">
+          <img src={WalikyUser} alt="waliky user" />
+        </div>
+        <div><span className="capitalize font-semibold text-gray-500">waliky store</span></div>
       </div>
     </div>
   )
