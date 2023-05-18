@@ -81,7 +81,7 @@ const Statistics = () => {
         <div>
           <div className='grid grid-cols-2 gap-2 mt-2'>
             <div className='w-full flex justify-end'>
-              <div className='bg-blue-400 w-full gap-10 items-center px-3 shadow-lg rounded-lg p-1'>
+              <div className=' bg-gradient-to-l from-blue-400 to-blue-600 w-full gap-10 items-center px-3 shadow-lg rounded-lg p-1'>
                 <p className="text-lg text-white  capitalize font-semibold">I. total:</p>
                 <div className=''>
                   <p className='text-white font-semibold'>
@@ -96,7 +96,7 @@ const Statistics = () => {
             <div className='flex justify-end'>
               {dataPerYear && dataPerYear.map((data, index) => {
                 return (
-                  <div key={index} className='bg-indigo-600 w-full rounded-lg shadow-lg p-1 text-white font-semibold text-base'>
+                  <div key={index} className='bg-gradient-to-l from-indigo-400 to-indigo-600 w-full rounded-lg shadow-lg p-1 text-white font-semibold text-base'>
                     <div className='ml-1 text-lg'>
                       Año {data.name}
                     </div>
@@ -106,7 +106,7 @@ const Statistics = () => {
               })
               }
             </div>
-            <div className='bg-yellow-300 w-full rounded-lg shadow-lg p-1 text-white font-semibold text-base'>
+            <div className='bg-gradient-to-l from-yellow-200 to-yellow-400 w-full rounded-lg shadow-lg p-1 text-white font-semibold text-base'>
               <div className='ml-1 text-lg'>
                 <span className='block capitalize text-md font-semibold text-white'>
                   Año {currentYear}</span>
