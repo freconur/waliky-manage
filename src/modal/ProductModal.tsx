@@ -44,7 +44,7 @@ const ProductModal = ({ modalState, itemInfo }: Props) => {
 		updateItemProv(item)
 	}
 	return ReactDOM.createPortal(
-		<form onSubmit={onSubmitForm} className="absolute inset-0 bg-white flex justify-center ">
+		<form onSubmit={onSubmitForm} className="absolute z-50 inset-0 bg-white flex justify-center ">
 			<div className="border-4 p-2 rounded-lg w-full m-3 ">
 				<div className="flex justify-between">
 					<div className="flex items-center mb-2"><span className="text-gray-400 font-semibold text-lg">Id: {itemInfo.id}</span></div>
