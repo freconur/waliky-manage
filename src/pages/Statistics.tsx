@@ -18,6 +18,7 @@ import {
 import { Data2022 } from '../reducer/statistics';
 import { DataPerYear } from '../types';
 import { SalesPerMarca } from './SalesPerMarca';
+import { table } from 'console';
 
 ChartJS.register(
   // CategoryScale,
@@ -78,76 +79,90 @@ const Statistics = () => {
       {currentDate && totalSales && currentYear && monthAvailableGraphics && dataForCard && totalSalesPerYear
         ?
         <div>
-          <div className='w-full flex justify-end mt-2'>
-            <div className='bg-blue-400 w-full  flex gap-10 items-center px-3 shadow-lg rounded-lg p-1'>
-              <p className="text-lg text-white  capitalize font-semibold">ingreso total:</p>
-              <div className=''>
-                <p className='text-white font-semibold'>
-                  S/ {totalSalesPerYear && utilidad2022
-                    &&
-                    totalSalesPerYear + utilidad2022
-                  }
-                </p>
-
+          <div className='grid grid-cols-2 gap-2 mt-2'>
+            <div className='w-full flex justify-end'>
+              <div className='bg-blue-400 w-full gap-10 items-center px-3 shadow-lg rounded-lg p-1'>
+                <p className="text-lg text-white  capitalize font-semibold">I. total:</p>
+                <div className=''>
+                  <p className='text-white font-semibold'>
+                    S/ {totalSalesPerYear && utilidad2022
+                      &&
+                      totalSalesPerYear + utilidad2022
+                    }
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-          <div>
-            <h2 className='text-xl text-cyan-600 font-semibold capitalize my-5'>resultados por año</h2>
             <div className='flex justify-end'>
               {dataPerYear && dataPerYear.map((data, index) => {
                 return (
-                  <div key={index} className='bg-yellow-300 drop-shadow-lg rounded-lg border-4 border-yellow-400 p-1 mr-1'>
-                    <div className='m-auto flex justify-center'>
-                      <span className='block capitalize text-md font-semibold text-white'><span className='capitalize text-md font-semibold text-white mr-1'>año</span>{data.name}</span>
+                  <div key={index} className='bg-indigo-600 w-full rounded-lg shadow-lg p-1 text-white font-semibold text-base'>
+                    <div className='ml-1 text-lg'>
+                      Año {data.name}
                     </div>
-                    <span className='block text-green-500 font-semibold'><span className='capitalize text-md font-semibold text-white mr-1'>total:</span>S/{data.utilidad}</span>
+                    <span className='ml-1'>S/{data.utilidad}</span>
                   </div>
                 )
               })
               }
-
-              <div className='bg-yellow-300 drop-shadow-lg rounded-lg border-4 border-yellow-400 p-1 mr-1'>
-                <div className='m-auto flex justify-center'>
-                  <span className='block capitalize text-md font-semibold text-white'><span className='capitalize text-md font-semibold text-white mr-1'>año</span>{currentYear}</span>
-                </div>
-                <span className='block text-green-500 font-semibold'><span className='capitalize text-md font-semibold text-white mr-1'>total:</span>S/{totalSalesPerYear}</span>
-              </div>
             </div>
-
+            <div className='bg-yellow-300 w-full rounded-lg shadow-lg p-1 text-white font-semibold text-base'>
+              <div className='ml-1 text-lg'>
+                <span className='block capitalize text-md font-semibold text-white'>
+                  Año {currentYear}</span>
+              </div>
+              <span className='block ml-1 text-green-500 font-semibold'>S/{totalSalesPerYear}</span>
+            </div>
           </div>
+
           <h2 className='text-xl text-cyan-600 font-semibold capitalize mt-5'>venta y ratio de crecimiento</h2>
-          <ul className='flex flex-wrap mt-5'>
-            {
-              dataForCard
-              &&
-              dataForCard.map((data, index) => {
-                return (
-                  <li key={index} className="p-2 m-2 border-4 border-blue-200 rounded-md drop-shadow-lg bg-blue-100 w-34">
-                    <p className='uppercase font-semibold text-blue-400'>{data.nameMonth}</p>
-                    <p className='text-gray-500 capitalize'>venta: <span className={`ml-1 text-green-500 ${data.sales < 0 && "text-red-600"} `}>S/ {data.sales.toFixed(2)}</span> </p>
-                    {
-                      data.salesGrowth
-                        ?
-                        <div className='text-gray-500 capitalize flex'>
-                          %: <div className={`ml-1 text-green-500 ${data.salesGrowth < 0 && "text-red-600"} `}>
-                            <div className='flex'>
-                              {data.salesGrowth < 0
-                                ? <RiArrowDownFill className='animate-bounce' />
-                                : <RiArrowUpFill className='animate-bounce' />
-                              }
-                              {data.salesGrowth?.toFixed(2)}
-                            </div>
-                          </div>
-                        </div>
-                        :
-                        null
-                    }
-                  </li>
-                )
-              })
-            }
-          </ul>
+
+          <div className='overflow-hidden rounded-lg mt-5 shadow-lg'>
+            <table>
+              <thead className="bg-cyan-500 border-b-2 border-gray-200">
+                <tr className="text-center">
+                  <th className="p-2 capitalize text-white w-10  text-lg font-semibold tracking-wide ">Mes</th>
+                  <th className="p-2 capitalize text-white w-24  text-lg font-semibold tracking-wide ">venta</th>
+                  <th className="p-2 capitalize text-white w-[768px]  text-lg font-semibold tracking-wide ">ratio %</th>
+
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {
+                  dataForCard.map((data, index) => {
+                    return (
+                      <tr key={index} className='w-auto text-center capitalize text-gray-400'>
+                        <td className='w-[33%] font-semibold h-10'>{data.nameMonth}</td>
+                        <td className='w-[33%] text-green-500'>S/ {data.sales.toFixed(2)}</td>
+                        {
+                          data.salesGrowth
+                            ?
+                            <td className={`w-[33%] text-green-500 text-center grid justify-center m-auto items-center ${data.salesGrowth < 0 && "text-red-600"} `}>
+                              {/* <div className='flex items-center w-[100px] justify-center'> */}
+                              <div className='flex w-full'>
+                                <div className='grid place-items-center'>
+                                  {data.salesGrowth < 0
+                                    ? <RiArrowDownFill className='animate-bounce' />
+                                    : <RiArrowUpFill className='animate-bounce' />
+                                  }
+                                </div>
+                                <div>
+                                  {data.salesGrowth?.toFixed(2)}
+                                </div>
+                              </div>
+                              {/* </div> */}
+                            </td>
+                            :
+                            null
+                        }
+                      </tr>
+                    )
+                  })
+                }
+              </tbody>
+            </table>
+          </div>
+
         </div>
         :
         <div className="w-full flex justify-center mt-5">

@@ -13,8 +13,8 @@ const Navbar = ({openSidebar, setOpenSidebar}:Props) => {
   const currentLocation = useLocation()
   return (
     <div className="relavite z-10 w-full mt-1 py-2 px-5 flex justify-between rounded-lg h-[60px] bg-white items-center">
-      <div>
-        <RiMenuFill onClick={showSidebar} className="text-2xl text-gray-600"/>
+      <div onClick={showSidebar} className="cursor-pointer flex items-center justify-centerw-[50px] h-flex justify-center[50px]">
+        <RiMenuFill  className="text-3xl text-gray-600 font-bold "/>
       </div>
       {/* <div className="capitalize text-gray-500 font-semibold text-xl">{currentLocation.pathname.slice(1).replaceAll('-'," ")}</div> */}
       <div className="flex justify-center items-center gap-3">
