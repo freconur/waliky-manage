@@ -51,7 +51,7 @@ const PurchaseModal = ({ productModal, modalState }: Props) => {
 	}
 	return ReactDOM.createPortal(
 
-		<div className="duration-1000 absolute inset-0 bg-modal-color grid place-content-center">
+		<div className="duration-1000 absolute z-50 inset-0 bg-modal-color grid place-content-center">
 			{warningMessagePurchase && <ToastContainer />}
 
 			<div className="bg-white p-5 rounded-xl">
