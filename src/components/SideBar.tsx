@@ -24,7 +24,7 @@ const SideBar = ({openSidebar,setOpenSidebar}:Props) => {
   }
   return (
     
-      <div className={`z-50 absolute duration-300 -left-[300px] ${openSidebar && "left-0 duration-300"}`}>
+      <div className={`z-50 fixed duration-300 -left-[300px] ${openSidebar && "left-0 duration-300"}`}>
       {/* <div className={`sticky -left-[300px] ${openSidebar ? "w-100 p-5" : "w-12 p-1"}`}> */}
 
         {/* <div className={`bg-cyan-700 h-screen pt-2 max-cs:w-12 max-cs:p-1 ${openSidebar ? "w-100 p-5" : "w-12 p-1"} duration-1000 sticky inset-y-0`}> */}
