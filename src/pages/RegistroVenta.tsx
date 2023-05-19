@@ -90,7 +90,8 @@ const RegistroVenta = () => {
     updateStockProduct(inputValue, currentProductSell, dispatch);
   };
   return (
-    <div className="m-10 max-xs:m-3">
+    // <div className="m-10 max-xs:m-3">
+    <div className="m-10 w-full">
       <h1 className="uppercase text-cyan-700 font-bold text-2xl">
         gestion de ventas
       </h1>

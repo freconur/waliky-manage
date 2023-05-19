@@ -81,7 +81,7 @@ const AddProduct = () => {
     setNewProductValues(initialNewProductValues)
   }
   return (
-    <form onSubmit={onClickRegisterNewProduct} className="m-2 ">
+    <form onSubmit={onClickRegisterNewProduct} className="m-2 w-full">
       <div className="border-4 rounded-lg border-blue-100 bg-blue-50 p-2 pb-4">
 
         {warningFile && <ToastContainer />}

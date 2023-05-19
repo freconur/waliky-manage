@@ -57,7 +57,7 @@ const ListPurchaseProducts = ({ handleNewValueSelectOrderBy }: Props) => {
 		<>
 			<PurchaseSelectByOrder byOrderHandler={byOrderHandler} />
 			<OptionPurchasePerMonth onChangeValueSelect={onChangeValueSelect} />
-			<div className="rounded-lg shadow overflow-hidden max-xm:hidden">
+			<div className="rounded-lg w-full shadow overflow-hidden max-xm:hidden">
 				{purchaseModal &&
 					<PurchaseModal productModal={productModal} modalState={ModalState} />
 				}
@@ -114,7 +114,7 @@ const ListPurchaseProducts = ({ handleNewValueSelectOrderBy }: Props) => {
 									</div>
 									<div className="w-full mr-2  flex text-green-500 justify-between px-1 text-sm">
 										<p className="font-semibold uppercase">un:</p>
-										<span className="font-semibold uppercase">S/ {item.cantidad}</span>
+										<span className="font-semibold uppercase">{item.cantidad}</span>
 									</div>
 									<div className="w-full mr-2  flex text-cyan-500 justify-between px-1 text-sm">I
 										<p className="font-semibold uppercase">cu:</p>
