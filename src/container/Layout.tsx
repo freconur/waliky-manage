@@ -16,7 +16,7 @@ const Layout = ({ children }: Props) => {
       <SideBar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar}/>
       <div className="w-full">
         <Navbar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar}/>
-        <div className="relative z-40 bg-white rounded-lg mt-1 p-1 flex w-full">
+        <div className="relative z-30 bg-white rounded-lg mt-1 p-1 flex w-full">
           {children}
         </div>
       </div>

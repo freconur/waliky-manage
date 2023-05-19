@@ -12,7 +12,7 @@ const Navbar = ({openSidebar, setOpenSidebar}:Props) => {
   }
   const currentLocation = useLocation()
   return (
-    <div className="relavite z-10 w-full mt-1 py-2 px-5 flex justify-between rounded-lg h-[60px] bg-white items-center">
+    <div className="sticky top-0 z-40 shadow-md w-full mt-1 py-2 px-5 flex justify-between rounded-lg h-[60px] bg-white items-center">
       <div onClick={showSidebar} className="cursor-pointer flex items-center justify-centerw-[50px] h-flex justify-center[50px]">
         <RiMenuFill  className="text-3xl text-gray-600 font-bold "/>
       </div>
