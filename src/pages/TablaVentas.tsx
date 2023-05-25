@@ -43,7 +43,7 @@ const TablaVentas = () => {
           <OptionsSort onChangeOptionsSort={onChangeOptionsSort}/>
         <div className="rounded-lg shadow max-cs:mr-0 mt-5 mr-5 overflow-auto">
           <table className="w-full overflow-auto max-xsm:hidden">
-            <thead className="bg-gray-50 border-b-2 border-gray-200">
+            <thead className="bg-green-50 border-b-2 border-gray-200">
               <tr className="text-center">
                 <th className="p-2 capitalize text-gray-500 w-10  text-sm font-semibold tracking-wide text-left ">id</th>
                 <th className="p-2 capitalize text-gray-500 w-24  text-sm font-semibold tracking-wide text-left ">id prod.</th>
@@ -72,7 +72,7 @@ const TablaVentas = () => {
           <ul className="hidden max-xsm:block max-w-xsm">
             {productsSold?.map(({name, id, date, cantidad, price}, index) => {
               return (
-                <li key={id} className="rounded-lg bg-slate-200 m-2 p-1">
+                <li key={id} className="rounded-lg bg-blue-200 m-2 p-1">
                   <div className="flex justify-between">
                     <span className="text-blue-500 font-semibold mr-2">id:{index + 1}</span>
                     <span>{date}</span>
